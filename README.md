@@ -1,157 +1,152 @@
-# Benchmark + MUSE
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-2.7+-red?style=flat-square&logo=pytorch" alt="PyTorch">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Status">
+</p>
 
-A sample-wise machine unlearning benchmark with unified evaluation across multiple privacy attacks and an integrated unlearning method, **MUSE**.
+<h1 align="center">🔬 MIA-benchmark</h1>
 
-This repository focuses on:
+<p align="center">
+  <strong>Machine Unlearning Membership Inference Attack Benchmark</strong>
+</p>
 
-- sample-wise forgetting with a shared forget index
-- unified benchmarking across multiple attacks
-- reproducible outputs for utility and privacy metrics
-- lightweight integration of new unlearning methods into the existing framework
+<p align="center">
+  <i>A sample-wise machine unlearning benchmark with unified evaluation across multiple privacy attacks and an integrated unlearning method, MUSE</i>
+</p>
 
-## Highlights
+---
 
-- Unified benchmark entry: [`run_benchmark.py`](./run_benchmark.py)
-- Supported attacks:
-  - `lira`
-  - `rea`
-  - `ruli`
-  - `unlearningleaks`
-- Supported datasets/backbones:
-  - `Cifar10` -> `ResNet18`
-  - `Cifar100` -> `ResNet50`
-  - `TinyImageNet` -> `ViT`
-- New unlearning method:
-  - `MUSE` (Membership-Undistinguishable Sample Erasure)
-- Multi-round experiment scripts with shared seed/sample per round
+## 📊 Overview
 
-## What MUSE Is
+MIA-benchmark is a comprehensive evaluation framework for **privacy-preserving machine learning** and **machine unlearning**, focusing on:
 
-MUSE is implemented as a new unlearning method on top of the existing sample-wise framework. It keeps the base retain-set objective and adds two regularizers so that forgotten samples behave more like reference non-member samples.
+- 🎯 **Unified Evaluation Protocol**: Five-dimensional unified evaluation for sample-wise forget index
+- 🔬 **Diverse Attack Methods**: Integration of LiRA, REA, RULI, UnlearningLeaks, and other mainstream attacks
+- 🛡️ **MUSE Defense Method**: Novel Membership-Undistinguishable Sample Erasure approach
+- 📈 **Comprehensive Metrics**: Unified output for utility and privacy metrics
+
+---
+
+## ✨ Key Features
+
+### 🏛️ Unified Architecture
+- **Single Benchmark Entry**: Run full pipeline via [`run_benchmark.py`](./run_benchmark.py)
+- **Modular Design**: Lightweight integration of new unlearning methods
+- **Reproducibility**: Multi-round experiments with shared `seed + sample` per round
+
+### 🔐 Supported Attack Methods
+
+| Attack Method | Description | Characteristics |
+|---------------|-------------|-----------------|
+| **LiRA** | Likelihood Ratio Attack | Likelihood ratio-based membership inference |
+| **REA** | Raisin Evaluation Attack | Requires additional reminiscence stage |
+| **RULI** | Re-supplemented Unlearning Inference | Maintains independent shadow attack assets |
+| **UnlearningLeaks** | Unlearning Information Leakage | Generates shadow-unlearned assets |
+
+### 🎯 Supported Datasets/Models
+
+| Dataset | Backbone | Notes |
+|---------|----------|-------|
+| **CIFAR-10** | ResNet18 | Classic image classification |
+| **CIFAR-100** | ResNet50 | Fine-grained classification |
+| **TinyImageNet** | ViT | Vision Transformer |
+
+### 🔬 Supported Unlearning Methods
+
+- `retrain` - Retraining baseline
+- `finetune` - Fine-tuning method
+- `negative_grad` - Negative gradient method
+- `scrub` - Scrub method
+- **`muse`** - Our proposed method ⭐
+
+---
+
+## 🛡️ About MUSE
+
+### What is MUSE?
+
+**MUSE (Membership-Undistinguishable Sample Erasure)** is a novel unlearning method implemented on top of the existing sample-wise framework.
+
+### Core Idea
+
+Maintain the base retain-set objective while adding two regularizers to make **forgotten samples behave more like reference non-member samples**, thus reducing membership inference risk.
+
+### Loss Function
 
 For each training step, MUSE samples:
-
 - forget batch `D_f`
 - retain batch `D_r`
 - reference non-member batch `D_t`
 
-The total loss is:
+Total loss:
 
 ```text
-L_total = L_base + lambda_align * L_align + lambda_stat * L_stat
+L_total = L_base + λ_align × L_align + λ_stat × L_stat
 ```
 
-with:
+Where:
+- `L_base = CE(model(x_r), y_r)` - Base classification loss
+- `L_align` - Batch-mean softmax distribution alignment between forget and non-member batches
+- `L_stat` - Attack-sensitive statistics alignment:
+  - Maximum softmax confidence
+  - Top1-top2 logit margin
 
-- `L_base = CE(model(x_r), y_r)`
-- `L_align`: MSE between the batch-mean softmax distributions of forget and non-member batches
-- `L_stat`: MSE between batch-mean attack-sensitive statistics:
-  - maximum softmax confidence
-  - top1-top2 logit margin
+### Implementation Files
 
-Main implementation files:
+- [`muse/trainer.py`](./muse/trainer.py) - MUSE trainer
+- [`forget_random_strategies.py`](./forget_random_strategies.py) - Forgetting strategies
+- [`forget_sample_main.py`](./forget_sample_main.py) - Sample-wise unlearning entry
 
-- [`muse/trainer.py`](./muse/trainer.py)
-- [`forget_random_strategies.py`](./forget_random_strategies.py)
-- [`forget_sample_main.py`](./forget_sample_main.py)
+---
 
-## Repository Structure
+## 📁 Repository Structure
 
-- [`run_benchmark.py`](./run_benchmark.py): main benchmark entry
-- [`benchmark/samplewise.py`](./benchmark/samplewise.py): dataset presets, stage orchestration, attack dispatch
-- [`forget_sample_main.py`](./forget_sample_main.py): main sample-wise unlearning entry
-- [`rea_reminiscence_random.py`](./rea_reminiscence_random.py): REA-specific reminiscence stage
-- [`attacks/`](./attacks): benchmark attack adapters
-- [`muse/`](./muse): MUSE implementation
-- [`Ruli/`](./Ruli): RULI attack code
-- [`scripts/`](./scripts): convenience scripts for repeated experiments
+```
+MIA-benchmark/
+├── run_benchmark.py              # Main benchmark entry ⭐
+├── benchmark/
+│   └── samplewise.py             # Dataset presets, stage orchestration, attack dispatch
+├── forget_sample_main.py         # Sample-wise unlearning entry
+├── rea_reminiscence_random.py    # REA-specific reminiscence stage
+├── attacks/                       # Attack method adapters
+├── muse/                          # MUSE implementation ⭐
+├── Ruli/                          # RULI attack code
+├── scripts/                       # Batch experiment scripts
+├── models/                        # Model definitions
+├── evaluation/                     # Evaluation metrics
+└── utils/                         # Utility functions
+```
 
-## Environment
+---
 
-The repository has been used with a Conda environment named `exp`.
+## 🚀 Quick Start
 
-A validated runtime setup used in this project is:
+### Environment Setup
 
+Current project environment:
+
+```bash
+# Create conda environment
+conda create -n exp python=3.10 -y
+conda activate exp
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Verified environment:**
 - Python: `3.10.0`
 - PyTorch: `2.7.1+cu128`
 - TorchVision: `0.22.1+cu128`
 - GPU: `NVIDIA GeForce RTX 5090`
 
-Typical setup:
+### Example 1: Run finetune + REA attack on CIFAR-10
+
+**Full pipeline (with pretrain and shadow):**
 
 ```bash
-conda create -n exp python=3.10 -y
-conda activate exp
-pip install -r requirements.txt
-```
-
-## Datasets
-
-The benchmark currently uses:
-
-- `Cifar10`
-- `Cifar100`
-- `TinyImageNet`
-
-Expected default root:
-
-```text
-./data
-```
-
-## Benchmark Pipeline
-
-Available stages:
-
-- `pretrain`
-- `shadow`
-- `unlearn`
-- `reminiscence`
-- `attack`
-
-Typical stage usage:
-
-- `pretrain`: train the target model
-- `shadow`: prepare reusable shadow models
-- `unlearn`: run the chosen unlearning method
-- `reminiscence`: extra REA-only stage
-- `attack`: run selected attacks
-
-Important behavior:
-
-- `shadow` is reusable if checkpoints already exist
-- `pretrain`, `unlearn`, `reminiscence`, and `attack` can be rerun per seed/sample setup
-- REA requires `reminiscence`; other attacks do not
-
-## Supported Unlearning Methods
-
-Common methods currently wired into the benchmark:
-
-- `retrain`
-- `finetune`
-- `negative_grad`
-- `scrub`
-- `muse`
-
-## Supported Attacks
-
-Current benchmark attack adapters:
-
-- `lira`
-- `rea`
-- `ruli`
-- `unlearningleaks`
-
-All four are wired into the benchmark runner. `MUSE` is also connected to these attack pipelines.
-
-## Quick Start
-
-### 1. Run `finetune` on CIFAR-10 and evaluate with REA
-
-Full run:
-
-```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py \
+python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods finetune \
@@ -159,10 +154,10 @@ Full run:
   --stages pretrain shadow unlearn reminiscence attack
 ```
 
-If `pretrain` and `shadow` already exist:
+**Unlearn and attack only (reuse existing shadow):**
 
 ```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py \
+python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods finetune \
@@ -170,10 +165,10 @@ If `pretrain` and `shadow` already exist:
   --stages unlearn reminiscence attack
 ```
 
-### 2. Run all four attacks on one method
+### Example 2: One method + four attacks
 
 ```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py \
+python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods finetune \
@@ -181,10 +176,10 @@ If `pretrain` and `shadow` already exist:
   --stages unlearn attack
 ```
 
-### 3. Dry-run a command
+### Example 3: Dry-run to check command
 
 ```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py \
+python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods finetune \
@@ -193,27 +188,30 @@ If `pretrain` and `shadow` already exist:
   --dry-run
 ```
 
-## Multi-Round Script Example
+---
 
-For CIFAR-10 only, five rounds, four attacks, and five unlearning methods including MUSE:
+## 📊 Benchmark Pipeline
 
-```bash
-PYTHON_BIN=/root/miniconda3/envs/exp/bin/python \
-bash ./scripts/run_cifar10_five_rounds_muse.sh
-```
+### Supported Stages
 
-This script:
+| Stage | Description | Reusable |
+|-------|-------------|----------|
+| `pretrain` | Train target model | ❌ |
+| `shadow` | Prepare shadow models | ✅ |
+| `unlearn` | Run chosen unlearning method | ❌ |
+| `reminiscence` | REA-specific additional stage | ❌ |
+| `attack` | Run selected attacks | ❌ |
 
-- uses one random seed per round
-- uses one shared forget sample per round
-- reuses existing shadow checkpoints if available
-- reruns pretrain/unlearn/attack each round
-- skips failed sub-experiments and continues
-- aggregates mean/std across rounds
+**Important behavior:**
+- `shadow` is reusable if checkpoints exist
+- `pretrain`, `unlearn`, `reminiscence`, and `attack` can be rerun per seed/sample
+- REA requires additional `reminiscence` stage
 
-## Main CLI Parameters
+---
 
-Common `run_benchmark.py` options:
+## ⚙️ Main Parameters
+
+### Basic Parameters
 
 ```bash
 --dataset Cifar10|Cifar100|TinyImageNet|Cinic10
@@ -221,42 +219,43 @@ Common `run_benchmark.py` options:
 --stages pretrain shadow unlearn reminiscence attack
 --attacks lira rea ruli unlearningleaks
 --seed 1
---forget-perc 0.1
---num-shadow 8
---num-aug 10
---dry-run
+--forget-perc 0.1          # Forgetting ratio
+--num-shadow 8              # Number of shadow models
+--num-aug 10                # Data augmentation count
+--dry-run                   # Trial run check
 ```
 
-Attack-specific examples:
+### Attack-Specific Parameters
 
-- RULI:
-  - `--ruli-task selective`
-  - `--ruli-shadow-num 8`
-  - `--ruli-train-shadow-mode auto`
-- UnlearningLeaks:
-  - `--unlearningleaks-feature direct_diff`
-  - `--unlearningleaks-attack-model lr`
-  - `--unlearningleaks-num-shadow 8`
-
-For the full parameter list:
-
+**RULI:**
 ```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py --help
+--ruli-task selective
+--ruli-shadow-num 8
+--ruli-train-shadow-mode auto
 ```
 
-## MUSE Defaults
+**UnlearningLeaks:**
+```bash
+--unlearningleaks-feature direct_diff
+--unlearningleaks-attack-model lr
+--unlearningleaks-num-shadow 8
+```
 
-Current dataset-specific MUSE defaults are defined in [`config.py`](./config.py):
+### MUSE Hyperparameters
 
-- `Cifar10`: `lr=4e-4`, `epochs=7`, `lambda_align=1.0`, `lambda_stat=0.5`
-- `Cifar100`: `lr=3e-4`, `epochs=8`, `lambda_align=1.0`, `lambda_stat=0.75`
-- `Cinic10`: `lr=4e-4`, `epochs=8`, `lambda_align=1.0`, `lambda_stat=0.5`
-- `TinyImageNet`: `lr=3e-4`, `epochs=10`, `lambda_align=0.5`, `lambda_stat=0.25`
+Dataset-specific defaults in [`config.py`](./config.py):
 
-You can also override parameters explicitly:
+| Dataset | lr | epochs | λ_align | λ_stat |
+|----------|-----|--------|----------|--------|
+| CIFAR-10 | 4e-4 | 7 | 1.0 | 0.5 |
+| CIFAR-100 | 3e-4 | 8 | 1.0 | 0.75 |
+| CINIC-10 | 4e-4 | 8 | 1.0 | 0.5 |
+| TinyImageNet | 3e-4 | 10 | 0.5 | 0.25 |
+
+**Manual override:**
 
 ```bash
-/root/miniconda3/envs/exp/bin/python run_benchmark.py \
+python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods muse:4e-4:7 \
@@ -264,82 +263,112 @@ You can also override parameters explicitly:
   --stages unlearn reminiscence attack
 ```
 
-## Outputs
+---
 
-### Unlearning metrics
+## 📈 Output Results
 
-Per-method unlearning results are stored under:
+### Unlearning Metrics
 
-```text
-log_files\model/forget_random_main/<experiment>/unlearning/<method_key>/
+Per-method unlearning results stored at:
+
+```
+log_files/model/forget_random_main/<experiment>/unlearning/<method_key>/
 ```
 
-The TSV file contains:
+**TSV file records:**
+- `clean_acc` → **TA** (Test Accuracy)
+- `forgetting_acc` → **UA** (Unlearning Accuracy)
+- `remaining_acc` → **RA** (Retain Accuracy)
+- `zrf` (Zero-Residual Forgetting)
+- `mia` (MIA attack success rate)
+- `time` (Runtime)
 
-- `clean_acc` -> `TA`
-- `forgetting_acc` -> `UA`
-- `remaining_acc` -> `RA`
-- `zrf`
-- `mia`
-- `time`
+### Attack Metrics
 
-Note:
+Attack results stored at:
 
-- these TSV files are per-method working outputs
-- rerunning the same method directory overwrites the TSV
-
-### Attack metrics
-
-Attack results are stored under:
-
-```text
+```
 benchmark_results/samplewise/<experiment>/<method_key>/<attack>/seed_<seed>/
 ```
 
-Typical outputs include:
+**Output files:**
+- `attack_result.json` - Attack result summary
+- `ruli_summary.json` - RULI-specific results
+- Attack log files
+- ROC-related arrays for LiRA/REA
 
-- `attack_result.json`
-- `ruli_summary.json`
-- attack logs
-- summary arrays such as ROC-related files for LiRA/REA
+### Run Summary
 
-### Run summary
+Each benchmark run saves:
 
-Top-level benchmark summaries:
-
-```text
+```
 benchmark_results/samplewise/<experiment>/run_summary_seed_<seed>.json
 ```
 
-## Metrics
+---
 
-Legacy unlearning utility metrics:
+## 📊 Metrics Explanation
 
-- `TA`: test accuracy
-- `UA`: accuracy on the forget set
-- `RA`: accuracy on the retain set
+### Unlearning Utility Metrics
 
-Privacy metrics are attack-specific. The benchmark standardizes outputs such as:
+| Metric | Full Name | Meaning |
+|--------|-----------|---------|
+| **TA** | Test Accuracy | Accuracy on test set |
+| **UA** | Unlearning Accuracy | Accuracy on forget set |
+| **RA** | Retain Accuracy | Accuracy on retain set |
 
-- `auc`
-- `accuracy`
-- `TPR@0.1%FPR`
-- `TPR@1%FPR`
-- `TPR@10%FPR`
+### Privacy Attack Metrics
 
-If you follow the stricter legacy definition of MIA efficacy at fixed `0.1` FPR, the most relevant metric is:
+Standardized output:
+- **AUC** - Area under ROC curve
+- **Accuracy** - Attack accuracy
+- **TPR@0.1%FPR** - True positive rate at 0.1% FPR
+- **TPR@1%FPR** - True positive rate at 1% FPR
+- **TPR@10%FPR** - True positive rate at 10% FPR ⭐
 
-- `TPR@10%FPR`
+**Key metric:** Following the stricter legacy definition with fixed 0.1% FPR, the most critical privacy metric is **TPR@10%FPR**.
 
-## Notes
+---
 
-- `REA` requires the additional `reminiscence` stage.
-- `RULI` maintains its own internal shadow attack assets, in addition to the shared benchmark shadows.
-- `UnlearningLeaks` uses shared benchmark shadows and also builds its own shadow-unlearned assets.
-- The project contains several third-party components; the benchmark wrapper is the main entry recommended for new experiments.
+## 🧪 Multi-Round Experiments
 
-## Recommended Citation / Description
+### Batch Script Example
 
-If you upload this repository to GitHub, a short description can be:
+Run five rounds on CIFAR-10 with shared seed/sample per round, comparing four attacks and five unlearning methods (including `muse`):
 
-> A sample-wise machine unlearning benchmark with unified LiRA/REA/RULI/UnlearningLeaks evaluation and MUSE integration.
+```bash
+PYTHON_BIN=/root/miniconda3/envs/python \
+bash ./scripts/run_cifar10_five_rounds_muse.sh
+```
+
+**Script features:**
+- ✅ One random seed per round
+- ✅ One shared forget sample per round
+- ✅ Reuse existing shadow checkpoints
+- ✅ Rerun pretrain/unlearn/attack each round
+- ✅ Skip failed sub-experiments and continue
+- ✅ Output multi-round `mean/std`
+
+---
+
+## 📝 Notes
+
+- `REA` requires additional `reminiscence` stage
+- `RULI` maintains its own internal shadow attack assets
+- `UnlearningLeaks` uses shared shadows and builds shadow-unlearned assets
+- Contains several third-party components; benchmark wrapper is recommended for new experiments
+
+---
+
+## 📧 Contact
+
+- **Author:** Jingchao Hu
+- **Email:** [08235752@cumt.edu.cn](mailto:08235752@cumt.edu.cn)
+- **University:** China University of Mining and Technology (211)
+- **Paper:** "Research on Membership Inference Attack and Defense Methods for Machine Unlearning" - Under review at Cybersecurity
+
+---
+
+<p align="center">
+  <sub> built with ❤️ for privacy-preserving machine learning research </sub>
+</p>
