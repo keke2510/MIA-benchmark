@@ -62,11 +62,11 @@ MIA-benchmark is a comprehensive evaluation framework for **privacy-preserving m
 
 ---
 
-## 🛡️ About MUSE
+## 🛡️ About MISE
 
-### What is MUSE?
+### What is MISE?
 
-**MUSE (Membership-Undistinguishable Sample Erasure)** is a novel unlearning method implemented on top of the existing sample-wise framework.
+**MISE (Membership-Indistinguishable Sample Erasure)** is a novel unlearning method implemented on top of the existing sample-wise framework.
 
 ### Core Idea
 
@@ -110,7 +110,7 @@ MIA-benchmark/
 ├── forget_sample_main.py         # Sample-wise unlearning entry
 ├── rea_reminiscence_random.py    # REA-specific reminiscence stage
 ├── attacks/                       # Attack method adapters
-├── muse/                          # MUSE implementation ⭐
+├── mise/                          # MISE implementation ⭐
 ├── Ruli/                          # RULI attack code
 ├── scripts/                       # Batch experiment scripts
 ├── models/                        # Model definitions
