@@ -365,7 +365,6 @@ bash ./scripts/run_cifar10_five_rounds_muse.sh
 - **Author:** Jingchao Hu
 - **Email:** [08235752@cumt.edu.cn](mailto:08235752@cumt.edu.cn)
 - **University:** China University of Mining and Technology (211)
-- **Paper:** "Research on Membership Inference Attack and Defense Methods for Machine Unlearning" - Under review at Cybersecurity
 
 ---
 
