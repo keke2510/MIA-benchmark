@@ -56,16 +56,12 @@ def test_vgae_compute_loss():
 
     u = torch.tensor([0, 1])
     v = torch.tensor([1, 2])
-
-    # Generate consistent rank pos/neg for the test
-    with torch.no_grad():
-        _, rank_scores, weight_pred, mu, logvar, _ = model(x, edge_index, u, v)
-        rank_pos = rank_scores.detach().clone()
-        rank_neg = torch.tensor([1.0, 2.0])
-        w_true = torch.tensor([2.5, 3.5])
+    neg_u = torch.tensor([0, 1])
+    neg_v = torch.tensor([3, 3])
+    w_true = torch.tensor([2.5, 3.5])
 
     total, components = model.compute_loss(
-        x, edge_index, adj_true, u, v, rank_pos, rank_neg, None, w_true, loss_config
+        x, edge_index, adj_true, u, v, neg_u, neg_v, None, w_true, loss_config
     )
 
     assert total.ndim == 0

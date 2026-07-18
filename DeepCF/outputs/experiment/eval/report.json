@@ -1,0 +1,172 @@
+{
+  "timestamp": "2026-07-18T15:48:03.452267",
+  "link_prediction": {
+    "auc": 0.76416840974617,
+    "ap": 0.7623208707469955
+  },
+  "top_10_merchants": [
+    {
+      "id": 24,
+      "score": 0.8283720918814694,
+      "category": 0
+    },
+    {
+      "id": 162,
+      "score": 0.8278256599068202,
+      "category": 1
+    },
+    {
+      "id": 83,
+      "score": 0.8247517486186943,
+      "category": 0
+    },
+    {
+      "id": 159,
+      "score": 0.8230597757488607,
+      "category": 1
+    },
+    {
+      "id": 33,
+      "score": 0.8105306527040846,
+      "category": 0
+    },
+    {
+      "id": 61,
+      "score": 0.7935710809579005,
+      "category": 0
+    },
+    {
+      "id": 104,
+      "score": 0.7897675773375461,
+      "category": 1
+    },
+    {
+      "id": 21,
+      "score": 0.7792421691046073,
+      "category": 0
+    },
+    {
+      "id": 77,
+      "score": 0.7686260772197676,
+      "category": 0
+    },
+    {
+      "id": 150,
+      "score": 0.7623057868919199,
+      "category": 1
+    }
+  ],
+  "top_20_merchants": [
+    {
+      "id": 24,
+      "score": 0.8283720918814694,
+      "category": 0
+    },
+    {
+      "id": 162,
+      "score": 0.8278256599068202,
+      "category": 1
+    },
+    {
+      "id": 83,
+      "score": 0.8247517486186943,
+      "category": 0
+    },
+    {
+      "id": 159,
+      "score": 0.8230597757488607,
+      "category": 1
+    },
+    {
+      "id": 33,
+      "score": 0.8105306527040846,
+      "category": 0
+    },
+    {
+      "id": 61,
+      "score": 0.7935710809579005,
+      "category": 0
+    },
+    {
+      "id": 104,
+      "score": 0.7897675773375461,
+      "category": 1
+    },
+    {
+      "id": 21,
+      "score": 0.7792421691046073,
+      "category": 0
+    },
+    {
+      "id": 77,
+      "score": 0.7686260772197676,
+      "category": 0
+    },
+    {
+      "id": 150,
+      "score": 0.7623057868919199,
+      "category": 1
+    },
+    {
+      "id": 374,
+      "score": 0.760369465974845,
+      "category": 3
+    },
+    {
+      "id": 70,
+      "score": 0.7592034227259263,
+      "category": 0
+    },
+    {
+      "id": 335,
+      "score": 0.7568880376236958,
+      "category": 3
+    },
+    {
+      "id": 53,
+      "score": 0.755932486351415,
+      "category": 0
+    },
+    {
+      "id": 331,
+      "score": 0.7547554152588647,
+      "category": 3
+    },
+    {
+      "id": 60,
+      "score": 0.7544245566158219,
+      "category": 0
+    },
+    {
+      "id": 47,
+      "score": 0.7535004538364268,
+      "category": 0
+    },
+    {
+      "id": 145,
+      "score": 0.7502326825750663,
+      "category": 1
+    },
+    {
+      "id": 90,
+      "score": 0.747748477128218,
+      "category": 0
+    },
+    {
+      "id": 118,
+      "score": 0.7471413230428374,
+      "category": 1
+    }
+  ],
+  "radiation_stats": {
+    "mean": 0.5782279594709842,
+    "std": 0.10210746931920812,
+    "max": 0.8283720918814694,
+    "min": 0.1530197337269783
+  },
+  "output_files": [
+    "outputs/experiment/eval\\tsne_embeddings.png",
+    "outputs/experiment/eval\\influence_distribution.png",
+    "outputs/experiment/eval\\training_curves.png"
+  ]
+}

@@ -56,19 +56,23 @@ class DeepCFVGAE(nn.Module):
         adj_true: torch.Tensor,
         u: torch.Tensor,
         v: torch.Tensor,
-        rank_pos: torch.Tensor,
-        rank_neg: torch.Tensor,
+        neg_u: torch.Tensor,
+        neg_v: torch.Tensor,
         edge_weight: torch.Tensor | None,
         weight_true: torch.Tensor,
         loss_config: LossConfig,
     ) -> tuple:
-        adj_pred, rank_scores, weight_pred, mu, logvar, _ = self(
-            x, edge_index, u, v, edge_weight=edge_weight
-        )
+        # 一次编码，两次解码：正样本 + 负样本各算一次 BPR 分数
+        mu, logvar = self.encoder(x, edge_index, edge_weight=edge_weight)
+        z = reparameterize(mu, logvar, training=self.training)
+
+        adj_pred, rank_pos, weight_pred = self.decoder(z, u, v)
+        _, rank_neg, _ = self.decoder(z, neg_u, neg_v)
+
         return multi_task_loss(
             adj_pred=adj_pred,
             adj_true=adj_true,
-            rank_pos=rank_scores,
+            rank_pos=rank_pos,
             rank_neg=rank_neg,
             weight_pred=weight_pred,
             weight_true=weight_true,

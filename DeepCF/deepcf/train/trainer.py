@@ -56,6 +56,10 @@ class Trainer:
         total_loss = 0.0
         n_batches = 0
 
+        x_all = self.train_loader.dataset.x.to(self.config.device)
+        edge_index_all = self.train_loader.dataset.edge_index.to(self.config.device)
+        adj_all = adj_true.to(self.config.device)
+
         for batch in self.train_loader:
             users, pos_items, neg_items, weights = batch
             users = users.to(self.config.device)
@@ -63,25 +67,16 @@ class Trainer:
             neg_items = neg_items.to(self.config.device)
             weights = weights.to(self.config.device)
 
-            # 获取 BPR 排序样本（使用当前嵌入打分，detach 避免梯度回传到排序头）
-            with torch.no_grad():
-                z = self.model.get_embeddings(
-                    self.train_loader.dataset.x.to(self.config.device),
-                    self.train_loader.dataset.edge_index.to(self.config.device),
-                )
-                rank_pos = self.model.decoder.rank(z, users, pos_items)
-                rank_neg = self.model.decoder.rank(z, users, neg_items)
-
             self.optimizer.zero_grad()
 
             loss, components = self.model.compute_loss(
-                x=self.train_loader.dataset.x.to(self.config.device),
-                edge_index=self.train_loader.dataset.edge_index.to(self.config.device),
-                adj_true=adj_true.to(self.config.device),
+                x=x_all,
+                edge_index=edge_index_all,
+                adj_true=adj_all,
                 u=users,
                 v=pos_items,
-                rank_pos=rank_pos,
-                rank_neg=rank_neg,
+                neg_u=users,
+                neg_v=neg_items,
                 edge_weight=None,
                 weight_true=weights,
                 loss_config=self.config.loss,
