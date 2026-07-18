@@ -1,5 +1,7 @@
 """DeepCF VGAE 主模型."""
 
+from __future__ import annotations
+
 import torch
 import torch.nn as nn
 from typing import Dict
