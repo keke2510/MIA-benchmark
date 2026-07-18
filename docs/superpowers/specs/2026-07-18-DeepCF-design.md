@@ -1,24 +1,24 @@
-# DeepCF Design Specification
+# DeepCF 设计规范
 
 > **项目名称**: DeepCF — 基于图表示学习的城市消费网络建模与关键商户消费辐射最大化研究
 >
-> **Date**: 2026-07-18
+> **日期**: 2026-07-18
 >
-> **Status**: Approved
+> **状态**: 已确认
 
 ---
 
-## 1. Overview
+## 1. 概述
 
-### 1.1 Problem Statement
+### 1.1 问题定义
 
 城市消费网络中，不同商户对消费流的辐射/吸引能力差异巨大。识别网络中具有最大消费辐射影响力的关键商户，对商业选址、营销资源分配、城市商业规划等具有重要意义。
 
-### 1.2 Proposed Method
+### 1.2 方法概述
 
-DeepCF 基于 **Variational Graph Autoencoder (VGAE)** 框架，使用双层 GCN 编码器学习商户节点的 64 维潜在表示，并通过三头解码器同时完成：(A) 商户间链接预测、(B) 影响力成对排序、(C) 边权重回归。最终基于学到的嵌入识别 Top-K 关键商户并生成多维可视化分析。
+DeepCF 基于 **变分图自编码器（Variational Graph Autoencoder, VGAE）** 框架，使用双层 GCN 编码器学习商户节点的 64 维潜在表示，并通过三头解码器同时完成：(A) 商户间链接预测、(B) 影响力成对排序、(C) 边权重回归。最终基于学到的嵌入识别 Top-K 关键商户并生成多维可视化分析。
 
-### 1.3 Key References
+### 1.3 参考文献
 
 - VGAE: Kipf & Welling, "Variational Graph Auto-Encoders" (NIPS 2016)
 - BPR: Rendle et al., "BPR: Bayesian Personalized Ranking from Implicit Feedback" (UAI 2009)
@@ -26,189 +26,198 @@ DeepCF 基于 **Variational Graph Autoencoder (VGAE)** 框架，使用双层 GCN
 
 ---
 
-## 2. Graph Definition
+## 2. 图定义
 
-| Property | Value |
-|----------|-------|
-| Node | Merchant (商户) |
-| Edge | Consumption transfer relationship (消费转移关系) |
-| Edge Weight | Consumption amount + transfer frequency (消费金额 + 转移频次) |
-| Type | Undirected weighted graph (无向加权图) |
-| Node Features | Rich merchant attributes: category, location coordinates, avg spend, rating, etc. |
+| 属性 | 取值 |
+|------|------|
+| 节点 | 商户 |
+| 边 | 消费转移关系 |
+| 边权重 | 消费金额 + 转移频次 |
+| 类型 | 无向加权图 |
+| 节点特征 | 丰富商户属性：类别、位置坐标、人均消费、评分等 |
 
 ---
 
-## 3. Model Architecture
+## 3. 模型架构
 
-### 3.1 Overall: Multi-task VGAE
+### 3.1 总体架构：多任务 VGAE
 
 ```
-Input: X(N×F) features, A(N×N) adjacency, W(N×N) weights
+输入: X(N×F) 特征矩阵, A(N×N) 邻接矩阵, W(N×N) 权重矩阵
        │
        ▼
 ┌──────────────────────┐
-│  GCN Encoder         │
-│  Layer 1: N×16→N×128 │  ReLU + Dropout(0.3)
-│  Layer 2: N×128→μ,σ  │  Shared weight + independent projection
+│  GCN 编码器           │
+│  第1层: N×F → N×128  │  ReLU + Dropout(0.3)
+│  第2层: N×128 → μ,σ  │  共享权重 + 独立投影
 └──────────┬───────────┘
            │
            ▼
 ┌──────────────────────┐
-│  Reparameterization  │  z = μ + σ ⊙ ε, ε ~ N(0,I), dim=64
+│  重参数化             │  z = μ + σ ⊙ ε, ε ~ N(0,I), dim=64
 └──────────┬───────────┘
            │
      ┌─────┼─────┬──────────┐
      ▼     ▼     ▼          ▼
   ┌────┐┌────┐┌────┐   ┌────────┐
-  │Link││Rank││Wgt │   │  KL    │
-  │Head││Head││Head│   │  Loss  │
+  │链接││排序││权重│   │  KL    │
+  │预测││打分││回归│   │  损失  │
   └──┬─┘└──┬─┘└──┬─┘   └────────┘
      │     │     │
      ▼     ▼     ▼
-  BCE(A) BPR(s) MSE(w)   ← Joint Loss
+  BCE(A) BPR(s) MSE(w)   ← 联合损失
 ```
 
-### 3.2 Encoder (GCN)
+### 3.2 编码器（GCN）
 
-- **GCN Layer 1**: `H₁ = ReLU(D^(-½) Â D^(-½) X W₀)`, output dim = 128, Dropout = 0.3
-- **GCN Layer 2 (shared weight)**: `H₂ = D^(-½) Â D^(-½) H₁ W₁`, output dim = 128
-- **μ head**: `μ = H₂ W_μ`, output dim = 64
-- **log σ² head**: `log σ² = H₂ W_σ`, output dim = 64
-- **Reparameterization**: `z = μ + exp(½ log σ²) ⊙ ε`
+- **GCN 第1层**: `H₁ = ReLU(D⁻½ Â D⁻½ X W₀)`，输出维度 = 128，Dropout = 0.3
+- **GCN 第2层（共享权重）**: `H₂ = D⁻½ Â D⁻½ H₁ W₁`，输出维度 = 128
+- **μ 头**: `μ = H₂ W_μ`，输出维度 = 64
+- **log σ² 头**: `log σ² = H₂ W_σ`，输出维度 = 64
+- **重参数化**: `z = μ + exp(½ log σ²) ⊙ ε`
 
-### 3.3 Decoder (Three Heads)
+### 3.3 解码器（三头并行）
 
-| Head | Computation | Output | Loss |
-|------|-------------|--------|------|
-| **Link** | σ(zᵢᵀ zⱼ) — inner product + sigmoid | Âᵢⱼ ∈ [0,1] | BCE(Â, A) |
-| **Rank** | MLP([zᵢ ‖ zⱼ]) → sᵢⱼ — 2-layer MLP(128→64→1) | sᵢⱼ ∈ ℝ | BPR(s_pos, s_neg) |
-| **Weight** | MLP([zᵢ ‖ zⱼ]) → ŵᵢⱼ — 2-layer MLP(128→64→1) | ŵᵢⱼ ∈ ℝ | MSE(ŵ, w) |
+| 解码头 | 计算方式 | 输出 | 损失函数 |
+|--------|----------|------|----------|
+| **链接预测头** | σ(zᵢᵀ zⱼ) — 内积 + sigmoid | Âᵢⱼ ∈ [0,1] | BCE(Â, A) |
+| **排序头** | MLP([zᵢ ‖ zⱼ]) → sᵢⱼ — 2层MLP(128→64→1) | sᵢⱼ ∈ ℝ | BPR(s_pos, s_neg) |
+| **权重回归头** | MLP([zᵢ ‖ zⱼ]) → ŵᵢⱼ — 2层MLP(128→64→1) | ŵᵢⱼ ∈ ℝ | MSE(ŵ, w) |
 
-### 3.4 Joint Loss Function
+### 3.4 联合损失函数
 
 ```
-L = λ₁ · BCE(Â, A)          # Graph structure reconstruction
-  + λ₂ · BPR(s_pos, s_neg)  # Pairwise influence ranking
-  + λ₃ · MSE(ŵ, w)          # Edge weight regression
-  + β  · KL(q(z|X,A) ‖ p(z))  # Variational regularization
+L = λ₁ · BCE(Â, A)          # 图结构重构
+  + λ₂ · BPR(s_pos, s_neg)  # 影响力成对排序
+  + λ₃ · MSE(ŵ, w)          # 边权重回归
+  + β  · KL(q(z|X,A) ‖ p(z))  # 变分正则化
 ```
 
-Default hyperparameters: `λ₁ = 1.0, λ₂ = 0.5, λ₃ = 0.3, β = 0.001`
+超参默认值：`λ₁ = 1.0, λ₂ = 0.5, λ₃ = 0.3, β = 0.001`
+
+### 3.5 BPR 采样策略
+
+对每个商户 i：
+
+- **正样本 (i, j⁺)**：有边连接的邻居商户
+- **负样本 (i, j⁻)**：无边商户（随机采样，1:1 比例）
+- BPR 目标：s(i, j⁺) > s(i, j⁻)，即真实消费关联的商户对比随机商户具有更高影响力得分
 
 ---
 
-## 4. Data Pipeline
+## 4. 数据管线
 
-### 4.1 Data Strategy
+### 4.1 数据策略
 
-| Phase | Data Source | Purpose |
-|-------|-------------|---------|
-| Prototype & tuning | Synthetic data (generator) | Fast iteration, controlled experiments |
-| Main experiments | Public datasets (Yelp / Foursquare) | Real-world credibility |
-| Ablation studies | Synthetic data | Controlled parameter analysis |
+| 阶段 | 数据来源 | 用途 |
+|------|----------|------|
+| 原型开发与调参 | 合成数据生成器 | 快速迭代、可控实验 |
+| 主实验验证 | 公开数据集（Yelp / Foursquare） | 真实场景可信度 |
+| 消融实验 | 合成数据 | 可控参数分析 |
 
-### 4.2 Synthetic Data Generator
+### 4.2 合成数据生成器
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `num_nodes` | 500 | Number of merchants |
-| `num_features` | 16 | Raw node features (category one-hot + coords + spend + rating) |
-| `edge_density` | 0.05 | ~5% of node pairs have edges |
-| `community_k` | 5 | Number of business districts (SBM communities) |
-| `weight_range` | [0.1, 10.0] | Edge weight range |
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `num_nodes` | 500 | 商户数量 |
+| `num_features` | 16 | 原始节点特征（类别one-hot + 坐标 + 消费 + 评分） |
+| `edge_density` | 0.05 | 约5%的商户对存在消费关联边 |
+| `community_k` | 5 | 商业区数量（SBM 社区结构） |
+| `weight_range` | [0.1, 10.0] | 边权重范围 |
 
-Generation logic: SBM → community structure → category-bias edge probability → weight assignment (distance decay + category affinity)
+生成逻辑：SBM 生成社区结构图 → 按商户类别偏置调整连接概率 → 为边分配权重（基于距离衰减 + 类别关联度）
 
-### 4.3 Data Loading
+### 4.3 数据加载与采样
 
-1. **Graph construction**: Feature matrix X(N×F) + Adjacency A(N×N) + Weight matrix W(N×N)
-2. **Edge split**: Train 85% / Validation 5% / Test 10%
-3. **BPR sampling**: Per node per epoch: 1 positive edge + 1 negative edge → (u, i⁺, i⁻) triplet
-4. **Batching**: Mini-batch = 128 triplets, full adjacency matrix for GCN forward pass
-
----
-
-## 5. Training Configuration
-
-| Parameter | Value |
-|-----------|-------|
-| Optimizer | Adam (lr=0.001, weight_decay=5e-4) |
-| LR Schedule | ReduceLROnPlateau (patience=20, factor=0.5) |
-| Epochs | 500 (early stopping patience=50) |
-| Batch Size | 128 (BPR triplet batch) |
-| Device | GPU (CUDA) / CPU auto-detect |
-| Checkpoint | Every 50 epochs + best validation loss |
+1. **图构建**：特征矩阵 X(N×F) + 邻接矩阵 A(N×N) + 权重矩阵 W(N×N)
+2. **边划分**：训练边 85% / 验证边 5% / 测试边 10%
+3. **BPR 采样**：每轮对每个节点采样 1 正边 + 1 负边，构成 (u, i⁺, i⁻) 三元组
+4. **批量构造**：Mini-batch = 128 个三元组，GCN 前向传播使用完整邻接矩阵
 
 ---
 
-## 6. Evaluation Metrics
+## 5. 训练配置
 
-| Task | Metrics |
-|------|---------|
-| Link Prediction | AUC-ROC, AP (Average Precision) |
-| Influence Ranking | Precision@K, Recall@K, NDCG@K (K=5,10,20) |
-| Weight Regression | MAE, RMSE, R² |
-| Comprehensive | Radiation score = α·degree_centrality + β·rank_score + γ·avg_weight |
-
----
-
-## 7. Visualization & Analysis Outputs
-
-### 7.1 t-SNE Embedding Visualization
-- 2D/3D projection of 64-dim merchant embeddings
-- Color by merchant category → semantic clustering validation
-- Color by radiation score (heatmap) → highlight Top-K high-influence nodes
-- Before/after training comparison
-
-### 7.2 Influence Distribution
-- Radiation score histogram + long-tail analysis
-- Degree vs. Influence scatter plot → identify "low-degree high-influence" nodes
-- Geographic heatmap (if coordinates available)
-- Community-level influence bar chart
-
-### 7.3 Top-K Key Merchant Identification
-- Composite score ranking → Top-10 / Top-20 tables
-- Graph visualization with Top-K nodes highlighted
-- Cascade propagation simulation: random vs. Top-K seed comparison
-
-### 7.4 Model Analysis
-- Training curves (loss + metrics over epochs)
-- Ablation: pure GCN vs. GCN+VAE vs. DeepCF full model
-- Parameter sensitivity: β, λ ratios impact heatmap
-- Embedding dimension analysis: dim=16/32/64/128 comparison
+| 配置项 | 取值 |
+|--------|------|
+| 优化器 | Adam (lr=0.001, weight_decay=5e-4) |
+| 学习率调度 | ReduceLROnPlateau (patience=20, factor=0.5) |
+| 训练轮数 | 500（早停 patience=50） |
+| 批次大小 | 128（BPR 三元组采样批次） |
+| 设备 | GPU (CUDA) / CPU 自动检测 |
+| Checkpoint | 每 50 轮保存一次，保留验证损失最优模型 |
 
 ---
 
-## 8. Project Structure
+## 6. 评估指标
+
+| 任务 | 指标 |
+|------|------|
+| 链接预测 | AUC-ROC, AP (Average Precision) |
+| 影响力排序 | Precision@K, Recall@K, NDCG@K (K=5,10,20) |
+| 权重回归 | MAE, RMSE, R² |
+| 综合评分 | 辐射力 = α·度中心性 + β·排序得分 + γ·平均边权重 |
+
+---
+
+## 7. 可视化与分析输出
+
+### 7.1 t-SNE 嵌入可视化
+- 将 64 维商户嵌入降维到 2D/3D 空间
+- 按商户类别着色 → 验证嵌入是否学到了语义聚类
+- 按辐射力得分着色（热力图） → 标记 Top-K 高影响力节点
+- 训练前后嵌入对比 → 展示 VGAE 学到的结构信息
+
+### 7.2 影响力分布图
+- **辐射力直方图**：所有商户影响力得分分布 + 长尾分析
+- **度-影响力散点图**：x=节点度, y=辐射力得分 → 识别"低度高影响力"的关键商户
+- **辐射力热力图**：在 2D 平面（坐标）上绘制商户影响力地理热力分布
+- **社区级影响力汇总**：每个商业区（社区）的总体辐射力柱状图
+
+### 7.3 Top-K 关键商户识别
+- 综合得分 = α·度中心性 + β·排序头得分 + γ·边权重总和
+- 输出 Top-10 / Top-20 关键商户表格（ID, 类别, 辐射力得分, 覆盖范围）
+- 在图结构上高亮标记 Top-K 节点
+- 级联传播模拟：随机选择商户 vs Top-K 商户的传播效果对比
+
+### 7.4 模型分析
+- **训练曲线**：Loss/Epoch + 各指标/Epoch 双轴图
+- **消融对比**：纯 GCN vs GCN+VAE vs DeepCF 全模型指标对比
+- **参数敏感性**：β（KL权重）、λ比率对性能影响的 heatmap
+- **嵌入维度分析**：不同 latent dim (16/32/64/128) 的指标对比
+
+---
+
+## 8. 项目结构
 
 ```
 deepcf/
 ├── __init__.py
-├── config.py                 # Global config (model, training, paths)
+├── config.py                 # 全局配置（模型参数、训练参数、路径）
 ├── data/
 │   ├── __init__.py
-│   ├── generator.py          # Synthetic consumption network generator
-│   ├── dataset.py            # PyTorch Dataset + BPR sampling
-│   └── utils.py              # Graph normalization, feature scaling, train/test split
+│   ├── generator.py          # 合成消费网络数据生成器
+│   ├── dataset.py            # PyTorch Dataset（图数据 + 正负采样）
+│   └── utils.py              # 图标准化、特征归一化、训练/测试集划分
 ├── model/
 │   ├── __init__.py
-│   ├── encoder.py            # GCN encoder → μ, σ
-│   ├── decoder.py            # Three-head decoder (Link / Rank / Weight)
-│   ├── vgae.py               # VGAE main model
-│   └── losses.py             # Multi-task loss (BCE + BPR + MSE + KL)
+│   ├── encoder.py            # GCN 编码器（双层GCN → μ, σ）
+│   ├── decoder.py            # 三头解码器（Link / Rank / Weight）
+│   ├── vgae.py               # VGAE 主模型（组装 encoder + decoder）
+│   └── losses.py             # 多任务损失函数（BCE + BPR + MSE + KL）
 ├── train/
 │   ├── __init__.py
-│   ├── trainer.py            # Training loop (early stop, checkpoint)
-│   └── metrics.py            # Evaluation metrics (AUC, P@K, R@K, NDCG)
+│   ├── trainer.py            # 训练循环（含早停、checkpoint）
+│   └── metrics.py            # 评估指标（AUC, Precision@K, Recall@K, NDCG）
 ├── eval/
 │   ├── __init__.py
-│   ├── ranking.py            # Top-K identification & influence ranking
-│   ├── visualize.py          # t-SNE, influence distribution, model analysis
-│   └── report.py             # Comprehensive evaluation report
+│   ├── ranking.py            # Top-K 关键商户识别 & 影响力排序
+│   ├── visualize.py          # t-SNE 嵌入可视化、影响力分布图
+│   └── report.py             # 综合评估报告生成
 ├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_model_training.ipynb
-│   └── 03_results_analysis.ipynb
+│   ├── 01_data_exploration.ipynb   # 数据探索与网络统计
+│   ├── 02_model_training.ipynb     # 模型训练与超参调优
+│   └── 03_results_analysis.ipynb   # 结果分析与可视化
 tests/
 ├── test_encoder.py
 ├── test_decoder.py
@@ -216,37 +225,37 @@ tests/
 ├── test_losses.py
 └── test_data.py
 scripts/
-├── train.py                  # Training CLI
-├── evaluate.py               # Evaluation CLI
-└── visualize.py              # Visualization CLI
+├── train.py                  # 训练入口
+├── evaluate.py               # 评估入口
+└── visualize.py              # 可视化入口
 ```
 
-### Design Principles
+### 设计原则
 
-- **Single Responsibility**: Each module has one clear purpose
-- **Unidirectional Dependencies**: data → model → train → eval
-- **Config-driven**: All hyperparameters in config.py
-- **Testable**: Each module independently unit-testable
-
----
-
-## 9. Deliverable Format
-
-**Python package** (`deepcf/`) + **Jupyter Notebooks** (3 notebooks) + **CLI scripts** (train/evaluate/visualize).
+- **单一职责**：每个模块有且只有一个清晰的目标
+- **依赖单向**：data → model → train → eval，无循环依赖
+- **配置驱动**：所有超参数集中在 config.py，便于实验管理
+- **可测试**：每个模块可独立单元测试
 
 ---
 
-## 10. Non-Goals (for this iteration)
+## 9. 交付形式
 
-- Consumer node modeling (graph is merchant-only)
-- Real-time / streaming inference
-- Distributed training (multi-GPU)
-- Web UI or API server
-- Temporal dynamics (static graph snapshot)
+**Python 包**（`deepcf/`）+ **Jupyter Notebook**（3 个）+ **CLI 脚本**（train/evaluate/visualize）
 
 ---
 
-## 11. Dependencies
+## 10. 本期不包含的范围
+
+- 消费者节点建模（当前图为纯商户网络）
+- 实时/流式推理
+- 分布式训练（多 GPU）
+- Web UI 或 API 服务
+- 时序动态建模（当前为静态图快照）
+
+---
+
+## 11. 依赖项
 
 ```
 torch >= 2.0
@@ -260,9 +269,9 @@ tqdm
 
 ---
 
-## Specification Self-Review
+## 规范自检清单
 
-- **Placeholder scan**: ✅ No TBDs or TODOs remain. All key parameters have concrete defaults.
-- **Internal consistency**: ✅ Architecture (§3) aligns with pipeline (§5) and evaluation (§6). VGAE structure matches the project description.
-- **Scope check**: ✅ Focused and implementable. Non-goals clearly stated. No scope creep.
-- **Ambiguity check**: ✅ GCN vs GAT resolved (GCN). VAE role clarified (VGAE encoder). Multi-task approach explicitly defined as shared-encoder + three-head decoder.
+- **占位符检查**: ✅ 无 TBD、TODO 或未完成的章节。所有关键参数均有具体默认值。
+- **内部一致性**: ✅ 架构（§3）与管线（§4）、训练（§5）、评估（§6）保持一致。VGAE 结构与项目描述吻合。
+- **范围检查**: ✅ 聚焦可落地实施。非目标范围已在 §10 明确列出。无范围蔓延。
+- **歧义检查**: ✅ GCN vs GAT 已明确（使用 GCN）。VAE 角色已澄清（VGAE 编码器）。多任务方案明确定义为共享编码器 + 三头解码器。
