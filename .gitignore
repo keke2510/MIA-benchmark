@@ -1,0 +1,8 @@
+.superpowers/
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/
