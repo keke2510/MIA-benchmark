@@ -1,167 +1,208 @@
 #!/usr/bin/env python
-"""生成 DeepCF 模型架构流程图 — ASCII-only 版本，避免 Unicode 缺字."""
+"""生成 DeepCF 模型架构流程图 — 大幅改进版：更大间距、无重叠、分区清晰."""
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+import matplotlib.patches as mpatches
 
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
 plt.rcParams["axes.unicode_minus"] = False
 
 
-def draw_box(ax, x, y, w, h, text, color, text_color="white", fontsize=10):
-    box = FancyBboxPatch(
-        (x - w / 2, y - h / 2), w, h,
-        boxstyle="round,pad=0.08",
-        facecolor=color, edgecolor="#333333", linewidth=1.2, alpha=0.95,
-    )
-    ax.add_patch(box)
-    ax.text(x, y, text, ha="center", va="center", fontsize=fontsize,
-            color=text_color, weight="bold")
+def box(ax, x, y, w, h, text, color, fontsize=10, tc="white", lw=1.2):
+    """绘制圆角矩形."""
+    b = FancyBboxPatch((x - w/2, y - h/2), w, h, boxstyle="round,pad=0.12",
+                       facecolor=color, edgecolor="#333", linewidth=lw, alpha=0.95)
+    ax.add_patch(b)
+    ax.text(x, y, text, ha="center", va="center", fontsize=fontsize, color=tc, weight="bold")
 
 
-def draw_sub(ax, x, y, text, fontsize=9, color="white"):
-    """副标题文字."""
-    ax.text(x, y, text, ha="center", va="center", fontsize=fontsize, color=color)
+def zone(ax, x, y, w, h, color, alpha=0.35, lw=2):
+    """绘制背景分区."""
+    z = FancyBboxPatch((x - w/2, y - h/2), w, h, boxstyle="round,pad=0.2",
+                       facecolor=color, edgecolor=color, linewidth=lw, alpha=alpha)
+    ax.add_patch(z)
 
 
-def draw_arrow(ax, x1, y1, x2, y2, color="#555555", lw=1.5, style="->"):
+def arrow(ax, x1, y1, x2, y2, color="#555", lw=1.8):
     ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                arrowprops=dict(arrowstyle=style, color=color, lw=lw))
+                arrowprops=dict(arrowstyle="->", color=color, lw=lw, connectionstyle="arc3,rad=0"))
+
+
+def label(ax, x, y, text, fontsize=13, color="#1a1a2e", bold=True):
+    ax.text(x, y, text, ha="center", va="center", fontsize=fontsize, color=color, weight="bold" if bold else "normal")
 
 
 def main():
-    fig, ax = plt.subplots(1, 1, figsize=(16, 18))
-    ax.set_xlim(-6, 6)
-    ax.set_ylim(-8.5, 8.5)
+    # 更大画布，更多间距
+    fig, ax = plt.subplots(1, 1, figsize=(20, 24))
+    ax.set_xlim(-8, 8)
+    ax.set_ylim(-11, 10)
     ax.set_aspect("equal")
     ax.axis("off")
-    fig.patch.set_facecolor("#FAFBFC")
-    ax.set_facecolor("#FAFBFC")
+    fig.patch.set_facecolor("#F8F9FA")
+    ax.set_facecolor("#F8F9FA")
 
-    # ===== 标题 =====
-    ax.text(0, 8.0, "DeepCF Model Architecture", ha="center", va="center",
-            fontsize=22, weight="bold", color="#1a1a2e")
-    ax.text(0, 7.45, "Variational Graph Autoencoder for Urban Consumption Flow Network",
-            ha="center", va="center", fontsize=10, color="#666666", style="italic")
+    # =====================================================================
+    # TITLE
+    # =====================================================================
+    ax.text(0, 9.6, "DeepCF  Model Architecture", ha="center", fontsize=26, weight="bold", color="#1a1a2e")
+    ax.text(0, 9.1, "Variational Graph Autoencoder for Urban Merchant Influence Modeling",
+            ha="center", fontsize=11, color="#666", style="italic")
+    ax.plot([-6, 6], [8.85, 8.85], color="#ccc", lw=0.8)
 
-    # ===== 图定义横幅 =====
-    draw_box(ax, 0, 7.0, 10.5, 0.5,
-             "Graph: Nodes = Merchants  |  Edges = Consumption Flow  |  Weights = Amount + Frequency  |  Undirected",
-             "#5D6D7E", fontsize=8)
+    # =====================================================================
+    # GRAPH DEFINITION BAR
+    # =====================================================================
+    box(ax, 0, 8.5, 12, 0.55,
+        "Nodes = Merchants   |   Edges = Consumption Flow   |   Weights = Amount + Frequency   |   Undirected Graph",
+        "#4A5568", fontsize=9, tc="#E2E8F0", lw=1)
 
-    # ===== 输入层 =====
-    in_y = 6.1
-    draw_box(ax, -2.5, in_y, 2.2, 0.85, "Features\nX (N x F)", "#2E86AB", fontsize=9)
-    draw_box(ax, 0, in_y, 2.2, 0.85, "Adjacency\nA (N x N)", "#2E86AB", fontsize=9)
-    draw_box(ax, 2.5, in_y, 2.2, 0.85, "Weights\nW (N x N)", "#2E86AB", fontsize=9)
-    ax.text(0, 6.7, "INPUT", ha="center", va="center", fontsize=12, weight="bold", color="#1a1a2e")
+    # =====================================================================
+    # ZONE 1: INPUT (light blue)
+    # =====================================================================
+    zone(ax, 0, 7.3, 11, 1.7, "#BEE3F8", alpha=0.25)
+    label(ax, 0, 8.05, "INPUT", fontsize=14, color="#2B6CB0")
 
-    for sx in [-2.5, 0, 2.5]:
-        draw_arrow(ax, sx, 5.62, sx, 5.15, "#2E86AB")
+    in_y = 7.1
+    box(ax, -2.8, in_y, 2.6, 0.95, "Feature Matrix\nX  (N x F)", "#3182CE", fontsize=10)
+    box(ax, 0, in_y, 2.6, 0.95, "Adjacency Matrix\nA  (N x N)", "#3182CE", fontsize=10)
+    box(ax, 2.8, in_y, 2.6, 0.95, "Weight Matrix\nW  (N x N)", "#3182CE", fontsize=10)
 
-    # ===== GCN Encoder =====
-    enc = FancyBboxPatch((-4.5, 2.0), 9, 3.05, boxstyle="round,pad=0.15",
-                         facecolor="#E8F4F8", edgecolor="#2E86AB", linewidth=2.0, alpha=0.5)
-    ax.add_patch(enc)
-    ax.text(0, 4.90, "GCN Encoder", ha="center", va="center", fontsize=14, weight="bold", color="#1a5276")
+    for sx in [-2.8, 0, 2.8]:
+        arrow(ax, sx, 6.6, sx, 5.45, "#3182CE")
 
-    draw_box(ax, 0, 4.1, 7.2, 0.75,
-             "Layer 1: GCNConv(F->128) -> ReLU -> Dropout(0.3)",
-             "#3498DB", fontsize=9)
-    draw_box(ax, 0, 3.1, 7.2, 0.75,
-             "Layer 2: GCNConv(128->128, shared) -> ReLU",
-             "#3498DB", fontsize=9)
-    draw_arrow(ax, 0, 3.72, 0, 3.5, "#3498DB")
+    # =====================================================================
+    # ZONE 2: GCN ENCODER (blue)
+    # =====================================================================
+    zone(ax, 0, 4.1, 11, 2.5, "#90CDF4", alpha=0.20)
+    label(ax, 0, 5.3, "GCN  ENCODER", fontsize=14, color="#2B6CB0")
 
-    draw_box(ax, -1.6, 2.35, 2.8, 0.55, "mean: Linear(128->64)", "#2980B9", fontsize=8)
-    draw_box(ax, 1.6, 2.35, 2.8, 0.55, "log-var: Linear(128->64)", "#2980B9", fontsize=8)
+    # Layer 1
+    box(ax, 0, 4.55, 8.5, 0.8,
+        "Layer 1:  GCNConv(F -> 128)  ->  ReLU  ->  Dropout(0.3)",
+        "#2B6CB0", fontsize=10)
+    # Layer 2
+    box(ax, 0, 3.5, 8.5, 0.8,
+        "Layer 2:  GCNConv(128 -> 128, shared weights)  ->  ReLU",
+        "#2B6CB0", fontsize=10)
+    arrow(ax, 0, 4.12, 0, 3.92, "#2B6CB0")
 
-    # ===== Reparameterization =====
-    draw_arrow(ax, -1.6, 2.05, 0, 1.55, "#2E86AB")
-    draw_arrow(ax, 1.6, 2.05, 0, 1.55, "#2E86AB")
+    # mu and logvar projections
+    box(ax, -2.0, 2.68, 3.2, 0.65, "mu  =  Linear(128 -> 64)", "#2C5282", fontsize=9)
+    box(ax, 2.0, 2.68, 3.2, 0.65, "log-var  =  Linear(128 -> 64)", "#2C5282", fontsize=9)
 
-    draw_box(ax, 0, 1.25, 4.5, 0.55,
-             "z = mu + sigma * eps,  eps ~ N(0,I)", "#16A085", fontsize=10)
-    ax.text(2.65, 1.25, "[64-dim]", ha="center", va="center", fontsize=8, color="#0D6B5D")
-    ax.text(2.65, 0.95, "latent space", ha="center", va="center", fontsize=8, color="#0D6B5D")
+    # =====================================================================
+    # ZONE 3: REPARAMETERIZATION (green)
+    # =====================================================================
+    arrow(ax, -2.0, 2.33, 0, 1.55, "#2B6CB0")
+    arrow(ax, 2.0, 2.33, 0, 1.55, "#2B6CB0")
 
-    # ===== Three-Head Decoder =====
-    dec = FancyBboxPatch((-4.5, -2.85), 9, 3.95, boxstyle="round,pad=0.15",
-                         facecolor="#FEF9E7", edgecolor="#F39C12", linewidth=2.0, alpha=0.5)
-    ax.add_patch(dec)
-    ax.text(0, 0.95, "Three-Head Decoder", ha="center", va="center",
-            fontsize=14, weight="bold", color="#7D6608")
+    zone(ax, 0, 1.0, 7, 1.0, "#A3E4D7", alpha=0.25)
+    label(ax, -4.2, 1.0, "REPARAMETERIZATION", fontsize=12, color="#0E6251")
+    box(ax, 0, 1.0, 5.5, 0.65, "z  =  mu  +  sigma * epsilon  ,   epsilon ~ N(0, I)",
+        "#0E6251", fontsize=10)
+    label(ax, 3.3, 1.0, "64-dim latent space", fontsize=9, color="#0E6251", bold=False)
 
-    draw_arrow(ax, 0, 0.95, 0, 0.35, "#F39C12")
+    # =====================================================================
+    # ZONE 4: DECODER (orange)
+    # =====================================================================
+    zone(ax, 0, -1.6, 11, 2.7, "#FBD38D", alpha=0.20)
+    label(ax, 0, -0.3, "THREE-HEAD  DECODER", fontsize=14, color="#C05621")
 
-    # 三个解码头
-    hy = -0.05
-    draw_box(ax, -3.0, hy, 2.6, 0.85, "Link Head\nsigmoid(zi * zj)", "#E67E22", fontsize=9)
-    draw_sub(ax, -3.0, hy - 0.42, "output: A_hat (N x N) in [0,1]", fontsize=7, color="#FFEAA7")
+    arrow(ax, 0, 0.65, 0, 0.05, "#C05621")
 
-    draw_box(ax, 0, hy, 2.6, 0.85, "Rank Head\nMLP([zi || zj]) -> score", "#E67E22", fontsize=9)
-    draw_sub(ax, 0, hy - 0.42, "output: sij (pairwise influence)", fontsize=7, color="#FFEAA7")
+    hy = -0.65
+    # Link Head
+    box(ax, -3.0, hy, 2.8, 1.1,
+        "Link Head\n\nsigmoid(zi^T zj)\n-> A_hat in [0,1]",
+        "#DD6B20", fontsize=9, tc="#FFF5F5")
+    # Rank Head
+    box(ax, 0, hy, 2.8, 1.1,
+        "Rank Head\n\nMLP([zi || zj])\n-> score sij",
+        "#DD6B20", fontsize=9, tc="#FFF5F5")
+    # Weight Head
+    box(ax, 3.0, hy, 2.8, 1.1,
+        "Weight Head\n\nMLP([zi || zj]) + Softplus\n-> w_hat >= 0",
+        "#DD6B20", fontsize=9, tc="#FFF5F5")
 
-    draw_box(ax, 3.0, hy, 2.6, 0.85, "Weight Head\nMLP([zi || zj]) -> Softplus", "#E67E22", fontsize=9)
-    draw_sub(ax, 3.0, hy - 0.42, "output: w_hat_ij >= 0", fontsize=7, color="#FFEAA7")
+    # =====================================================================
+    # ZONE 5: LOSS FUNCTIONS (red + purple)
+    # =====================================================================
+    zone(ax, 0, -3.8, 11, 2.2, "#FEB2B2", alpha=0.18)
+    label(ax, 0, -2.75, "LOSS  FUNCTIONS", fontsize=14, color="#9B2C2C")
 
-    # ===== 损失函数 =====
-    ly = -1.65
+    ly = -3.45
     for sx in [-3.0, 0, 3.0]:
-        draw_arrow(ax, sx, -0.92, sx, ly + 0.3, "#E67E22")
+        arrow(ax, sx, -1.22, sx, ly + 0.32, "#DD6B20")
 
-    draw_box(ax, -3.0, ly, 2.2, 0.5, "BCE(A_hat, A)", "#C0392B", fontsize=9)
-    draw_box(ax, 0, ly, 2.2, 0.5, "BPR(s+, s-)", "#C0392B", fontsize=9)
-    draw_box(ax, 3.0, ly, 2.2, 0.5, "MSE(w_hat, w)", "#C0392B", fontsize=9)
+    box(ax, -3.0, ly, 2.5, 0.6, "BCE(A_hat, A)", "#C53030", fontsize=10)
+    box(ax, 0, ly, 2.5, 0.6, "BPR(s_pos, s_neg)", "#C53030", fontsize=10)
+    box(ax, 3.0, ly, 2.5, 0.6, "MSE(w_hat, w)", "#C53030", fontsize=10)
 
-    # KL Loss
-    draw_box(ax, 5.6, 2.35, 1.6, 0.55, "KL Divergence", "#8E44AD", fontsize=10)
-    draw_arrow(ax, 2.0, 2.55, 5.0, 2.35, "#8E44AD", lw=1.5)
+    # KL divergence on the right, connected from encoder
+    box(ax, 6.0, 2.68, 2.0, 0.65, "KL Divergence", "#805AD5", fontsize=10, tc="#FAF5FF")
+    # arrow from mu/logvar area to KL
+    ax.annotate("", xy=(5.2, 2.68), xytext=(3.4, 2.68),
+                arrowprops=dict(arrowstyle="->", color="#805AD5", lw=1.8, linestyle="dashed"))
+    ax.annotate("", xy=(6.0, 2.33), xytext=(6.0, -3.5),
+                arrowprops=dict(arrowstyle="->", color="#805AD5", lw=1.5, linestyle="dashed"))
 
-    # ===== Joint Loss =====
-    jl_y = -2.8
+    # =====================================================================
+    # JOINT LOSS
+    # =====================================================================
     for sx in [-3.0, 0, 3.0]:
-        draw_arrow(ax, sx, ly - 0.28, sx, jl_y + 0.35, "#C0392B")
-    draw_arrow(ax, 5.6, 2.05, 0, jl_y + 0.35, "#8E44AD", lw=1.2)
+        arrow(ax, sx, ly - 0.32, sx, -4.9, "#C53030")
 
-    draw_box(ax, 0, jl_y, 7.5, 0.7,
-             "L = lambda1*BCE  +  lambda2*BPR  +  lambda3*MSE  +  beta*KL",
-             "#1a1a2e", fontsize=11)
+    # Plus signs
+    for px in [-1.5, 1.5]:
+        label(ax, px, -4.55, "+", fontsize=16, color="#666")
 
-    # ===== Training =====
-    tr_y = -4.1
-    draw_arrow(ax, 0, jl_y - 0.38, 0, tr_y + 0.35, "#333333", lw=2.2)
-    draw_box(ax, 0, tr_y, 3.5, 0.55, "End-to-End Training", "#2C3E50", fontsize=10)
-    draw_sub(ax, 2.1, tr_y, "Adam + ReduceLROnPlateau", fontsize=8, color="#BDC3C7")
+    box(ax, 0, -5.35, 9, 0.7,
+        "L  =  lambda1 * BCE  +  lambda2 * BPR  +  lambda3 * MSE  +  beta * KL",
+        "#1A202C", fontsize=11, tc="#E2E8F0")
 
-    # ===== Output =====
-    out = FancyBboxPatch((-4.5, -7.6), 9, 3.3, boxstyle="round,pad=0.15",
-                         facecolor="#EAECEE", edgecolor="#7F8C8D", linewidth=2.0, alpha=0.7)
-    ax.add_patch(out)
-    ax.text(0, -4.35, "Multi-Dimensional Analysis Outputs", ha="center", va="center",
-            fontsize=14, weight="bold", color="#2C3E50")
-    draw_arrow(ax, 0, tr_y - 0.3, 0, -4.5, "#333333", lw=2.2)
+    # =====================================================================
+    # TRAINING
+    # =====================================================================
+    arrow(ax, 0, -5.72, 0, -6.45, "#1A202C", lw=2.2)
+    zone(ax, 0, -6.8, 10, 0.9, "#CBD5E0", alpha=0.25)
+    box(ax, 0, -6.8, 6, 0.65, "End-to-End Training  (Adam + ReduceLROnPlateau)",
+        "#2D3748", fontsize=10, tc="#E2E8F0")
 
-    outs = [
-        ("t-SNE Embeddings", "by Category & Influence"),
-        ("Top-K Key Merchants", "Radiation Score Ranking"),
-        ("Influence Distribution", "Histogram + Scatter"),
-        ("Training Curves", "Loss + AUC + Ablation"),
+    # =====================================================================
+    # ZONE 6: OUTPUTS
+    # =====================================================================
+    arrow(ax, 0, -7.15, 0, -8.1, "#2D3748", lw=2.2)
+    zone(ax, 0, -9.3, 12, 2.0, "#A0AEC0", alpha=0.18)
+    label(ax, 0, -8.35, "MULTI-DIMENSIONAL  ANALYSIS  OUTPUTS", fontsize=14, color="#2D3748")
+
+    oy = -9.1
+    outputs = [
+        ("t-SNE Embedding\nVisualization", "by Category\n& Influence Score"),
+        ("Top-K Key\nMerchant Ranking", "Radiation Score\nDescending Order"),
+        ("Influence\nDistribution Plots", "Histogram + Degree\nvs. Score Scatter"),
+        ("Training Curves\n& Ablation Study", "Loss / AUC per\nEpoch Comparison"),
     ]
-    for i, (title, desc) in enumerate(outs):
-        ox = -3.0 + i * 2.0
-        oy = -5.3
-        draw_box(ax, ox, oy, 1.8, 0.82, f"{title}\n{desc}", "#5D6D7E", fontsize=7)
+    for i, (title, desc) in enumerate(outputs):
+        ox = -4.5 + i * 3.0
+        box(ax, ox, oy, 2.6, 1.2, title, "#4A5568", fontsize=9, tc="#F7FAFC")
+        ax.text(ox, oy - 0.58, desc, ha="center", va="center", fontsize=7, color="#CBD5E0")
 
-    # ===== 底部信息 =====
-    ax.text(0, -7.9, "Hyperparameters: lambda1=1.0  lambda2=0.5  lambda3=0.3  beta=0.001  |  Optimizer: Adam(lr=0.001)",
-            ha="center", va="center", fontsize=8, color="#999999", style="italic")
+    # =====================================================================
+    # FOOTER
+    # =====================================================================
+    ax.text(0, -10.5, "Default Hyperparameters:  lambda1=1.0   lambda2=0.5   lambda3=0.3   beta=0.001   |   Optimizer: Adam(lr=0.001, weight_decay=5e-4)",
+            ha="center", fontsize=8, color="#A0AEC0", style="italic")
 
-    plt.tight_layout(pad=0.5)
-    plt.savefig("docs/architecture.png", dpi=200, bbox_inches="tight",
+    # =====================================================================
+    # SAVE
+    # =====================================================================
+    plt.tight_layout(pad=0.3)
+    plt.savefig("docs/architecture.png", dpi=180, bbox_inches="tight",
                 facecolor=fig.get_facecolor(), edgecolor="none")
     plt.close()
     print("Architecture diagram saved to docs/architecture.png")
