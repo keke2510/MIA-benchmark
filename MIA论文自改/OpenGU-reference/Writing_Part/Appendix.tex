@@ -1,0 +1,193 @@
+\balance
+The appendix is organized as follows:
+
+\noindent\textbf{A.1} Dataset Details
+
+\noindent\textbf{A.2} Backbone Details
+
+\noindent\textbf{A.3} GU Method Details
+
+\noindent\textbf{A.4} Evaluation Metric Details
+
+\noindent\textbf{A.5} Attack Details
+
+\noindent\textbf{A.6} Experimental Setting Details
+
+\subsection{Dataset Details}
+\label{A.Dataset}
+In OpenGU, the selected datasets play a pivotal role in benchmarking and evaluating the performance of GU methods under a range of realistic and challenging conditions. These datasets, chosen for their diversity in structure and application domain, enable a comprehensive analysis of the methods’ effectiveness, efficiency, and robustness. By capturing various graph characteristics, they provide an essential foundation for assessing unlearning strategies and comparing their adaptability across different scenarios. The following section provides a detailed overview of each dataset:
+
+\textbf{Cora}, \textbf{CiteSeer}, and \textbf{PubMed} \cite{Yang16cora} are among the most widely utilized citation network datasets in the GU field. In these datasets, nodes represent research papers, and edges indicate citation relationships between them. Each node is characterized by a bag-of-words feature vector and is uniquely associated with a specific category. These datasets are frequently employed for tasks such as node classification, providing a reliable basis for evaluating model performance across citation networks.
+
+\textbf{DBLP} \cite{2019DBLP}, derived from the extensive DBLP Computer Science Bibliography, offers a unique view into academic collaboration by modeling a co-authorship network. In this dataset, nodes represent individual authors, and edges indicate co-authored publications, capturing dynamic, multi-disciplinary research networks. Each node is labeled according to research domains, enabling robust experiments in node classification, clustering, and link prediction.
+
+\textbf{ogbn-arxiv} \cite{hu2020ogb} is a comprehensive academic graph derived from the Microsoft Academic Graph (MAG) \cite{wang2020microsoft_MAG}, designed to facilitate machine learning tasks on graph data. It represents a paper citation network of arXiv papers, capturing the scholarly communication and influence within the field of computer science. The graph structure of ogbn-arxiv is characterized by nodes representing scientific papers and edges representing citations between them, reflecting the academic referencing relationships. It offers a challenging and realistic testbed for the development and evaluation of GNNs and other machine learning models on graph data.
+
+\textbf{CS} and \textbf{Physics} \cite{shchur2018amazon_datasets} are co-authorship graphs derived from the Microsoft Academic Graph, specifically designed for node classification tasks. These datasets represent academic collaborations where nodes correspond to authors and edges indicate co-authorship on papers. In both datasets, node features are represented by paper keywords associated with each author's publications and class labels denote the most active fields of study for each author, providing a rich semantic profile for classification purposes.
+
+\textbf{Flickr} \cite{zeng2019graphsaint} encapsulates the structure and properties of online images, with each node representing an individual image. The dataset is characterized by its rich feature set, where nodes are described by a comprehensive set of features extracted from image metadata, such as comments, likes, and group affiliations. Edges in the Flickr dataset signify connections between images, which are based on shared attributes or interactions. The Flickr dataset stands as a significant resource for researchers and practitioners in the field of graph neural networks.
+
+\textbf{Photo} and \textbf{Computers} \cite{shchur2018amazon_datasets} datasets are derived from the Amazon co-purchase graph, representing the relationships between products frequently bought together. Nodes in these datasets symbolize individual products, while edges indicate co-purchase frequency, reflecting the market dynamics and consumer behavior on Amazon's e-commerce platform. The Photo dataset focuses on photographic equipment, while the Computers dataset centers on computer-related products, providing a nuanced view into consumer purchasing patterns within these specific domains.
+
+\textbf{ogbn-products} \cite{hu2020ogb} dataset, part of the Open Graph Benchmark (OGB), is an extensive co-purchasing network that captures the intricate relationships between products. Nodes in this dataset symbolize products and edges indicate that two products are frequently bought together. Node features are extracted from product descriptions, transformed into a bag-of-words representation. This dataset is renowned for its large scale and complex structure, which makes it an exemplary testbed for large-scale graph learning applications. It serves as a critical benchmark for assessing the scalability and effectiveness of graph algorithms, providing a realistic challenge for models to handle vast amounts of data and intricate connections.
+
+\textbf{Chameleon} and \textbf{Squirrel} \cite{pei2020geomgcn} datasets, sourced from Wikipedia, represent webpage networks where nodes correspond to individual pages and edges indicate mutual links. Each node’s features are derived from webpage content, capturing unique structural characteristics specific to each network. These datasets are particularly valuable for evaluating heterophilic graph learning methods, as nodes with similar labels are less densely connected, challenging traditional GNNs and encouraging the development of models that effectively handle low homophily settings.
+
+\textbf{Actor} \cite{pei2020geomgcn} dataset represents a actor network within the film industry, where each node corresponds to an actor and edges represent co-appearances in the same movie. Each node is characterized by features based on personal and professional attributes, providing a basis for relational insights. The dataset’s structure, with nodes labeled based on actor roles or genres, is well-suited for evaluating algorithms in low-homophily settings, challenging GNNs to accurately classify nodes when similar labels are sparsely connected.
+
+\textbf{Minesweeper} \cite{platonov2023hete_gnn_survey4} dataset, sourced from an online gaming platform, models interactions within the Minesweeper game environment. In this graph, each node represents a player, and edges denote collaborations or competitions between players during gameplay sessions. Node features are derived from player statistics and gameplay metrics, providing a comprehensive view of user behavior patterns. This dataset is valuable for analyzing patterns in social connectivity and behavior, making it useful for assessing unlearning strategies in dynamic, interaction-driven networks.
+
+\textbf{Tolokers} \cite{platonov2023hete_gnn_survey4} dataset, drawn from a crowdsourcing platform \cite{Tolokers_original}, represents worker interactions within collaborative tasks. Nodes correspond to individual workers, with edges indicating collaborations on shared tasks. The dataset captures complex relationships, as it aims to predict which workers may face restrictions or bans based on past activities.
+
+\textbf{Roman-empire} \cite{platonov2023hete_gnn_survey4} dataset is a dependency graph from the Roman Empire Wikipedia article \cite{lhoest2021empire_original}, with nodes as words and edges as dependencies or word adjacencies. It is used for node classification based on syntactic roles, offering insights into language structure and word relationships within a historical text.
+
+\textbf{Amazon-ratings} \cite{platonov2023hete_gnn_survey4} dataset captures user interactions with products on Amazon, forming a graph where nodes are items and edges represent user ratings. This dataset is instrumental for tasks like predicting user preferences and understanding product affinities, offering a real-world testbed for GNNs to operate at scale.
+
+\textbf{Questions} \cite{platonov2023hete_gnn_survey4} dataset represents interactions within a community Q\&A platform, where nodes correspond to users and edges indicate interactions such as asking, answering, or commenting on questions. This dataset reflects user engagement and information exchange patterns, making it suitable for evaluating algorithms focused on social dynamics and collaborative learning. Its structure provides valuable insights into the spread of information and influence within online communities.
+
+\textbf{MUTAG} \cite{MUTAG} is a chemical compounds dataset focusing on the mutagenicity of molecules, where each graph represents a molecule and the nodes represent atoms. The task is to predict whether the molecule is mutagenic or not. The dataset consists of 188 graphs with 7 distinct classes, making it a benchmark for graph classification in the field of cheminformatics.
+
+\textbf{PTC-MR} \cite{PTC} is a dataset used for mutagenic toxicity prediction, where each graph represents a chemical compound, and the nodes correspond to atoms. The task is to predict whether a compound is mutagenic based on its chemical structure. With 344 graphs, it includes two distinct classes and is commonly used for evaluating GNNs in bioinformatics applications.
+
+\textbf{BZR} \cite{BZR_COX_DHFR} dataset contains chemical compounds, where each molecule is represented as a graph, with nodes representing atoms and edges representing bonds. The classification task is to determine whether a compound can act as a potent estrogen receptor binder. It includes 405 graphs, with active and inactive classes.
+
+\textbf{COX2} \cite{BZR_COX_DHFR} is a dataset related to the inhibition of the COX-2 enzyme, an important target for anti-inflammatory drugs. It consists of chemical compounds where the nodes represent atoms and the edges represent bonds. The task is to predict whether a compound inhibits COX-2 or not. The dataset includes 467 graphs and is used for evaluating graph neural networks in drug discovery.
+
+\textbf{DHFR} \cite{BZR_COX_DHFR} is a dataset of 1,634 chemical compounds used to predict inhibition of the dihydrofolate reductase (DHFR) enzyme, a target for antimicrobial drugs. The dataset is significant for its application in drug design, where GNNs are used to model molecular structures and predict bioactivity. The task is binary classification (inhibitor or non-inhibitor), making it a valuable benchmark in computational biology.
+
+\textbf{AIDS} \cite{AIDS} dataset, which contains 2,000 chemical compounds, is used to predict the activity of these compounds against the HIV virus. It is a key dataset in drug discovery, particularly for anti-HIV drug. Each molecule is represented as a graph where nodes are atoms and edges are bonds. The binary classification task helps evaluate GNNs in pharmaceutical research and HIV treatment.
+
+
+\textbf{NCI1} \cite{NCI1} dataset consists of 4,110 chemical compounds and is used for cancer cell line screening. Each graph represents a molecule, and the task is to classify whether a compound is active or inactive against cancer cells. It is one of the largest datasets in molecular graph classification, playing a significant role in drug discovery, particularly in identifying potential anticancer compounds.
+
+\textbf{ogbg-molhiv} \cite{hu2020ogb} dataset, part of the Open Graph Benchmark (OGB), consists of 41,127 graphs representing chemical compounds. The goal is to predict whether a compound inhibits HIV. This large-scale dataset is important for advancing GNNs in drug discovery, providing a real-world application in the search for anti-HIV drugs. It is valuable due to its scale and complexity in bioinformatics.
+
+\textbf{ogbg-molpcba} \cite{hu2020ogb} dataset is another graph dataset from the Open Graph Benchmark (OGB) focused on predicting the biological activity of compounds across multiple targets. With over 437,000 compounds, this dataset presents a multi-label classification task, where each compound can have multiple activity labels. It is important for developing models capable of handling large-scale, multi-label classification tasks in cheminformatics.
+
+\textbf{ENZYMES} \cite{chen2024fedgl} dataset is used for enzyme classification, where each graph represents a protein, and the task is to predict the enzyme class to which it belongs. The dataset contains 600 graphs and is significant for understanding protein structures and functions in computational biology. It provides a benchmark for GNNs in biological and biomedical applications, particularly for enzyme function prediction.
+
+\textbf{DD} \cite{DD} dataset consists of 1,178 protein-protein interaction graphs, where nodes represent proteins and edges denote interactions between them. The task is binary classification, determining whether two proteins interact. This dataset is important in the study of biological systems, particularly in understanding cellular processes and identifying potential therapeutic targets.
+
+\textbf{PROTEINS} \cite{PROTEINS} dataset contains 1,113 graphs, each representing a protein, with nodes corresponding to amino acids and edges indicating spatial proximity. The classification task is to distinguish between enzymes and non-enzymes. This dataset is significant for studying protein structure and function, which is fundamental in drug discovery and molecular biology.
+
+\textbf{ogbg-ppa} \cite{hu2020ogb} dataset, from the Open Graph Benchmark (OGB), includes 158,100 graphs representing pairs of proteins and their potential interactions. The task is binary classification to predict whether a pair of proteins interacts. It is particularly valuable for exploring protein interaction prediction, which plays a critical role in understanding biological networks and disease mechanisms.
+
+\textbf{IMDB-BINARY} \cite{IMDB} dataset consists of 1,000 graphs, each representing a movie and the relationships between users and movies. The task is to predict whether a movie belongs to a specific genre based on interactions. This dataset is relevant for applications in social network analysis and movie recommendation systems.
+
+\textbf{IMDB-MULTI} \cite{IMDB} dataset, derived from IMDB, includes 1,500 graphs, where each graph represents a movie and contains co-occurrence relationships between users and movies. The task is to predict multiple genres for each movie. It is important for multi-label classification tasks in social network analysis and content-based recommendation systems.
+
+\textbf{COLLAB} \cite{COLLAB} dataset contains 5,000 graphs, each representing a scientific collaboration network, where nodes represent researchers and edges represent co-authorships. The classification task involves predicting the research domain of a collaboration network. This dataset is valuable for studying academic collaboration patterns and community detection in social networks.
+
+
+\textbf{ShapeNet} \cite{ShapeNet} dataset is a large-scale collection of 3D models representing various object categories, including chairs, tables, and airplanes. Each object is represented as a graph where nodes correspond to geometric features, and edges define spatial relationships. The task is to classify objects into categories, making it important for 3D shape recognition and computer vision applications.
+
+\textbf{MNISTSuperPixels} \cite{MNISTSuperPixels} dataset is a graph-based version of the famous MNIST digit classification dataset, where each digit is represented as a graph of superpixels. The task is to classify the digits (0-9) based on the graph structure. It is useful for exploring how graph-based models can be applied to image classification tasks, particularly in the context of digit recognition.
+
+
+
+\subsection{Backbone Details}
+\label{A.Backbone}
+
+In this section, we provide an in-depth overview of the GNNs utilized within OpenGU. These foundational architectures play a critical role in implementing and benchmarking GU strategies, as they offer diverse structures and mechanisms that impact the model's effectiveness, efficiency, and adaptability. By detailing each backbone, we aim to give readers a clearer understanding of the underlying model choices and their relevance to unlearning process.
+
+\textbf{GCN} \cite{kipf2016gcn} is a foundational GNN model that effectively captures graph structure by recursively aggregating feature information from neighboring nodes through a first-order approximation of spectral convolutions. GCN achieves strong performance in tasks such as semi-supervised node classification, link prediction, and community detection. 
+
+\textbf{GCNII} \cite{chen2020gcnii} is an extension of GCN that improves expressiveness by incorporating higher-order graph convolutions while avoiding over-smoothing. It introduces a novel initialization and an implicit regularization mechanism, making it robust for deep graph networks. GCNII excels in tasks involving large and sparse graphs, such as semi-supervised node classification and graph regression, while maintaining stability in deep models.
+
+\textbf{LightGCN} \cite{LightGCN} is a light-weight GNN model optimized for collaborative filtering tasks, specifically in recommender systems. Unlike traditional GCNs, it simplifies the convolution operation by removing unnecessary transformations and focusing solely on neighborhood aggregation. LightGCN delivers state-of-the-art performance in tasks such as link prediction and recommendation while maintaining computational efficiency.
+
+\textbf{GAT} \cite{velivckovic2017gat} enhances traditional GNNs by introducing attention mechanisms to weigh the importance of neighboring nodes when aggregating features. This attention-driven approach makes GAT especially effective in graphs with complex node relationships, offering a robust solution for node classification and link prediction.
+
+\textbf{GATv2} \cite{brody2021gatv2} is an enhanced version of the Graph Attention Network (GAT) that improves the flexibility and expressiveness of attention mechanisms. GATv2 introduces a more generalized attention mechanism, allowing for better handling of noisy graph data and fine-grained aggregation of neighborhood information. It has shown superior performance in node classification and graph classification tasks, especially for graphs with heterogeneous features.
+
+% \textbf{TAG} \cite{jian2018tag} introduces the Topology Adaptive Graph Convolutional Network (TAGCN), which improves upon spectral graph convolutions by eliminating the need for approximations. TAGCN uses fixed-size, learnable filters that adapt to the graph's topology, performing convolution directly in the vertex domain. This approach combines the benefits of CNNs for grid data with graph signal processing principles, achieving better performance and computational efficiency than existing spectral CNNs.
+
+
+\textbf{GIN}  \cite{xu2018gin} is designed to capture structural distinctions in graphs with maximal expressive power. By applying a sum aggregator followed by a multi-layer perceptron, GIN achieves injective mapping of neighborhood features, allowing it to differentiate between complex graph structures more effectively than other models.
+
+
+\textbf{GraphSAGE} \cite{hamilton2017graphsage} is a powerful framework that generalizes GNNs by learning node embeddings through sampling and aggregating features from a fixed-size neighborhood. Unlike traditional GNNs, which require access to the entire graph, GraphSAGE supports efficient inductive learning by training on sampled node neighborhoods, enabling it to scale effectively to large graphs and adapt to unseen nodes in dynamic environments. 
+
+\textbf{GraphSAINT} \cite{zeng2019graphsaint} is a scalable GNN model designed to handle large-scale graphs by employing efficient sampling methods. It combines graph sampling with mini-batch training, allowing the model to operate on subgraphs rather than the entire graph, which greatly improves training efficiency. GraphSAINT achieves competitive performance in node classification and graph classification tasks, particularly for large graphs with millions of nodes.
+
+\textbf{Cluster-gcn} \cite{chiang2019cluster-gcn} is a GNN model designed to handle graph clustering tasks by exploiting node-level similarity structures. It divides the graph into multiple subclusters and performs learning on these subgraph clusters to improve performance and scalability. Cluster-gcn has been demonstrated to achieve high accuracy in clustering-based tasks while maintaining computational efficiency in large-scale graphs.
+
+\textbf{SGC} \cite{wu2019sgc} is a streamlined variant of GCN that removes non-linearity between layers, significantly reducing computational complexity. By collapsing multiple layers into a single linear transformation, SGC preserves essential neighborhood information while enhancing scalability, making it particularly suitable for large-scale node classification tasks.
+
+\textbf{SSGC} \cite{zhu2021ssgc} extends the SGC model by incorporating self-supervised learning through contrastive loss, enabling more robust representation learning. This method preserves the efficient linear architecture of SGC while enhancing node embeddings by contrasting positive and negative samples, capturing meaningful graph structures.
+
+\textbf{SIGN} \cite{frasca2020sign}  is designed for large-scale graphs, leveraging a pre-computation strategy to improve efficiency. It processes multiple hops of neighborhood information independently, storing them as separate feature channels. By avoiding recursive message passing during training, SIGN achieves scalability and faster computation, making it well-suited for tasks on massive graph datasets.
+
+\textbf{APPNP} \cite{2019appnp} introduces a novel approximation of personalized PageRank, combining random walk-based methods with graph neural networks. APPNP performs graph-based label propagation with high efficiency, significantly improving node classification performance, particularly in semi-supervised learning settings. The model’s robustness to noisy graphs and its ability to propagate information over distant nodes makes it a powerful tool for graph-based recommendation systems.
+
+
+\subsection{GU Method Details}
+\label{A.GU}
+In the context of GU, a range of specialized methods has been developed to address the challenges of selectively forgetting specific nodes, edges, or features in a trained model while preserving the integrity of the remaining graph information. These methods aim to balance effectiveness in unlearning with model efficiency and robustness, ensuring minimal impact on predictive performance for retained data. Below, we provide a detailed overview of these approaches, highlighting their mechanisms and contributions to advancing GU capabilities.
+
+\textbf{GraphEraser} \cite{chen2022graph_eraser} is a GU method designed to efficiently remove specific nodes or edges from a trained GNN model. By utilizing two novel graph partition algorithms and a learning-based aggregation method, GraphEraser identifies and updates only the relevant substructures, enabling precise removal while minimizing computational overhead.
+
+\textbf{GUIDE} \cite{wang2023guide} is an inductive GU framework designed to address the limitations of traditional transductive unlearning approaches like GraphEraser. GUIDE incorporates a balanced graph partitioning mechanism, efficient subgraph repair, and similarity-based aggregation to ensure effective unlearning while maintaining computational efficiency. This approach enables unlearning with low partition costs, preserving model adaptability in inductive graph learning tasks.
+
+\textbf{GraphRevoker} \cite{2024ZhangGraphRevoker} addresses the challenge of GU by balancing efficient unlearning with high model utility. Unlike traditional methods that may fragment essential information during partitioning, GraphRevoker employs property-aware sharding, preserving key structural and attribute information. For final predictions, it integrates sub-GNN models through a contrastive aggregation technique, ensuring coherent model utility while unlearning data.
+
+\textbf{GIF} \cite{wu2023gif} innovatively tackles GU by leveraging a tailored influence function, enhancing both efficiency and precision in unlearning processes. GIF redefines influence to address dependencies among neighboring nodes by introducing a specialized loss term that accounts for structural interactions, which traditional influence functions overlook. This model-agnostic approach enables GIF to estimate parameter adjustments in response to small data perturbations, providing a closed-form solution that facilitates understanding of the unlearning mechanics.
+
+\textbf{ScaleGUN} \cite{scaluGUN} is a scalable framework for certified GU, addressing the inefficiency of traditional methods by integrating approximate graph propagation techniques. It ensures certified guarantees for node feature, edge, and node unlearning scenarios while maintaining bounded model error on embeddings. By balancing efficiency and accuracy, ScaleGUN extends certified unlearning to large-scale graphs without compromising privacy guarantees.
+
+\textbf{CGU} \cite{chien2022cgu} offers the first approximate GU approach with theoretical guarantees, designed to manage varied unlearning requests. CGU emphasizes precise handling of feature mixing during propagation, particularly within SGC. This enables CGU to efficiently balance privacy, complexity, and performance, achieving rapid unlearning with minimal accuracy loss.
+
+\textbf{CEU} \cite{2023WuCEU} introduces an efficient solution for edge unlearning in GNNs by bypassing the high costs of full retraining. CEU uniquely leverages a single-step parameter update on the pre-trained model, effectively erasing edge influence while preserving model integrity. The CEU framework also offers theoretical guarantees under convex loss conditions, achieving notable speedup with model accuracy nearly on par with complete retraining.
+
+\textbf{GST} \cite{pan2023gst_unlearning} offers an innovative approach to GU by leveraging its efficient, stable, and provably resilient framework under feature or topology perturbations. Unlike traditional GNN retraining, GST-based unlearning introduces a nonlinear approximation mechanism that achieves competitive graph classification performance, making GST an advantageous method for privacy-sensitive applications demanding efficient unlearning without sacrificing performance.
+
+\textbf{IDEA} \cite{2024IDEA} represents an outstanding framework in the realm of GU, addressing the critical need for flexible and certified unlearning. It pioneers an approach that accommodates a variety of unlearning requests, transcending the limitations of specialized GNN designs or objectives. IDEA's flexibility is underscored by its ability to provide theoretical guarantees for information removal across diverse GNN architectures, setting a new standard for privacy protection.
+
+\textbf{GNNDelete} \cite{cheng2023gnndelete} addresses key challenges in GU by introducing a model-agnostic, layer-wise operator that effectively removes graph elements. Its core mechanisms, Deleted Edge Consistency and Neighborhood Influence, ensure that deleted edges and nodes are fully excluded from model representations without compromising the influence of neighboring nodes.
+
+\textbf{MEGU} \cite{xkliMEGU2024} introduces a pioneering mutual evolution approach for GU, where prediction accuracy and unlearning effectiveness evolve synergistically within a single training framework. MEGU’s adaptability enables precise unlearning at the feature, node, and edge levels, showing strong superiority in the field of GU.
+
+\textbf{SGU} \cite{} is a pioneering approach that addresses the challenges of gradient-driven node entanglement and scalability in GU. By integrating Node Influence Maximization, SGU identifies the highly influenced nodes through a decoupled influence propagation model, offering a scalable and plug-and-play solution.
+
+\textbf{D2DGN} \cite{2024D2DGN} revolutionizes GU through knowledge distillation. It adeptly addresses the complexities of removing specific elements from GNNs by dividing and marking graph knowledge for retention and deletion. D2DGN stands out for its efficiency, effectively eliminating the influence of deleted elements while preserving retained knowledge, and its superior performance in both edge and node unlearning tasks across real-world datasets.
+
+
+% \textbf{GCU} \cite{2023GCU} is a groundbreaking framework that revolutionizes GU by integrating contrastive learning principles. GCU's innovation lies in its ability to differentiate deleted edges while aligning neighboring nodes with original features, effectively removing the influence of removed edges from model parameters and representations. This approach not only strengthens user privacy but also simplifies the unlearning process, eliminating the need for full model retraining even with extensive edge deletions.
+
+\textbf{GUKD} \cite{2023GUKD} harnesses the power of knowledge distillation, emerging as an innovative solution for class unlearning in GNN. It distinctively pairs a deep GNN model with a shallow student network, facilitating the transfer of retained knowledge and enabling targeted forgetting. GUKD stands out with its exceptional performance, thereby setting a new benchmark for efficient and effective GU.
+
+ 
+\textbf{UtU} \cite{Tan2024UtU} represents a paradigm shift in edge unlearning for GNNs, offering a streamlined solution that eschews the pitfalls of over-forgetting associated with traditional methods. This innovative technique simplifies the unlearning process by directly unlinking specified edges from the graph. UtU's elegance lies in its ability to safeguard privacy with minimal computational overhead, aligning closely with the performance of a freshly retrained model while ensuring the integrity of the remaining graph structure. 
+
+
+\textbf{Projector} \cite{cong2023projector} stands out by projecting the pre-trained model's weight parameters onto a subspace unrelated to the features of unlearning nodes, effectively bypassing node dependency issues. This method ensures a perfect data removal, where the unlearned model parameters are devoid of any information concerning the unlearned nodes, a guarantee inherent in its algorithmic design. 
+
+
+
+\subsection{Evaluation Metric Details}
+\label{A.Evaluation Metrics}
+
+Our OpenGU includes three downstream tasks in total: node classification, link prediction, and graph classification. These three downstream tasks are evaluated using F1-score, ROC-AUC, and accuracy Acc, respectively.
+
+\textbf{F1-score}, a metric used to evaluate classification problems, is the harmonic mean of precision and recall. In node classification tasks, there may be an imbalance in categories, that is, the number of samples in some categories is much larger than that in other categories. In this case, using accuracy alone may lead to misjudgment of model performance. F1-score can more comprehensively reflect the performance of the model in each category by considering both precision and recall, especially when dealing with data with imbalanced categories.
+
+\textbf{ROC-AUC}, the area under the ROC curve, is used to evaluate the performance of a classification model. AUC values range from 0 to 1, with larger values indicating better performance. In link prediction tasks, the AUC value measures the model's ability to predict whether there is a link between node pairs. A higher AUC value indicates that the model is more effective in distinguishing nodes that actually have links from node pairs that do not.
+
+\textbf{Accuracy}, one of the basic indicators for measuring model performance. In graph classification tasks, accuracy is the most intuitive evaluation indicator and is easy to understand and calculate.
+
+\textbf{Precision}, a crucial indicator for model performance assessment. In some tasks, it shows the proportion of correctly predicted positive instances among all predicted positives. It is a significant metric that helps to understand the exactness of the model's predictions.
+
+
+
+\subsection{Attack Details}
+\label{A.Attack}
+
+We implemented two attack strategies, Membership Inference Attack and Poison Attack, and evaluated them respectively.
+
+\textbf{Membership Inference Attack}, a privacy attack technique against machine learning models in which the attacker attempts to determine whether a specific data record was previously used to train the machine learning model. We use Membership Inference Attack to gauge the efficacy of unlearning by quantifying the probability ratio of unlearned part presence before and after the unlearning process.
+
+\textbf{Poisoning Attack}, a security threat against machine learning models. Its main purpose is to disrupt the model training process by contaminating the training data during the model training phase. Add heterogeneous edges to the original data as negative samples, and judge the quality of the forgetting effect by comparing the effects of the model before and after forgetting the heterogeneous edges.
+
+\subsection{Experimental Setting Details}
+\label{A.set}
+All experiments were conducted on a system equipped with an NVIDIA A100 80GB PCIe GPU and an Intel(R) Xeon(R) Gold 6240 CPU @ 2.60GHz, with CUDA Version 12.4 enabled. The software environment was set up with Python 3.8.0 and PyTorch 2.2.0 to ensure optimal compatibility and performance for all GU algorithms. Additionally, hyperparameters for each GU algorithm were configured based on conclusions drawn from prior research to provide consistent and reliable results.

@@ -1,0 +1,292 @@
+
+In this section, we present a comprehensive overview of OpenGU, emphasizing the key aspects of the benchmark design, as outlined in Table \ref{table1}. First, we detail the datasets and the associated preprocessing techniques (Sec. \ref{dataset}), followed by an examination of the various GU methods (Sec. \ref{alg}). Lastly, we outline the evaluation metrics and experimental configurations (Sec. \ref{eva}) that structure the benchmarking process, offering the core principles and the holistic view of our OpenGU framework.
+
+\captionsetup[table]{}
+\begin{table*}[t]
+\caption{Statistical Overview of Datasets for Node and Edge-Level Tasks in OpenGU Benchmark.}
+\renewcommand{\aboverulesep}{0.8pt}
+\renewcommand{\belowrulesep}{0.8pt}
+\renewcommand{\arraystretch}{0.9}
+\fontsize{3pt}{4pt}\selectfont% 设置横线宽度
+\label{table2}
+\centering % 表格居中
+\resizebox{0.95\textwidth}{!}{
+\begin{tabular}{ccccccc}
+    \arrayrulecolor{myblue5}\toprule[0.16em]%第一道横线
+    \textbf{Datasets}  & \textbf{Nodes} & \textbf{Edges} & \textbf{Features } & \textbf{Classes} & \textbf{Type} & \textbf{Description}\\
+    \arrayrulecolor{under}\midrule[0.1em]%第二道横线 
+    Cora & 2,708 & 5,278 & 1,433 & 7 & Homophily & Citation Network\\
+    Citeseer & 3,327 & 4,732 & 3,703 & 6 & Homophily& Citation Network\\
+    PubMed & 19,717 & 44,338 & 500 & 3 & Homophily& Citation Network\\ 
+    DBLP & 17,716 & 52,867 & 1,639 & 4 & Heterophily & Citation Network\\
+    ogbn-arxiv & 169,343 & 1,166,243 & 128 & 40 & Homophily & Citation Network\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.75pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    CS & 18,333 & 81,894 & 6,805 & 15 & Homophily& Co-author Network\\
+    Physics & 34,493 & 247,962 & 8,415 & 5 & Homophily& Co-author Network\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.7pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    Photo & 7,487 & 119,043 & 745 & 8 & Homophily& Co-purchasing Network\\ 
+    Computers & 13,381 & 245,778 & 767 & 10 & Homophily & Co-purchasing Network\\ 
+    ogbn-products & 2,449,029 & 61,859,140 & 100 & 47 & Homophily & Co-purchasing Network\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.7pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    Chameleon & 2,277 & 36,101 & 2,325 & 5 & Heterophily  & Wiki-page Network \\
+    Squirrel & 5,201 & 216,933 & 2,089 & 5 & Heterophily  & Wiki-page Network \\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.75pt]
+\arrayrulecolor{under} \midrule[0.08em]
+
+    Actor & 7,600 & 29,926 & 931 & 5 & Heterophily  &  Actor Network \\
+    Minesweeper & 10,000 & 39,402 & 7 & 2 & Homophily &  Game Synthetic Network\\
+    Tolokers & 11,758 & 519,000 & 10 & 2 & Homophily &  Crowd-sourcing Network\\
+    Roman-empire & 22,662 & 32,927 & 300 & 18 & Heterophily  &  Article Syntax Network\\
+    Amazon-ratings & 24,492 & 93,050 & 300 & 5 & Heterophily  &  Rating Network\\
+    Questions & 48,921 & 153,540 & 301 & 2 & Homophily &  Social Network\\
+    Flickr & 89,250 & 899,756 & 500 & 7 & Heterophily & Image Network\\ 
+        \arrayrulecolor{myblue5}\bottomrule[0.16em]%第三道横线
+\end{tabular}}
+\end{table*}
+
+
+
+\captionsetup[table]{}
+\begin{table*}[t]
+\caption{Statistical Overview of Datasets for Graph-Level Tasks in OpenGU Benchmark.}
+\label{table3}
+\centering % 表格居中
+\renewcommand{\aboverulesep}{0.7pt}
+\renewcommand{\belowrulesep}{0.7pt}
+\fontsize{2.5pt}{3.5pt}\selectfont% 设置横线宽度
+% \setlength{\tabcolsep}{3pt} % 设置列间距
+\renewcommand{\arraystretch}{0.9} % 设置行距
+\resizebox{0.95\textwidth}{!}{
+\begin{tabular}{ccccccc}
+    \arrayrulecolor{myblue5}\toprule[0.16em]%第一道横线
+    \textbf{Datasets}  & \textbf{Graphs} &\textbf{Nodes} & \textbf{Edges} & \textbf{Features } & \textbf{Classes} & \textbf{Description}\\
+    \arrayrulecolor{under}\midrule[0.1em]%第二道横线 
+    MUTAG & 188 & 17.93 & 19.79 & 7 & 2 & Compounds Network\\
+    PTC-MR & 344 & 14.29 & 14.69 & 18 & 2& Compounds Network\\
+    BZR & 405 & 35.75 & 38.36 & 56 & 2 & Compounds Network\\ 
+    COX2 & 467 & 41.22 & 43.45 & 38 & 2 & Compounds Network\\
+    DHFR & 467 & 42.43 & 44.54 & 56 & 2 & Compounds Network\\ 
+    AIDS & 2,000  & 15.69 & 16.20 & 42 & 2 & Compounds Network\\
+    NCI1 & 4,110 & 29.87 & 32.30 & 37 & 2 & Compounds Network\\ 
+    ogbg-molhiv & 41,127 & 25.50 & 27.50 & 9 & 2 & Compounds Network\\ 
+    ogbg-molpcba & 437,929 & 26.00 & 28.10 & 9 & 2 & Compounds Network\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.7pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    ENZYMES & 600 & 32.63 & 62.14  & 21 & 6 & Protein Network\\ 
+    DD & 1,178 & 284.32 & 715.66 & 89 & 2 & Protein Network\\ 
+    PROTEINS & 1,113 & 39.06 & 72.82 & 4 & 2 & Protein Network\\ 
+    ogbg-ppa & 158,100 & 243.40 & 2,266.10 & 4 & 37 & Protein Network\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.7pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    IMDB-BINARY &1,000 &19.77 &96.53 &degree &2 & Movie Network \\
+    IMDB-MULTI& 1,500 &13.00 &65.94 &degree &3 &Movie Network \\  \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-0.7pt]
+\arrayrulecolor{under} \midrule[0.08em]
+    COLLAB &5,000 &74.49 &2,457.78 &degree &3  &Collaboration Network \\
+    ShapeNet &16,881 &2,616.20 &KNN &3 &50 &Point Cloud Network \\ 
+    MNISTSuperPixels &70,000 &75.00 &1,393.03 &1 &10 &Super-pixel Network \\
+    \arrayrulecolor{myblue5}\bottomrule[0.16em]%第三道横线
+\end{tabular}}
+\vspace{-0.15cm}
+\end{table*}
+
+\vspace{-1em}
+\subsection{Dataset Overview for OpenGU}
+\label{dataset}
+% Graph unlearning scenarios are fundamentally data-driven, making the meticulous selection of datasets indispensable for evaluating the effectiveness of graph unlearning strategies. To assess the effectiveness, efficiency and robustness of these methods across diverse settings, we have selected 11 datasets which are widely used in the GU field \cite{kipf2016gcn}. These datasets are collected from various domains, each with distinct characteristics. Specifically, we choose three citation datasets which are commonly used for academic citation analysis, including Cora, Citeseer and PubMed \cite{Yang16cora}. Moving to the realm of Co-author Networks, CS and Physics \cite{shchur2018amazon_datasets} capture the collaborative nature of academic research. Similarly, in Image Networks, Flickr \cite{zeng2019graphsaint} serves as a rich source for studying user interactions in social media. Further extending into the domain of E-commerce and Product Networks, Photo and Computers \cite{shchur2018amazon_datasets} represent the interplay between products and consumers. Scientific and Knowledge Networks like DBLP \cite{2019DBLP} and ogbn-arxiv \cite{hu2020ogb} offer large-scale representations of publication and citation patterns. Lastly, the ogbn-products \cite{hu2020ogb} dataset models co-purchasing behavior in e-commerce, providing insights into product relationships. To provide a clearer understanding of the datasets used, a detailed overview is showed in Table\ref{table2}.
+
+GU scenarios are fundamentally data-driven, making the meticulous selection of datasets indispensable for evaluating the GU strategies. To assess GU methods for node or edge-related tasks, we have carefully selected 19 datasets \cite{kipf2016gcn}. Citation Networks include Cora, Citeseer, and PubMed \cite{Yang16cora}, while Co-author Networks are represented by CS and Physics \cite{shchur2018amazon_datasets}. Image Networks feature Flickr \cite{zeng2019graphsaint}, while E-commerce and Product Networks incorporate Photo, Computers \cite{shchur2018amazon_datasets}, ogbn-products \cite{hu2020ogb}, and Amazon-ratings \cite{platonov2023hete_gnn_survey4}, capturing consumer and product interactions. Scientific Networks leverage DBLP \cite{2019DBLP} and ogbn-arxiv \cite{hu2020ogb} to reflect publication patterns. To further broaden the scope, we add Squirrel and Chameleon \cite{pei2020geomgcn}, reflecting webpage networks; Actor \cite{pei2020geomgcn}, focusing on film connections; and digital engagement data such as Minesweeper \cite{platonov2023hete_gnn_survey4} for online gaming, and Tolokers \cite{platonov2023hete_gnn_survey4}, from a crowdsourcing platform where edges signify task collaborations. Additionally, historical and social Q\&A contexts are represented by Roman-empire and Questions \cite{platonov2023hete_gnn_survey4}, respectively, enriching our dataset diversity.
+
+Considering the scenario of graph classification tasks, OpenGU includes 18 datasets spanning various domains, Specifically, the compounds networks (MUTAG, PTC-MR, BZR, COX2, DHFR, AIDS, NCI1, ogbg-molhiv and ogbg-molpcba) \cite{MUTAG,PTC,BZR_COX_DHFR,AIDS,NCI1,hu2020ogb}, focus on molecular structures and chemical properties; the protein networks (ENZYMES, DD, PROTEINS and ogbg-ppa) \cite{chen2024fedgl,DD,PROTEINS,hu2020ogb} are concerned with biology data; the movie networks (IMDB-BINARY, IMDB-MULTI) \cite{IMDB} and collaboration networks (COLLAB) \cite{COLLAB} pertain to social media and community structures; additionally, ShapeNet \cite{ShapeNet} and MNISTSuperPixels \cite{MNISTSuperPixels} represent tasks related to 3D shapes and image superpixels. 
+To provide a clearer understanding of the datasets, a detailed overview is showed in Tables \ref{table2} and \ref{table3} and further details about datasets can be found in \cite{OpenGU2025} (A.1).
+
+In terms of data preprocessing, our work introduces several key enhancements to address existing limitations in splitting, inference, and special scenes with noise or sparsity,
+% label balance considerations, and inference scenario flexibility,
+making OpenGU more adaptable and comprehensive. GU methods currently lack a unified approach for dataset splitting: for instance, GraphEraser applies an 80\%/20\% training-test split, whereas GIF uses 90\%/10\%.
+Although some datasets provide default splitting, these fixed ratios can limit the flexibility needed for diverse experimentation. 
+To achieve a standardized and versatile splitting in OpenGU, we implemented code that allows arbitrary dataset split ratios, enabling researchers to customize splitting to suit their needs and experiment requirements.
+% In addition to this flexible splitting, we also consider the label balance within class distributions. By providing both balanced and random partitioning options, we allow for a nuanced investigation into whether sufficient, well-distributed training data impacts GU model robustness and generalization. 
+Furthermore, we introduce a preprocessing enhancement that allows datasets to function under both transductive and inductive inference scenarios. While some datasets are typically optimized for only one inference scenario, this additional flexibility permits researchers to evaluate GU methods under both settings, thus offering a broader evaluation of algorithm performance across various inference contexts. Together, these contributions in data preprocessing make OpenGU a powerful benchmark framework for comprehensive and adaptable GU method assessment.
+
+
+% \definecolor{myblue}{RGB}{146, 220, 247}
+% \definecolor{mycyan}{RGB}{151, 251, 241}
+% \definecolor{mygreen}{RGB}{220, 254, 141}
+% \definecolor{mygreen2}{RGB}{237, 254, 198}
+% \definecolor{myyellow}{RGB}{249, 208, 0}
+% \definecolor{myyellow2}{RGB}{254, 245, 201}
+% \definecolor{myyellow3}{RGB}{252, 238, 149}
+% \definecolor{mygray}{gray}{.9}
+% \captionsetup[table]{font=LARGE}
+% \begin{table*}[t]
+% \caption{An overview of OpenGU.}
+% \renewcommand{\aboverulesep}{0.7pt}
+% \renewcommand{\belowrulesep}{0.7pt}
+% \label{table1}
+% \centering % 表格居中
+% \fontsize{3pt}{4pt}\selectfont
+% % \setlength{\arrayrulewidth}{0.5mm} % 设置横线宽度
+% % \setlength{\tabcolsep}{3pt} % 设置列间距
+% \renewcommand{\arraystretch}{1} % 设置行距
+% \resizebox{0.9\textwidth}{!}{
+% \begin{tabular}{>{\centering\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{5.5cm}>{\centering\arraybackslash}p{9cm}}% 去掉最外层的竖线，只保留中间的竖线
+% \midrule
+% \rowcolor{white} 
+% \multicolumn{3}{c}{\cellcolor{mygray} \emph{\textbf{Datasets}}}  \\ \midrule % 大标题下方有横线
+
+% {Type} & \multicolumn{2}{c} {Homophily, Heterophily, Node/Edge, Graph}\\  
+% {Domain} & \multicolumn{2}{c} {Citation, Co-author, Social, Wiki, Image, Protein, ...} \\
+% Preprocess & \multicolumn{2}{c}{ Tranductive/Inductive, Label-Balanced/Label-Random }\\
+% \midrule % 大标题下方有横线
+% \rowcolor{white}
+% \multicolumn{3}{c}{\cellcolor{mygray}\emph{\textbf{GNN Algorithms}}} \\ \midrule% 删除小标题之间的横线
+% {Decoupled}& \multicolumn{2}{c}{SGC, SSGC, SIGN, APPNP} \\
+% {Sampling} &\multicolumn{2}{c}{GraphSAGE, GraphSAINT, ClusterGNN} \\ 
+
+% {Traditional} &\multicolumn{2}{c}{GCN, GCN2, lightGCN, GAT, GATv2, GIN, Tag} \\ 
+% \midrule
+% \multicolumn{3}{c}{\cellcolor{mygray}\emph{\textbf{ Mainstream GU Algorithms}}} \\ \midrule
+% {Partition-based} &  \multicolumn{2}{c}{GraphEraser, GUIDE, GraphRevoker} \\ 
+% {IF-based} & \multicolumn{2}{c}{GIF, CGU, CEU, GST, IDEA,  ScaleGUN} \\
+% {Learning-based} &\multicolumn{2}{c} {GNNDelete, MEGU, SGU, D2DGN, GUKD} \\ 
+% \midrule% 大标题下方有横线
+% \rowcolor{white}
+% \multicolumn{3}{c}{\cellcolor{mygray}\emph{\textbf{Evaluations}}} \\ \midrule % 删除小标题之间的横线
+
+% {Attack}  & \multicolumn{2}{c}{Membership Inference Attack, Poisoning Attack}\\
+% {Effectiveness}  & \multicolumn{2}{c}{Accuracy, Precision, F1-score, AUC-ROC} \\ 
+% Efficiency & \multicolumn{2}{c}{Scalability, Time Complexity, Space Complexity} \\ 
+
+% Robustness & \multicolumn{2}{c}{GU Scenario Generalizability, Deletion Intensity} \\
+% Unlearning Request &  \multicolumn{2}{c}{Node-level Request, Feature-level Request, Edge-level Request} \\
+% Downstream Task & \multicolumn{2}{c}{Node Classification, Link Prediction, Graph Classification}\\
+%  \midrule % 大标题下方有横线
+% \end{tabular}}
+% \end{table*}
+
+
+
+\subsection{Algorithm Framework for OpenGU}
+\label{alg}
+\textbf{GNN Backbones.} To evaluate the generalizability of GU algorithms, we incorporate three predominant paradigms of GNNs within our benchmark: traditional GNNs, sampling GNNs, and decoupled GNNs. For the traditional GNNs, we implement widely-recognized models such as GCN \cite{kipf2016gcn}, GAT \cite{velivckovic2017gat}, GIN \cite{xu2018gin} and others \cite{chen2020gcnii, brody2021gatv2, LightGCN}.
+% representing a broad spectrum of architectural variations. 
+Sampling GNNs include GraphSAGE \cite{hamilton2017graphsage}, GraphSAINT \cite{zeng2019graphsaint} and Cluster-gcn \cite{chiang2019cluster-gcn}. Additionally, to accommodate GU methods which rely on linear-GNN, we further incorporate scalable, decoupled GNN models into the benchmark, specifically SGC \cite{wu2019sgc}, SSGC \cite{zhu2021ssgc}, SIGN \cite{frasca2020sign} and APPNP \cite{2019appnp}. These models offer scalability advantages and efficient decoupling for handling larger datasets and supporting diverse GU methods. 
+More detailed descriptions of these GNN backbones are provided in \cite{OpenGU2025} (A.2).
+
+\noindent \textbf{GU Algorithms.} For GU algorithms, our framework encompasses 16 methods, each meticulously reproduced based on source code or detailed descriptions in the relevant publications. 
+The detailed descriptions can be found in \cite{OpenGU2025} (A.3). 
+Moreover, we deliver a unified interface for GU methods, merging them under a cohesive API to facilitate easier access, experimentation, and future expansion. By standardizing these methods within OpenGU, we provide a streamlined and highly efficient platform for researchers and practitioners to conduct robust, reliable, and reproducible benchmarking studies. 
+
+\vspace{-0.2cm}
+\subsection{Evaluation Strategy for OpenGU}
+\label{eva}
+% To provide a thorough assessment of GU algorithms in diverse real-world scenarios, our benchmark evaluation spans three critical dimensions tailored to GU contexts: effectiveness, efficiency, and robustness. Each dimension includes custom evaluation methods reflecting OpenGU’s mission to serve as a flexible, high-standard benchmark.
+
+To assess GU algorithms in diverse real-world scenarios, our benchmark evaluation spans three critical dimensions tailored to GU contexts: effectiveness, efficiency, and robustness. Each dimension includes tailored evaluation methods reflecting OpenGU’s mission to serve as a flexible, high-standard benchmark.
+
+
+
+ \textbf{Cross-over Design.}
+In previous GU studies, node and feature unlearning typically align with node classification tasks, while edge unlearning is often evaluated in the context of link prediction. However, real-world applications frequently demand the removal of data in scenarios where unlearning requests and downstream tasks intersect. 
+% For instance, in a node classification task, it may be necessary to remove edges between nodes, effectively combining edge unlearning with a task traditionally associated with node unlearning. 
+To address this gap, we designed cross-task evaluations in OpenGU, allowing us to measure GU algorithm performance in more complex, realistic scenarios where different unlearning types may apply across diverse downstream tasks. This approach provides a comprehensive and practical evaluation framework to assess the flexibility of GU algorithms in real-world applications.
+% \noindent \textbf{Unlearning Requests.} Before introducing the three evaluation dimensions, we first emphasize the importance of understanding the primary types of unlearning requests in GU: node unlearning, edge unlearning, and feature unlearning. Each type forms the foundation for specific performance metrics essential to GU evaluation. Node unlearning targets the removal of individual nodes, facilitating the precise deletion of specific data points, such as individual users or entities, while preserving the broader structure of the graph. Node unlearning focuses on the selective deletion of specific nodes, such as individuals or entities, ensuring data integrity while preserving the overarching graph structure. Edge unlearning, on the other hand, targets the removal of relationships between nodes—an approach essential for privacy-sensitive applications where certain connections require erasure without altering node attributes. Feature unlearning, meanwhile, involves the elimination of specific node features, facilitating controlled deletion of attribute-based information linked to individual nodes. In previous GU studies, node and feature unlearning typically align with node classification tasks, while edge unlearning is often evaluated in the context of link prediction. However, real-world applications frequently demand the removal of data in scenarios where unlearning requests and downstream tasks intersect. For instance, in a node classification task, it may be necessary to remove edges between nodes, effectively combining edge unlearning with a task traditionally associated with Node Unlearning. To address this gap, we designed cross-task evaluations in OpenGU, allowing us to measure GU algorithm performance in more complex, realistic scenarios where different unlearning types may apply across diverse downstream tasks. This approach provides a comprehensive and practical evaluation framework to assess the flexibility and robustness of GU algorithms in real-world applications.
+
+% \captionsetup[table]{font=Large}
+% \begin{table*}[t]
+% \caption{An overview of OpenGU Datasets.}
+% \label{table2}
+% \centering % 表格居中
+% \resizebox{0.8\textwidth}{!}{
+% \begin{tabular}{ccccccc}
+%     \toprule
+%     \textbf{Datasets}  & \textbf{Nodes} & \textbf{Edges} & \textbf{Features } & \textbf{Classes} & \textbf{Type} & \textbf{Description}\\
+%     \midrule
+%     Cora & 2,708 & 5,278 & 1,433 & 7 & Homophily & Citation Network\\
+%     Citeseer & 3,327 & 4,732 & 3,703 & 6 & Homophily& Citation Network\\
+%     PubMed & 19,717 & 44,338 & 500 & 3 & Homophily& Citation Network\\ 
+%     DBLP & 17,716 & 52,867 & 1,639 & 4 & Heterophily & Citation Network\\
+%     ogbn-arxiv & 169,343 & 1,166,243 & 128 & 40 & Homophily & Citation Network\\ \midrule
+%     CS & 18,333 & 81,894 & 6,805 & 15 & Homophily& Co-author Network\\
+%     Physics & 34,493 & 247,962 & 8,415 & 5 & Homophily& Co-author Network\\ \midrule
+%     Flickr & 89,250 & 899,756 & 500 & 7 & Heterophily & Image Network\\ \midrule
+%     Photo & 7,487 & 119,043 & 745 & 8 & Homophily& Co-purchasing Network\\ 
+%     Computers & 13,381 & 245,778 & 767 & 10 & Homophily & Co-purchasing Network\\ 
+%     ogbn-products & 2,449,029 & 61,859,140 & 100 & 47 & Homophily & Co-purchasing Network\\ \midrule
+%     Chameleon & 2,277 & 36,101 & 2,325 & 5 & Heterophily  & Wiki-page Network \\
+%     Squirrel & 5,201 & 216,933 & 2,089 & 5 & Heterophily  & Wiki-page Network \\ \midrule
+%     Actor & 7,600 & 29,926 & 931 & 5 & Heterophily  &  Actor Network \\
+%     Minesweeper & 10,000 & 39,402 & 7 & 2 & Homophily &  Game Synthetic Network\\
+%     Tolokers & 11,758 & 519,000 & 10 & 2 & Homophily &  Crowd-sourcing Network\\
+%     Roman-empire & 22,662 & 32,927 & 300 & 18 & Heterophily  &  Article Syntax Network\\
+%     Amazon-ratings & 24,492 & 93,050 & 300 & 5 & Heterophily  &  Rating Network\\
+%     Questions & 48,921 & 153,540 & 301 & 2 & Homophily &  Social Network\\
+%     \bottomrule
+% \end{tabular}}
+% \end{table*}
+
+
+\definecolor{myblue1}{RGB}{144, 201, 230}
+\definecolor{myblue2}{RGB}{155, 187, 225}
+\definecolor{myblue3}{RGB}{122, 187, 219}
+\definecolor{myblue}{RGB}{146, 220, 247}
+\definecolor{mycyan}{RGB}{151, 251, 241}
+\definecolor{mygreen}{RGB}{220, 254, 141}
+\definecolor{mygreen2}{RGB}{237, 254, 198}
+\definecolor{myblue4}{RGB}{196, 225, 255}
+\definecolor{myblue5}{RGB}{36,80,138}
+\definecolor{under}{RGB}{116,141,164}
+\begin{table*}[ht]
+\caption{F1-score ± STD comparison(\%) under the standard setting of transductive node classification task with node unlearning request. The highest results are highlighted in \colorbox{mycyan!40}{bold}, while the second-highest results are marked with \colorbox{myblue!20}{\underline{underline}}.}%标题
+\centering%把表居中
+% \fontsize{8pt}{9pt}\selectfont% 设置横线宽度
+% \setlength{\tabcolsep}{3pt} % 设置列间距
+
+\renewcommand{\arraystretch}{1.2} % 设置行距
+% \resizebox{0.95\textwidth}{!}{
+\begin{tabular*}{0.99\textwidth}{lcccccccccc}%四个c代表该表一共四列，内容全部居中
+\arrayrulecolor{myblue5}\toprule[0.16em]%第一道横线
+\textbf{Node-Level} &\textbf{Cora}&\textbf{Citeseer} & \textbf{PubMed}&\textbf{ogbn-arxiv} &\textbf{CS}& \textbf{Flickr}&\textbf{Chameleon} &\textbf{Minesweeper} & \textbf{Tolokers}\\ \arrayrulecolor{under}\midrule[0.1em]%第二道横线 
+
+GraphEraser & 81.14{\scriptsize \(\pm\)1.00} & 73.57{\scriptsize \(\pm\)1.25} & 84.68{\scriptsize \(\pm\)0.54} & 62.72{\scriptsize \(\pm\)0.18} & 91.24{\scriptsize \(\pm\)0.08} & 46.93{\scriptsize \(\pm\)0.14} & 45.18{\scriptsize \(\pm\)1.46} & 80.45{\scriptsize \(\pm\)0.08} & 78.36{\scriptsize \(\pm\)0.30}\\
+GUIDE       & 73.89{\scriptsize \(\pm\)2.18} & 63.50{\scriptsize \(\pm\)0.71} & 84.02{\scriptsize \(\pm\)0.15} & OOM        & 86.96{\scriptsize \(\pm\)0.15} & OOM & {43.37{\scriptsize \(\pm\)0.04}} & 44.71{\scriptsize \(\pm\)0.00} & 44.11{\scriptsize \(\pm\)0.00}\\
+GraphRevoker& 81.09{\scriptsize \(\pm\)1.63} & 73.45{\scriptsize \(\pm\)0.61} & 84.94{\scriptsize \(\pm\)0.14} & 62.72{\scriptsize \(\pm\)0.18} & 91.26{\scriptsize \(\pm\)0.10} & 46.91{\scriptsize \(\pm\)0.14} & 44.87{\scriptsize \(\pm\)1.72} & 80.44{\scriptsize \(\pm\)0.12} & 78.36{\scriptsize \(\pm\)0.30}\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-1.5pt]
+\arrayrulecolor{under} \midrule[0.08em]
+GIF         & 81.75{\scriptsize \(\pm\)1.09} & 62.58{\scriptsize \(\pm\)0.67} & 78.60{\scriptsize \(\pm\)0.22} & 65.52{\scriptsize \(\pm\)0.17} & 91.87{\scriptsize \(\pm\)0.22} & 47.56{\scriptsize \(\pm\)0.12} & 55.09{\scriptsize \(\pm\)1.23}& 77.83{\scriptsize \(\pm\)0.09} & 78.44{\scriptsize \(\pm\)0.10}\\
+CGU         & 86.37{\scriptsize \(\pm\)0.78} & \cellcolor{myblue!20}\underline{75.62\scriptsize \(\pm\)0.41} & 76.07{\scriptsize \(\pm\)0.15} & OOT & OOT & OOT & {35.83{\scriptsize \(\pm\)0.74}} & {80.85{\scriptsize \(\pm\)0.00}} & {78.91{\scriptsize \(\pm\)1.49}}\\
+ScaleGUN    & 78.82{\scriptsize \(\pm\)0.14} & {73.42\scriptsize \(\pm\)0.13} & 77.88{\scriptsize \(\pm\)0.02} &43.01 {\scriptsize \(\pm\)0.01} & 91.44{\scriptsize \(\pm\)0.09} & 32.95{\scriptsize \(\pm\)0.03} & {49.61{\scriptsize \(\pm\)0.58}} &{44.10{\scriptsize \(\pm\)0.00}} & {59.31{\scriptsize \(\pm\)0.00}} \\
+IDEA        & 87.71{\scriptsize \(\pm\)0.25} & 63.66{\scriptsize \(\pm\)0.49} & 80.44{\scriptsize \(\pm\)0.13} & 64.22{\scriptsize \(\pm\)0.17} & 89.47{\scriptsize \(\pm\)0.22} & 42.01{\scriptsize \(\pm\)0.04} & 52.89{\scriptsize \(\pm\)0.80} & 77.93{\scriptsize \(\pm\)0.04} & 78.72{\scriptsize \(\pm\)0.15}\\ 
+CEU        & 87.12{\scriptsize \(\pm\)0.07} & 71.56{\scriptsize \(\pm\)0.15} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{86.91{\scriptsize \(\pm\)0.06}}} & 57.80{\scriptsize \(\pm\)0.83} & 92.23{\scriptsize \(\pm\)0.07} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{49.47{\scriptsize \(\pm\)0.19}}} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{61.89{\scriptsize \(\pm\)0.54}}} & 81.05{\scriptsize \(\pm\)0.04} &78.72{\scriptsize \(\pm\)0.03}\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-1.5pt]
+\arrayrulecolor{under} \midrule[0.08em]
+
+GNNDelete   & 74.78{\scriptsize \(\pm\)5.49} & 64.26{\scriptsize \(\pm\)3.82} & 84.82{\scriptsize \(\pm\)1.36} & OOM & 76.26{\scriptsize \(\pm\)2.73} & 42.03{\scriptsize \(\pm\)0.00} & 54.43{\scriptsize \(\pm\)1.87} & 81.04{\scriptsize \(\pm\)0.19} & 79.12{\scriptsize \(\pm\)0.16}\\
+MEGU        & 82.68{\scriptsize \(\pm\)1.56} & 63.60{\scriptsize \(\pm\)1.11} & 79.68{\scriptsize \(\pm\)0.60} & \cellcolor{myblue!20}\underline{66.15{\scriptsize \(\pm\)0.29}} & 91.69{\scriptsize \(\pm\)0.08} & 47.97{\scriptsize \(\pm\)0.13} & 53.82{\scriptsize \(\pm\)1.68} & 77.64{\scriptsize \(\pm\)0.02} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{79.29{\scriptsize \(\pm\)0.10}}}\\
+SGU         & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{89.26{\scriptsize \(\pm\)0.49}}} & 72.04{\scriptsize \(\pm\)1.70} & \cellcolor{myblue!20}\underline{86.61{\scriptsize \(\pm\)0.02}} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{67.20{\scriptsize \(\pm\)0.08}}} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{93.20{\scriptsize \(\pm\)0.07}}} & \cellcolor{myblue!20}\underline{48.70{\scriptsize \(\pm\)0.21}} & \cellcolor{myblue!20}\underline{60.18{\scriptsize \(\pm\)0.26}} & \cellcolor{myblue!20}\underline{81.11{\scriptsize \(\pm\)0.02}} & \cellcolor{myblue!20}\underline{79.18{\scriptsize \(\pm\)0.04}}\\
+D2DGN       & \cellcolor{myblue!20}\underline{88.41{\scriptsize \(\pm\)0.20}} & {73.81{\scriptsize \(\pm\)0.28}} & 86.06{\scriptsize \(\pm\)0.05} & 66.08{\scriptsize \(\pm\)0.18} & \cellcolor{myblue!20}\underline{92.99{\scriptsize \(\pm\)0.03}} & 48.01{\scriptsize \(\pm\)0.03} & 53.25{\scriptsize \(\pm\)0.70} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{81.19{\scriptsize \(\pm\)0.04}}} & 79.18{\scriptsize \(\pm\)0.05}\\
+GUKD        & 79.65{\scriptsize \(\pm\)1.98} & 70.63{\scriptsize \(\pm\)0.93} & 83.37{\scriptsize \(\pm\)0.60} & OOM & {75.04{\scriptsize \(\pm\)0.82}} & 42.03{\scriptsize \(\pm\)0.04} & {36.62{\scriptsize \(\pm\)2.12}} & 80.89{\scriptsize \(\pm\)0.04} & 78.91{\scriptsize \(\pm\)0.00}\\ \arrayrulecolor{myblue4}\midrule[0.08em] \addlinespace[-1.5pt]
+\arrayrulecolor{under} \midrule[0.08em]
+Projector    & 86.79{\scriptsize \(\pm\)2.37} & \cellcolor{mycyan!40}\scalebox{0.95}{\textbf{77.00{\scriptsize \(\pm\)0.65}}} & 83.97{\scriptsize \(\pm\)0.30} & OOT & 88.40{\scriptsize \(\pm\)0.63} & OOT & 43.29{\scriptsize \(\pm\)1.17} & 80.85{\scriptsize \(\pm\)0.00} & 78.91{\scriptsize \(\pm\)0.00}\\
+\arrayrulecolor{myblue5}\bottomrule[0.16em]%第三道横线
+\end{tabular*}
+% }
+\label{node_node}
+\end{table*}
+
+
+
+ \textbf{Effectiveness.}
+For the effectiveness of algorithms within OpenGU, we conduct evaluations tailored to key downstream tasks while specifically examining GU performance on retained data. We leverage F1-score, AUC-ROC, and Accuracy to evaluate the model's predictive performance at the node, edge, and graph levels, respectively. To evaluate unlearning effects more rigorously, we incorporate membership inference attack (MIA) and poisoning attack (PA). MIA examines whether specific nodes are in the training set, with an AUC-ROC close to 0.5 indicating effective unlearning. Poisoning attack, on the other hand, degrades model predictions by introducing mismatched edges. Improved link prediction after removing these edges validates the algorithm’s ability to erase unwanted relationships effectively. This multi-faceted approach provides a thorough assessment of GU effectiveness, ensuring comprehensive evaluation of both retained and unlearned information. Detailed explanation of metrics and attacks is provided in \cite{OpenGU2025} (A.4 and A.5).
+% However, to more rigorously evaluate the unlearning effect on unlearning entities, we incorporate membership inference attack and poisoning attack as additional tests. Membership inference attack focuses on the node-level tasks, aiming to discern whether specific nodes were included in the training data. When the AUC-ROC for this attack approximates 0.5, it indicates that the attack model is unable to reliably infer a sample’s membership status, implying minimal information leakage about the sample. This outcome is particularly critical in validating whether the unlearning process effectively obscures the unlearning node's influence on the model. Additionally, we apply poisoning attacks to further probe the unlearning effectiveness of edge requests. By introducing mismatched or "poisoned" edges, we intentionally degrade the model’s prediction performance, creating conditions where accurate link predictions become challenging. Subsequently, we initiate an unlearning request to remove these poisoned edges. If the link prediction performance significantly improves following the removal of these artificial edges, it validates the GU algorithm's ability to effectively erase unwanted relationships, demonstrating successful edge unlearning. This multi-faceted approach provides a thorough assessment of GU effectiveness, ensuring comprehensive evaluation of both retained and unlearned information in OpenGU.
+
+
+
+ \textbf{Efficiency.} 
+In evaluating the efficiency of GU algorithms in OpenGU, we focus on scalability, time complexity, and space complexity. Scalability assesses each method’s adaptability to different dataset sizes, offering insight into performance stability across varying graph scales. Time complexity analysis includes both theoretical and empirical evaluation to understand computational demands. For space complexity, we examine memory efficiency by measuring peak memory usage and storage requirements during unlearning, determining which algorithms are viable in resource-limited environments. Together, these metrics provide a comprehensive view of each method’s suitability for real-time and scalable deployment.
+
+
+
+
+ \textbf{Robustness.}
+To evaluate the robustness of GU algorithms in OpenGU, we systematically examine model performance under varying levels of deletion intensity, noise and sparsity. This involves assessing how different proportions of data perturbation affect the model’s predictive capabilities. Robust GU algorithms should ideally demonstrate minimal performance degradation as deletion intensity increases, reflecting strong resilience in maintaining effective predictions for retained entities.
+
+
+
+
+
+

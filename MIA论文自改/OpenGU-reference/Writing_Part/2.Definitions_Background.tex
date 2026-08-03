@@ -1,0 +1,151 @@
+
+In this section, we will briefly review several key concepts and definitions to better explain the fundamentals of GU. Generally, we define a graph as $\mathcal{G}=(\mathcal{V},\mathcal{E},\mathcal{X})$, where $\mathcal{V}$ represents a set of nodes with $\lvert \mathcal{V} \rvert=n$, and $\mathcal{E}$ denotes the edge set containing $\lvert \mathcal{E} \rvert = m$ edges. The feature matrix, $\mathcal{X} \in\mathbb{R}^{n\times d}$, represents the feature vectors of all nodes, and $d$ represents the dimension of node features. We also define $\mathcal{Y} = \{y_1,y_2,...,y_n\}$ as the label set, where each $y_i$ corresponds to the node $v_i \in \mathcal{V}$ in a one-to-one manner. Apart from the aforementioned attributes, the graph is also characterized by its adjacency matrix $A \in \mathbb{R}^{n\times n}$, where each element $A_{ij}$ indicates the edge between nodes $i$ and $j$. Formally, we define $\mathcal{M}$ as the original model trained on a complete graph $\mathcal{G}$ or a graph dataset denoted as $G = \{\mathcal{G}_1,\mathcal{G}_2,...,\mathcal{G}_z\}$ with the corresponding labels $L = \{l_1,l_2,...,l_z\}$.
+% 这里的角标可以用n吗？？？？？？？？？？？？？？？
+
+\subsection{Graph Neural Networks}
+In this part, we mainly focus on Message Passing Neural Networks, a widely adopted paradigm within GNNs for learning graph data. These models leverage the structural properties of graphs to learn node representations effectively. Broadly, such GNNs can be defined through three key components: initialization, aggregation, and update, offering a unified framework to capture relational dependencies in graphs.
+
+
+\noindent\textbf{1.Initialization.}
+To initialize node representations in a graph, each node is typically assigned an embedding based on its features or attributes. This process can be formalized as:
+\begin{equation}
+h_v = x_v\quad\forall v \in \mathcal{V}.
+\end{equation}
+
+\noindent\textbf{2.Aggregation.}
+To capture information from the neighborhood of node $u$, an aggregation function $f_{Agg}^{(k-1)}$ is applied to combine the embeddings of $\mathcal{N}(u)$ from the previous iteration. 
+Common aggregators include permutation-invariant functions like sum, mean, or max, ensuring that the aggregated result is independent of the order of neighbors. This operation can be expressed as:
+\begin{equation}
+m_u^{(k)} = f_{Agg}^{(k-1)}(\{h_v^{(k-1)},v\in \mathcal{N}(u)\}).
+\end{equation}
+\noindent\textbf{3.Update.}
+% This process allows each node to refine its representation based on $f_{Up}^{(k-1)}$, which is the update function that combines the node's own embedding with the neighborhood's aggregated message.
+This process enables each node to refine its representation using $f_{Up}^{(k-1)}$, which combines the node's embedding and the neighborhood's aggregated message.
+Specifically, the updated embedding for node $u$ is computed as follows:
+\begin{equation}
+h_u^{(k)} = f_{Up}^{(k-1)}(h_v^{(k-1)},m_{\mathcal{N}(u)}^{(k-1)}).
+\end{equation}
+
+The combination of initialization, aggregation, and update functions forms the foundation of GNNs. Through iterative refinement, node embeddings progressively incorporate structural and feature information from their local neighborhoods, enabling GNNs to learn rich and expressive representations for downstream tasks.
+% 一部分是在介绍 gnn（2.1）
+
+\subsection{Downstream Tasks}
+\label{downstream}
+Building upon the iterative process of node representation, the resulting node embeddings $h_u^{(k)}$ at the final iteration $k$ serve as the foundation for downstream tasks. These refined embeddings are rich in information and capture both local and global graph structures, making them highly suitable for various graph-based prediction tasks. The downstream tasks typically involve node classification, link prediction, and graph classification, each utilizing these node embeddings in different ways.
+
+\textit{Node classification} aims to assign labels to individual nodes in the graph based on their features and structural context. The learned node representations $h^{(k)}$ are fed into a classifier, often a fully connected layer, to predict node labels. For instance, in financial transaction networks, this task can help determine whether a given transaction is fraudulent or not. 
+
+\textit{Link prediction} seeks to predict the existence of edges between nodes using their embeddings and graph structure. This is critical in tasks like drug-drug interaction prediction in biomedical networks, where nodes represent drugs, and edges indicate known interactions. Predicting potential edges can aid in discovering new therapeutic drug combinations. 
+
+\textit{Graph classification} predicts a label for an entire graph by aggregating node embeddings $h^{(k)}$ via a readout function $f_{Read}$ (e.g., sum or mean). In chemical compound classification, each molecule can be represented as a graph, where nodes correspond to atoms, and edges represent chemical bonds. Graph classification can help predict whether a molecule is toxic or not.
+% involves predicting a label for an entire graph based on its structure and the features of its nodes and edges. This task is especially useful when the goal is to classify entire graph structures rather than individual elements. To achieve this, a readout function $f_{Read}$ is applied to aggregate the information from the node embeddings $h^{(k)}$, producing a fixed-size vector that can then be classified. A typical readout function could involve taking the sum or average of all node embeddings. In chemical compound classification, each molecule can be represented as a graph, where nodes correspond to atoms, and edges represent chemical bonds. Graph classification can help predict whether a molecule is toxic or not.
+
+
+\definecolor{myblue1}{RGB}{144, 201, 230}
+\definecolor{myblue2}{RGB}{155, 187, 225}
+\definecolor{myblue3}{RGB}{122, 187, 219}
+\definecolor{myblue}{RGB}{146, 220, 247}
+\definecolor{mycyan}{RGB}{151, 251, 241}
+\definecolor{mygreen}{RGB}{220, 254, 141}
+\definecolor{mygreen2}{RGB}{237, 254, 198}
+\definecolor{myblue4}{RGB}{196, 225, 255}
+\definecolor{myblue5}{RGB}{36,80,138}
+\definecolor{under}{RGB}{116,141,164}
+\definecolor{mygray}{gray}{.9}
+\captionsetup[table]{}
+\begin{table*}[t]
+\caption{An overview of OpenGU.}
+\renewcommand{\aboverulesep}{0.7pt}
+\renewcommand{\belowrulesep}{0.7pt}
+\label{table1}
+\centering % 表格居中
+\fontsize{5pt}{6pt}\selectfont
+% \setlength{\arrayrulewidth}{0.5mm} % 设置横线宽度
+% \setlength{\tabcolsep}{3pt} % 设置列间距
+\renewcommand{\arraystretch}{1} % 设置行距
+\resizebox{0.9\textwidth}{!}{
+\begin{tabular}{>{\centering\arraybackslash}p{2cm}|
+    >{\centering\arraybackslash}p{6cm}}% 去掉最外层的竖线，只保留中间的竖线
+\midrule[0.08em]
+\rowcolor{white} 
+\multicolumn{2}{c}{\cellcolor{mygray} \emph{\textbf{Datasets}}}  \\ \midrule[0.08em]% 大标题下方有横线
+
+{Type} & {Homophily, Heterophily, Node, Edge, Graph}\\  
+{Domain} & {Citation, Co-author, Social, Wiki, Image, Protein, Movie, ...} \\
+Preprocess & { Transductive/Inductive, Label-Balanced/Label-Random, Noise, Sparsity}\\
+\midrule [0.08em]% 大标题下方有横线
+\rowcolor{white}
+\multicolumn{2}{c}{\cellcolor{mygray}\emph{\textbf{GNN Algorithms}}} \\ \midrule[0.08em]% 删除小标题之间的横线
+{Decoupled}& {SGC, SSGC, SIGN, APPNP} \\
+{Sampling} &{GraphSAGE, GraphSAINT, Cluster-gcn} \\ 
+
+{Traditional} &{GCN, GCNII, LightGCN, GAT, GATv2, GIN} \\ 
+\midrule[0.08em]
+\multicolumn{2}{c}{\cellcolor{mygray}\emph{\textbf{ Mainstream GU Algorithms}}} \\ \midrule[0.08em]
+{Partition-based} &  {GraphEraser, GUIDE, GraphRevoker} \\ 
+{IF-based} & {GIF, CGU, CEU, GST, IDEA,  ScaleGUN} \\
+{Learning-based} & {GNNDelete, MEGU, SGU, D2DGN, GUKD} \\ 
+\midrule[0.08em]% 大标题下方有横线
+\rowcolor{white}
+\multicolumn{2}{c}{\cellcolor{mygray}\emph{\textbf{Evaluations}}} \\ \midrule[0.08em]% 删除小标题之间的横线
+
+{Attack}  & {Membership Inference Attack, Poisoning Attack}\\
+{Effectiveness}  & {Accuracy, Precision, F1-score, AUC-ROC} \\ 
+Efficiency & {Time, Memory, Theoretical Algorithm Complexity} \\ 
+
+Robustness & {Deletion Intensity, GU Scenario Noise and Sparsity} \\
+Unlearning Request &  {Node-level Request, Feature-level Request, Edge-level Request} \\
+Downstream Task & {Node Classification, Link Prediction, Graph Classification}\\
+ \midrule[0.08em] % 大标题下方有横线
+\end{tabular}}
+\end{table*}
+
+
+% 再有一部分介绍基于图的下游任务（2.3）
+\subsection{Unlearning Requests}
+\label{unlearning_request}
+When receiving unlearning request $\Delta \mathcal{G}=\{\Delta \mathcal{V}, \Delta \mathcal{E}, \Delta \mathcal{X}\}$, the retrained model $\hat{\mathcal{M}}$ is trained from scratch on the pruned graph after the deletion and the unlearning model $\mathcal{M'}$ updates its parameters from original $W$ to $W'$ based on the unlearning algorithm. The goal of GU is to minimize the discrepancy between $\mathcal{M'}$ and $\hat{\mathcal{M}}$. Common unlearning requests in graph unlearning typically fall into three categories: node-level $\Delta \mathcal{G}=\{\Delta \mathcal{V}, \varnothing, \varnothing\}$, edge-level  $\Delta \mathcal{G}=\{\varnothing, \Delta \mathcal{E}, \varnothing\}$, and feature-level $\Delta \mathcal{G}=\{\varnothing, \varnothing, \Delta \mathcal{X}\}$. 
+
+Node unlearning targets the removal of individual nodes, facilitating the precise deletion of specific data points, such as individual users or entities, while preserving the broader structure of the graph. In social network platforms, if users (nodes) decide to delete their accounts, node unlearning ensures that the model no longer uses their interactions or behaviors to influence recommendations or predictions, safeguarding user privacy. Edge unlearning, on the other hand, targets the removal of relationships between nodes—an approach essential for privacy-sensitive applications where certain connections require erasure without altering node attributes. A key application of edge unlearning is in financial fraud detection, where certain transactional relationships (edges) between users may need to be erased if they are identified as erroneous or compromised. Feature unlearning, meanwhile, involves the elimination of specific node features, facilitating controlled deletion of attribute-based information linked to individual nodes. For example, in healthcare, sensitive medical attributes can be excluded to comply with regulations while retaining the utility of remaining features.
+% For example, in healthcare systems, if certain medical features (such as sensitive health data or attributes related to a patient’s background) are deemed no longer relevant or are subject to data protection regulations, feature unlearning can ensure that these sensitive features are effectively excluded from the model, while still retaining the utility of the remaining features.
+
+
+\vspace{-0.2cm}
+\subsection{GU Taxonomy}
+% To provide a comprehensive understanding of GU, we draw from the existing literature and offer an organized overview of existing methodologies, revealing their intrinsic characteristics. According to their operational frameworks, we categorize these algorithms into five distinct types: 
+To provide a comprehensive understanding of GU, we categorize existing methodologies into five types based on their operational frameworks: (1) Partition-based algorithms, (2) Influence Function-based (IF-based) unlearning algorithms, (3) Learning-based algorithms, (4) Projection-based algorithms, and (5) Structure-based algorithms. In Partition-based methods, GraphEraser \cite{chen2022graph_eraser}, GUIDE \cite{wang2023guide}, and GraphRevoker \cite{2024ZhangGraphRevoker} draw inspiration from SISA \cite{2021SISA} to implement different partitioning strategies, enabling training and unlearning on independent shards. In IF-based methods, GIF \cite{wu2023gif}, CGU \cite{chien2022cgu}, CEU \cite{2023WuCEU}, and others \cite{pan2023gst_unlearning,2024IDEA,scaluGUN} leverage rigorous mathematical formulations to quantify the impact of data removal on model, allowing for efficient model updates. In Learning-based algorithms methods, GNNDelete \cite{cheng2023gnndelete}, MEGU \cite{xkliMEGU2024}, SGU \cite{}, and others \cite{2024D2DGN,2023GUKD,2023GCU} achieve a trade-off between forgetting and reasoning with specialized loss functions. As for Projection-based algorithm, Projector \cite{cong2023projector} adapts to unlearning by orthogonally projecting the weights into a different subspace. Finally, Structure-based method UtU \cite{Tan2024UtU} manipulate the graph structure directly without the extensive retraining or complex optimizations. This categorization provides a structured landscape of GU, as illustrated in Figure \ref{figure1}. 
+
+% \definecolor{myblue}{RGB}{35, 178, 224}
+% \definecolor{mycyan}{RGB}{145, 205, 200}
+% \definecolor{mygreen}{RGB}{155, 205, 49}
+% \captionsetup[table]{font=LARGE}
+% \begin{table*}[t]
+% \caption{An overview of OpenGU.}
+% \centering % 表格居中
+% \fontsize{11pt}{10pt}\selectfont
+% % \setlength{\arrayrulewidth}{0.5mm} % 设置横线宽度
+% \setlength{\tabcolsep}{8pt} % 设置列间距
+% \renewcommand{\arraystretch}{1.5} % 设置行距
+% \begin{tabular}{>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{11cm}}% 去掉最外层的竖线，只保留中间的竖线
+% \midrule
+% \rowcolor{white} 
+%  \textbf{Data} & {\cellcolor{myblue!50}\textbf{Preprocessing}}  \\ \midrule % 大标题下方有横线
+% Datasets & \makecell{Cora, Citeseer, PubMed, CS, Physics, Flickr, Photo,\\
+% Computers, DBLP, ogbn-arxiv, ogbn-arxiv} \\ % 小标题下方无横线
+% Inference Scenario & Tranductive, Inductive \\ 
+% Splitting setting & Balanced, Imbalanced 
+% \\ \midrule % 大标题下方有横线
+% \rowcolor{white}
+%  \textbf{Method} & {\cellcolor{mycyan!75}\textbf{Algorithms}} \\ \midrule% 删除小标题之间的横线
+% GNN & {GCN, GAT, GraphSAGE, GIN, SGC, S\textsuperscript{2}GC, GIGN} \\ 
+% GU &  \makecell{GraphEraser, GUIDE, GraphRevoker, GIF, CGU, \\
+% CEU, GST, ScaleGUN, GNNDelete, MEGU, \\
+% SGU, D2DGN, GUKD, GCU, UtU, Projector } \\  \midrule% 大标题下方有横线
+% \rowcolor{white}
+% \textbf{Experiment} & {\cellcolor{mygreen!50}\textbf{Evaluations}} \\ \midrule % 删除小标题之间的横线
+% Unlearning Requests &  Node-level Request, Feature-level Request, Edge-level Request \\
+% Downstream Tasks & Node Classification, Link Prediction\\
+% Effectiveness & \makecell{Accuracy, Precision, F1-score, AUC-ROC,\\ Membership Inference Attack} \\ 
+% Efficiency & {Scalability, Time Complexity, Space Complexity} \\ \midrule % 大标题下方有横线
+% \end{tabular}
+% \end{table*}

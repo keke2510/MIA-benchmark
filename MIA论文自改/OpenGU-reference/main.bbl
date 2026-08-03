@@ -1,0 +1,772 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{94}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Ope(2025)]%
+        {OpenGU2025}
+ \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{OpenGU Technical Report. In https://github.com/bwfan-bit/OpenGU}.
+\newblock
+
+
+\bibitem[Aggarwal and Wang(2010)]%
+        {aggarwal2010graph}
+\bibfield{author}{\bibinfo{person}{Charu~C Aggarwal} {and} \bibinfo{person}{Haixun Wang}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Graph data management and mining: A survey of algorithms and applications}.
+\newblock \bibinfo{journal}{\emph{Managing and mining graph data}} (\bibinfo{year}{2010}), \bibinfo{pages}{13--68}.
+\newblock
+
+
+\bibitem[Angles and Gutierrez(2018)]%
+        {angles2018introduction}
+\bibfield{author}{\bibinfo{person}{Renzo Angles} {and} \bibinfo{person}{Claudio Gutierrez}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{An introduction to graph data management}.
+\newblock \bibinfo{journal}{\emph{Graph Data Management: Fundamental Issues and Recent Developments}} (\bibinfo{year}{2018}), \bibinfo{pages}{1--32}.
+\newblock
+
+
+\bibitem[Barcel{\'o}~Baeza(2013)]%
+        {qgdatabase}
+\bibfield{author}{\bibinfo{person}{Pablo Barcel{\'o}~Baeza}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Querying graph databases}. In \bibinfo{booktitle}{\emph{Proceedings of the 32nd ACM SIGMOD-SIGACT-SIGAI symposium on Principles of database systems}}. \bibinfo{pages}{175--188}.
+\newblock
+
+
+\bibitem[Bessadok et~al\mbox{.}(2022)]%
+        {bessadok2022gnn_survey3}
+\bibfield{author}{\bibinfo{person}{Alaa Bessadok}, \bibinfo{person}{Mohamed~Ali Mahjoub}, {and} \bibinfo{person}{Islem Rekik}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Graph neural networks in network neuroscience}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}} \bibinfo{volume}{45}, \bibinfo{number}{5} (\bibinfo{year}{2022}), \bibinfo{pages}{5833--5848}.
+\newblock
+
+
+\bibitem[Besta et~al\mbox{.}(2022)]%
+        {ngdatabase}
+\bibfield{author}{\bibinfo{person}{Maciej Besta}, \bibinfo{person}{Patrick Iff}, \bibinfo{person}{Florian Scheidl}, \bibinfo{person}{Kazuki Osawa}, \bibinfo{person}{Nikoli Dryden}, \bibinfo{person}{Michal Podstawski}, \bibinfo{person}{Tiancheng Chen}, {and} \bibinfo{person}{Torsten Hoefler}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Neural graph databases}. In \bibinfo{booktitle}{\emph{Learning on Graphs Conference}}. PMLR, \bibinfo{pages}{31--1}.
+\newblock
+
+
+\bibitem[Bourtoule et~al\mbox{.}(2021)]%
+        {2021SISA}
+\bibfield{author}{\bibinfo{person}{Lucas Bourtoule}, \bibinfo{person}{Varun Chandrasekaran}, \bibinfo{person}{Christopher~A. Choquette-Choo}, \bibinfo{person}{Hengrui Jia}, \bibinfo{person}{Adelin Travers}, \bibinfo{person}{Baiwu Zhang}, \bibinfo{person}{David Lie}, {and} \bibinfo{person}{Nicolas Papernot}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Machine Unlearning}. In \bibinfo{booktitle}{\emph{2021 IEEE Symposium on Security and Privacy (SP)}}. \bibinfo{pages}{141--159}.
+\newblock
+
+
+\bibitem[Brody et~al\mbox{.}(2022)]%
+        {brody2021gatv2}
+\bibfield{author}{\bibinfo{person}{Shaked Brody}, \bibinfo{person}{Uri Alon}, {and} \bibinfo{person}{Eran Yahav}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{How attentive are graph attention networks?}
+\newblock \bibinfo{journal}{\emph{International Conference on Learning Representations, ICLR}} (\bibinfo{year}{2022}).
+\newblock
+
+
+\bibitem[Cai et~al\mbox{.}(2023)]%
+        {cai2023app_gnn_rec3}
+\bibfield{author}{\bibinfo{person}{Xuheng Cai}, \bibinfo{person}{Chao Huang}, \bibinfo{person}{Lianghao Xia}, {and} \bibinfo{person}{Xubin Ren}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{LightGCL: Simple Yet Effective Graph Contrastive Learning for Recommendation}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Cao and Yang(2015)]%
+        {Cao2015Towards}
+\bibfield{author}{\bibinfo{person}{Yinzhi Cao} {and} \bibinfo{person}{Junfeng Yang}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Towards Making Systems Forget with Machine Unlearning}. In \bibinfo{booktitle}{\emph{2015 IEEE Symposium on Security and Privacy}}. \bibinfo{pages}{463--480}.
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2024)]%
+        {chen2024fedgl}
+\bibfield{author}{\bibinfo{person}{Chuan Chen}, \bibinfo{person}{Ziyue Xu}, \bibinfo{person}{Weibo Hu}, \bibinfo{person}{Zibin Zheng}, {and} \bibinfo{person}{Jie Zhang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{FedGL: Federated graph learning framework with global self-supervision}.
+\newblock \bibinfo{journal}{\emph{Information Sciences}}  \bibinfo{volume}{657} (\bibinfo{year}{2024}), \bibinfo{pages}{119976}.
+\newblock
+
+
+\bibitem[Chen and Yang(2023)]%
+        {Efficient2}
+\bibfield{author}{\bibinfo{person}{Jiaao Chen} {and} \bibinfo{person}{Diyi Yang}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Unlearn what you want to forget: Efficient unlearning for llms}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2310.20150}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2020)]%
+        {chen2020gcnii}
+\bibfield{author}{\bibinfo{person}{Ming Chen}, \bibinfo{person}{Zhewei Wei}, \bibinfo{person}{Zengfeng Huang}, \bibinfo{person}{Bolin Ding}, {and} \bibinfo{person}{Yaliang Li}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Simple and deep graph convolutional networks}. In \bibinfo{booktitle}{\emph{International Conference on Machine Learning, ICML}}.
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2021)]%
+        {privacy2}
+\bibfield{author}{\bibinfo{person}{Min Chen}, \bibinfo{person}{Zhikun Zhang}, \bibinfo{person}{Tianhao Wang}, \bibinfo{person}{Michael Backes}, \bibinfo{person}{Mathias Humbert}, {and} \bibinfo{person}{Yang Zhang}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{When machine unlearning jeopardizes privacy}. In \bibinfo{booktitle}{\emph{Proceedings of the 2021 ACM SIGSAC conference on computer and communications security}}. \bibinfo{pages}{896--911}.
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2022)]%
+        {chen2022graph_eraser}
+\bibfield{author}{\bibinfo{person}{Min Chen}, \bibinfo{person}{Zhikun Zhang}, \bibinfo{person}{Tianhao Wang}, \bibinfo{person}{Michael Backes}, \bibinfo{person}{Mathias Humbert}, {and} \bibinfo{person}{Yang Zhang}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Graph unlearning}. In \bibinfo{booktitle}{\emph{Proceedings of ACM SIGSAC Conference on Computer and Communications Security, CCS}}.
+\newblock
+
+
+\bibitem[Cheng et~al\mbox{.}(2023)]%
+        {cheng2023gnndelete}
+\bibfield{author}{\bibinfo{person}{Jiali Cheng}, \bibinfo{person}{George Dasoulas}, \bibinfo{person}{Huan He}, \bibinfo{person}{Chirag Agarwal}, {and} \bibinfo{person}{Marinka Zitnik}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{GNNDelete: A General Strategy for Unlearning in Graph Neural Networks}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Chiang et~al\mbox{.}(2019)]%
+        {chiang2019cluster-gcn}
+\bibfield{author}{\bibinfo{person}{Wei-Lin Chiang}, \bibinfo{person}{Xuanqing Liu}, \bibinfo{person}{Si Si}, \bibinfo{person}{Yang Li}, \bibinfo{person}{Samy Bengio}, {and} \bibinfo{person}{Cho-Jui Hsieh}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Cluster-gcn: An efficient algorithm for training deep and large graph convolutional networks}. In \bibinfo{booktitle}{\emph{Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining, KDD}}.
+\newblock
+
+
+\bibitem[Chien et~al\mbox{.}(2022)]%
+        {chien2022cgu}
+\bibfield{author}{\bibinfo{person}{Eli Chien}, \bibinfo{person}{Chao Pan}, {and} \bibinfo{person}{Olgica Milenkovic}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Certified Graph Unlearning}. In \bibinfo{booktitle}{\emph{NeurIPS 2022 Workshop: New Frontiers in Graph Learning}}.
+\newblock
+
+
+\bibitem[Choi and Na(2024)]%
+        {tradeoff2}
+\bibfield{author}{\bibinfo{person}{Dasol Choi} {and} \bibinfo{person}{Dongbin Na}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Distribution-Level Feature Distancing for Machine Unlearning: Towards a Better Trade-off Between Model Utility and Forgetting}.
+\newblock
+\newblock
+\showeprint[arxiv]{2409.14747}~[cs.CV]
+
+
+\bibitem[Chowdhury et~al\mbox{.}(2024)]%
+        {generalization3}
+\bibfield{author}{\bibinfo{person}{Somnath Basu~Roy Chowdhury}, \bibinfo{person}{Krzysztof Choromanski}, \bibinfo{person}{Arijit Sehanobish}, \bibinfo{person}{Avinava Dubey}, {and} \bibinfo{person}{Snigdha Chaturvedi}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Towards Scalable Exact Machine Unlearning Using Parameter-Efficient Fine-Tuning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2406.16257}~[cs.LG]
+
+
+\bibitem[Cong and Mahdavi(2023)]%
+        {cong2023projector}
+\bibfield{author}{\bibinfo{person}{Weilin Cong} {and} \bibinfo{person}{Mehrdad Mahdavi}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Efficiently Forgetting What You Have Learned in Graph Representation Learning via Projection}. In \bibinfo{booktitle}{\emph{International Conference on Artificial Intelligence and Statistics, AISTATS}}.
+\newblock
+
+
+\bibitem[Cvitkovic(2020)]%
+        {cvitkovic2020supervised}
+\bibfield{author}{\bibinfo{person}{Milan Cvitkovic}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Supervised learning on relational databases with graph neural networks}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2002.02046}} (\bibinfo{year}{2020}).
+\newblock
+
+
+\bibitem[Debnath et~al\mbox{.}(1991)]%
+        {MUTAG}
+\bibfield{author}{\bibinfo{person}{Asim~Kumar Debnath}, \bibinfo{person}{Rosa~L. Lopez~de Compadre}, \bibinfo{person}{Gargi Debnath}, \bibinfo{person}{Alan~J. Shusterman}, {and} \bibinfo{person}{Corwin Hansch}.} \bibinfo{year}{1991}\natexlab{}.
+\newblock \showarticletitle{Structure-activity relationship of mutagenic aromatic and heteroaromatic nitro compounds. Correlation with molecular orbital energies and hydrophobicity}.
+\newblock \bibinfo{journal}{\emph{Journal of Medicinal Chemistry}} \bibinfo{volume}{34}, \bibinfo{number}{2} (\bibinfo{year}{1991}), \bibinfo{pages}{786--797}.
+\newblock
+
+
+\bibitem[Defferrard et~al\mbox{.}(2016)]%
+        {2016Convolutional_ChebNet}
+\bibfield{author}{\bibinfo{person}{Michal Defferrard}, \bibinfo{person}{X. Bresson}, {and} \bibinfo{person}{P. Vandergheynst}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering}.
+\newblock \bibinfo{journal}{\emph{Advances in Neural Information Processing Systems, NeurIPS}} (\bibinfo{year}{2016}).
+\newblock
+
+
+\bibitem[Dobson and Doig(2003)]%
+        {DD}
+\bibfield{author}{\bibinfo{person}{Paul~D. Dobson} {and} \bibinfo{person}{Andrew~J. Doig}.} \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Distinguishing enzyme structures from non-enzymes without alignments.}
+\newblock \bibinfo{journal}{\emph{Journal of molecular biology}}  \bibinfo{volume}{330 4} (\bibinfo{year}{2003}), \bibinfo{pages}{771--83}.
+\newblock
+
+
+\bibitem[Dong et~al\mbox{.}(2024)]%
+        {2024IDEA}
+\bibfield{author}{\bibinfo{person}{Yushun Dong}, \bibinfo{person}{Binchi Zhang}, \bibinfo{person}{Zhenyu Lei}, \bibinfo{person}{Na Zou}, {and} \bibinfo{person}{Jundong Li}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{IDEA: A Flexible Framework of Certified Unlearning for Graph Neural Networks}. In \bibinfo{booktitle}{\emph{Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{621–630}.
+\newblock
+\showISBNx{9798400704901}
+
+
+\bibitem[Fout et~al\mbox{.}(2017)]%
+        {NIPS2017_f5077839}
+\bibfield{author}{\bibinfo{person}{Alex Fout}, \bibinfo{person}{Jonathon Byrd}, \bibinfo{person}{Basir Shariat}, {and} \bibinfo{person}{Asa Ben-Hur}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Protein Interface Prediction using Graph Convolutional Networks}. In \bibinfo{booktitle}{\emph{Advances in Neural Information Processing Systems}}, Vol.~\bibinfo{volume}{30}. \bibinfo{publisher}{Curran Associates, Inc.}
+\newblock
+
+
+\bibitem[Frasca et~al\mbox{.}(2020)]%
+        {frasca2020sign}
+\bibfield{author}{\bibinfo{person}{Fabrizio Frasca}, \bibinfo{person}{Emanuele Rossi}, \bibinfo{person}{Davide Eynard}, \bibinfo{person}{Ben Chamberlain}, \bibinfo{person}{Michael Bronstein}, {and} \bibinfo{person}{Federico Monti}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Sign: Scalable inception graph neural networks}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2004.11198}} (\bibinfo{year}{2020}).
+\newblock
+
+
+\bibitem[Guo et~al\mbox{.}(2022)]%
+        {Efficient4}
+\bibfield{author}{\bibinfo{person}{Tao Guo}, \bibinfo{person}{Song Guo}, \bibinfo{person}{Jiewei Zhang}, \bibinfo{person}{Wenchao Xu}, {and} \bibinfo{person}{Junxiao Wang}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Efficient attribute unlearning: Towards selective removal of input attributes from feature representations}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2202.13295}} (\bibinfo{year}{2022}).
+\newblock
+
+
+\bibitem[Hamilton et~al\mbox{.}(2017)]%
+        {hamilton2017graphsage}
+\bibfield{author}{\bibinfo{person}{Will Hamilton}, \bibinfo{person}{Zhitao Ying}, {and} \bibinfo{person}{Jure Leskovec}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Inductive representation learning on large graphs}.
+\newblock \bibinfo{journal}{\emph{Advances in Neural Information Processing Systems, NeurIPS}} (\bibinfo{year}{2017}).
+\newblock
+
+
+\bibitem[He et~al\mbox{.}(2020)]%
+        {LightGCN}
+\bibfield{author}{\bibinfo{person}{Xiangnan He}, \bibinfo{person}{Kuan Deng}, \bibinfo{person}{Xiang Wang}, \bibinfo{person}{Yan Li}, \bibinfo{person}{YongDong Zhang}, {and} \bibinfo{person}{Meng Wang}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation}. In \bibinfo{booktitle}{\emph{Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{639–648}.
+\newblock
+\showISBNx{9781450380164}
+
+
+\bibitem[Helma et~al\mbox{.}(2001a)]%
+        {PROTEINS}
+\bibfield{author}{\bibinfo{person}{Christoph Helma}, \bibinfo{person}{Ross~D. King}, \bibinfo{person}{Stefan Kramer}, {and} \bibinfo{person}{Ashwin Srinivasan}.} \bibinfo{year}{2001}\natexlab{a}.
+\newblock \showarticletitle{The Predictive Toxicology Challenge 2000-2001}.
+\newblock \bibinfo{journal}{\emph{Bioinform.}}  \bibinfo{volume}{17} (\bibinfo{year}{2001}), \bibinfo{pages}{107--108}.
+\newblock
+
+
+\bibitem[Helma et~al\mbox{.}(2001b)]%
+        {PTC}
+\bibfield{author}{\bibinfo{person}{C. Helma}, \bibinfo{person}{R.~D. King}, \bibinfo{person}{S. Kramer}, {and} \bibinfo{person}{A. Srinivasan}.} \bibinfo{year}{2001}\natexlab{b}.
+\newblock \showarticletitle{The Predictive Toxicology Challenge 2000–2001}.
+\newblock \bibinfo{journal}{\emph{Bioinformatics}} \bibinfo{volume}{17}, \bibinfo{number}{1} (\bibinfo{date}{01} \bibinfo{year}{2001}), \bibinfo{pages}{107--108}.
+\newblock
+\showISSN{1367-4803}
+
+
+\bibitem[Hu et~al\mbox{.}(2020)]%
+        {hu2020ogb}
+\bibfield{author}{\bibinfo{person}{Weihua Hu}, \bibinfo{person}{Matthias Fey}, \bibinfo{person}{Marinka Zitnik}, \bibinfo{person}{Yuxiao Dong}, \bibinfo{person}{Hongyu Ren}, \bibinfo{person}{Bowen Liu}, \bibinfo{person}{Michele Catasta}, {and} \bibinfo{person}{Jure Leskovec}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Open graph benchmark: Datasets for machine learning on graphs}.
+\newblock \bibinfo{journal}{\emph{Advances in Neural Information Processing Systems, NeurIPS}} (\bibinfo{year}{2020}).
+\newblock
+
+
+\bibitem[Jin(2021)]%
+        {wsdmdataming2021}
+\bibfield{author}{\bibinfo{person}{Wei Jin}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Graph Mining with Graph Neural Networks}. In \bibinfo{booktitle}{\emph{Proceedings of the 14th ACM International Conference on Web Search and Data Mining}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{1119–1120}.
+\newblock
+\showISBNx{9781450382977}
+
+
+\bibitem[Kipf and Welling(2017)]%
+        {kipf2016gcn}
+\bibfield{author}{\bibinfo{person}{Thomas~N Kipf} {and} \bibinfo{person}{Max Welling}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Semi-supervised classification with graph convolutional networks}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Klicpera et~al\mbox{.}(2019)]%
+        {2019appnp}
+\bibfield{author}{\bibinfo{person}{J. Klicpera}, \bibinfo{person}{A. Bojchevski}, {and} \bibinfo{person}{S Günnemann}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Predict then Propagate: Graph Neural Networks meet Personalized PageRank}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Kwak et~al\mbox{.}(2017)]%
+        {kwak2017let}
+\bibfield{author}{\bibinfo{person}{Chanhee Kwak}, \bibinfo{person}{Junyeong Lee}, \bibinfo{person}{Kyuhong Park}, {and} \bibinfo{person}{Heeseok Lee}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Let machines unlearn--machine unlearning and the right to be forgotten}.
+\newblock  (\bibinfo{year}{2017}).
+\newblock
+
+
+\bibitem[Leskovec et~al\mbox{.}(2005)]%
+        {COLLAB}
+\bibfield{author}{\bibinfo{person}{Jure Leskovec}, \bibinfo{person}{Jon Kleinberg}, {and} \bibinfo{person}{Christos Faloutsos}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Graphs over time: densification laws, shrinking diameters and possible explanations}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{177–187}.
+\newblock
+\showISBNx{159593135X}
+
+
+\bibitem[Lhoest et~al\mbox{.}(2021)]%
+        {lhoest2021empire_original}
+\bibfield{author}{\bibinfo{person}{Quentin Lhoest}, \bibinfo{person}{Albert~Villanova del Moral}, \bibinfo{person}{Yacine Jernite}, \bibinfo{person}{Abhishek Thakur}, \bibinfo{person}{Patrick von Platen}, \bibinfo{person}{Suraj Patil}, \bibinfo{person}{Julien Chaumond}, \bibinfo{person}{Mariama Drame}, \bibinfo{person}{Julien Plu}, \bibinfo{person}{Lewis Tunstall}, {et~al\mbox{.}}} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Datasets: A community library for natural language processing}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2109.02846}} (\bibinfo{year}{2021}).
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2024b)]%
+        {privacy1}
+\bibfield{author}{\bibinfo{person}{Wenqin Li}, \bibinfo{person}{Xinrong Zheng}, \bibinfo{person}{Ruihong Huang}, \bibinfo{person}{Mingwei Lin}, \bibinfo{person}{Jun Shen}, {and} \bibinfo{person}{Jiayin Lin}.} \bibinfo{year}{2024}\natexlab{b}.
+\newblock \showarticletitle{Enhancing Privacy Protection for Online Learning Resource Recommendation with Machine Unlearning}. In \bibinfo{booktitle}{\emph{2024 27th International Conference on Computer Supported Cooperative Work in Design (CSCWD)}}. \bibinfo{pages}{3282--3287}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2020)]%
+        {app10041327}
+\bibfield{author}{\bibinfo{person}{Xuefeng Li}, \bibinfo{person}{Yang Xin}, \bibinfo{person}{Chensu Zhao}, \bibinfo{person}{Yixian Yang}, {and} \bibinfo{person}{Yuling Chen}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Graph Convolutional Networks for Privacy Metrics in Online Social Networks}.
+\newblock \bibinfo{journal}{\emph{Applied Sciences}} \bibinfo{volume}{10}, \bibinfo{number}{4} (\bibinfo{year}{2020}).
+\newblock
+\showISSN{2076-3417}
+
+
+\bibitem[Li et~al\mbox{.}(2024a)]%
+        {xkliMEGU2024}
+\bibfield{author}{\bibinfo{person}{Xunkai Li}, \bibinfo{person}{Yulin Zhao}, \bibinfo{person}{Zhengyu Wu}, \bibinfo{person}{Wentao Zhang}, \bibinfo{person}{Rong-Hua Li}, {and} \bibinfo{person}{Guoren Wang}.} \bibinfo{year}{2024}\natexlab{a}.
+\newblock \showarticletitle{Towards Effective and General Graph Unlearning via Mutual Evolution}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the AAAI Conference on Artificial Intelligence}} \bibinfo{volume}{38}, \bibinfo{number}{12} (\bibinfo{date}{Mar.} \bibinfo{year}{2024}), \bibinfo{pages}{13682--13690}.
+\newblock
+
+
+\bibitem[Likhobaba et~al\mbox{.}(2023)]%
+        {Tolokers_original}
+\bibfield{author}{\bibinfo{person}{Daniil Likhobaba}, \bibinfo{person}{Nikita Pavlichenko}, {and} \bibinfo{person}{Dmitry Ustalov}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{{Toloker Graph: Interaction of Crowd Annotators}}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.5281/zenodo.7620795}
+\showDOI{\tempurl}
+
+
+\bibitem[Liu et~al\mbox{.}(2023)]%
+        {generalization1}
+\bibfield{author}{\bibinfo{person}{Jiaqi Liu}, \bibinfo{person}{Jian Lou}, \bibinfo{person}{Zhan Qin}, {and} \bibinfo{person}{Kui Ren}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Certified Minimax Unlearning with Generalization Rates and Deletion Capacity}. In \bibinfo{booktitle}{\emph{Advances in Neural Information Processing Systems}}, \bibfield{editor}{\bibinfo{person}{A.~Oh}, \bibinfo{person}{T.~Naumann}, \bibinfo{person}{A.~Globerson}, \bibinfo{person}{K.~Saenko}, \bibinfo{person}{M.~Hardt}, {and} \bibinfo{person}{S.~Levine}} (Eds.), Vol.~\bibinfo{volume}{36}. \bibinfo{publisher}{Curran Associates, Inc.}, \bibinfo{pages}{62821--62852}.
+\newblock
+
+
+\bibitem[Liu et~al\mbox{.}(2020)]%
+        {liu2020privacy}
+\bibfield{author}{\bibinfo{person}{Ximeng Liu}, \bibinfo{person}{Lehui Xie}, \bibinfo{person}{Yaopeng Wang}, \bibinfo{person}{Jian Zou}, \bibinfo{person}{Jinbo Xiong}, \bibinfo{person}{Zuobin Ying}, {and} \bibinfo{person}{Athanasios~V Vasilakos}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Privacy and security issues in deep learning: A survey}.
+\newblock \bibinfo{journal}{\emph{IEEE Access}}  \bibinfo{volume}{9} (\bibinfo{year}{2020}), \bibinfo{pages}{4566--4593}.
+\newblock
+
+
+\bibitem[Liu et~al\mbox{.}(2024)]%
+        {tradeoff1}
+\bibfield{author}{\bibinfo{person}{Zheyuan Liu}, \bibinfo{person}{Guangyao Dou}, \bibinfo{person}{Eli Chien}, \bibinfo{person}{Chunhui Zhang}, \bibinfo{person}{Yijun Tian}, {and} \bibinfo{person}{Ziwei Zhu}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Breaking the trilemma of privacy, utility, and efficiency via controllable machine unlearning}. In \bibinfo{booktitle}{\emph{Proceedings of the ACM on Web Conference 2024}}. \bibinfo{pages}{1260--1271}.
+\newblock
+
+
+\bibitem[Luo et~al\mbox{.}(2024)]%
+        {luo2024classic}
+\bibfield{author}{\bibinfo{person}{Yuankai Luo}, \bibinfo{person}{Lei Shi}, {and} \bibinfo{person}{Xiao-Ming Wu}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Classic GNNs are Strong Baselines: Reassessing GNNs for Node Classification}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2406.08993}} (\bibinfo{year}{2024}).
+\newblock
+
+
+\bibitem[Monti et~al\mbox{.}(2016)]%
+        {MNISTSuperPixels}
+\bibfield{author}{\bibinfo{person}{Federico Monti}, \bibinfo{person}{Davide Boscaini}, \bibinfo{person}{Jonathan Masci}, \bibinfo{person}{Emanuele Rodol{\`a}}, \bibinfo{person}{Jan Svoboda}, {and} \bibinfo{person}{Michael~M. Bronstein}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Geometric Deep Learning on Graphs and Manifolds Using Mixture Model CNNs}.
+\newblock \bibinfo{journal}{\emph{2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}} (\bibinfo{year}{2016}), \bibinfo{pages}{5425--5434}.
+\newblock
+
+
+\bibitem[Pan et~al\mbox{.}(2023)]%
+        {pan2023gst_unlearning}
+\bibfield{author}{\bibinfo{person}{Chao Pan}, \bibinfo{person}{Eli Chien}, {and} \bibinfo{person}{Olgica Milenkovic}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Unlearning Graph Classifiers with Limited Data Resources}. In \bibinfo{booktitle}{\emph{Proceedings of the ACM Web Conference, WWW}}.
+\newblock
+
+
+\bibitem[Pardau(2018)]%
+        {CCPA1}
+\bibfield{author}{\bibinfo{person}{Stuart~L Pardau}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{The california consumer privacy act: Towards a european-style privacy regime in the united states}.
+\newblock \bibinfo{journal}{\emph{J. Tech. L. \& Pol'y}}  \bibinfo{volume}{23} (\bibinfo{year}{2018}), \bibinfo{pages}{68}.
+\newblock
+
+
+\bibitem[Pei et~al\mbox{.}(2020)]%
+        {pei2020geomgcn}
+\bibfield{author}{\bibinfo{person}{Hongbin Pei}, \bibinfo{person}{Bingzhe Wei}, \bibinfo{person}{Kevin Chen-Chuan Chang}, \bibinfo{person}{Yu Lei}, {and} \bibinfo{person}{Bo Yang}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Geom-gcn: Geometric graph convolutional networks}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Platonov et~al\mbox{.}(2023)]%
+        {platonov2023hete_gnn_survey4}
+\bibfield{author}{\bibinfo{person}{Oleg Platonov}, \bibinfo{person}{Denis Kuznedelev}, \bibinfo{person}{Michael Diskin}, \bibinfo{person}{Artem Babenko}, {and} \bibinfo{person}{Liudmila Prokhorenkova}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{A critical look at the evaluation of GNNs under heterophily: are we really making progress?}
+\newblock \bibinfo{journal}{\emph{International Conference on Learning Representations, ICLR}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Qian et~al\mbox{.}(2023)]%
+        {robustness2}
+\bibfield{author}{\bibinfo{person}{Wei Qian}, \bibinfo{person}{Chenxu Zhao}, \bibinfo{person}{Wei Le}, \bibinfo{person}{Meiyi Ma}, {and} \bibinfo{person}{Mengdi Huai}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Towards understanding and enhancing robustness of deep learning models against malicious unlearning attacks}. In \bibinfo{booktitle}{\emph{Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining}}. \bibinfo{pages}{1932--1942}.
+\newblock
+
+
+\bibitem[Qu et~al\mbox{.}(2023)]%
+        {qu2023app_gnn_bio2}
+\bibfield{author}{\bibinfo{person}{Zongshuai Qu}, \bibinfo{person}{Tao Yao}, \bibinfo{person}{Xinghui Liu}, {and} \bibinfo{person}{Gang Wang}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{A Graph Convolutional Network Based on Univariate Neurodegeneration Biomarker for Alzheimer’s Disease Diagnosis}.
+\newblock \bibinfo{journal}{\emph{IEEE Journal of Translational Engineering in Health and Medicine}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Regulation(2018)]%
+        {GDPR}
+\bibfield{author}{\bibinfo{person}{General Data~Protection Regulation}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{General data protection regulation (GDPR). ntersoft Consulting}.
+\newblock \bibinfo{journal}{\emph{Obtenido de https://www. epsu. org/sites/> default/files/article/files/GDPR\_FINAL\_EPSU. pdf}} (\bibinfo{year}{2018}).
+\newblock
+
+
+\bibitem[Rehman et~al\mbox{.}(2012)]%
+        {ieeedataming2012}
+\bibfield{author}{\bibinfo{person}{Saif~Ur Rehman}, \bibinfo{person}{Asmat~Ullah Khan}, {and} \bibinfo{person}{Simon Fong}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Graph mining: A survey of graph mining techniques}. In \bibinfo{booktitle}{\emph{Seventh International Conference on Digital Information Management (ICDIM 2012)}}. \bibinfo{pages}{88--92}.
+\newblock
+
+
+\bibitem[Riesen and Bunke(2008)]%
+        {AIDS}
+\bibfield{author}{\bibinfo{person}{Kaspar Riesen} {and} \bibinfo{person}{Horst Bunke}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{IAM Graph Database Repository for Graph Based Pattern Recognition and Machine Learning}. In \bibinfo{booktitle}{\emph{Proceedings of the 2008 Joint IAPR International Workshop on Structural, Syntactic, and Statistical Pattern Recognition}} (Orlando, Florida) \emph{(\bibinfo{series}{SSPR \& SPR '08})}. \bibinfo{publisher}{Springer-Verlag}, \bibinfo{address}{Berlin, Heidelberg}, \bibinfo{pages}{287–297}.
+\newblock
+\showISBNx{9783540896883}
+
+
+\bibitem[Robinson et~al\mbox{.}(2015)]%
+        {robinson2015graph}
+\bibfield{author}{\bibinfo{person}{Ian Robinson}, \bibinfo{person}{Jim Webber}, {and} \bibinfo{person}{Emil Eifrem}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Graph databases: new opportunities for connected data}}.
+\newblock \bibinfo{publisher}{" O'Reilly Media, Inc."}.
+\newblock
+
+
+\bibitem[Shchur et~al\mbox{.}(2018)]%
+        {shchur2018amazon_datasets}
+\bibfield{author}{\bibinfo{person}{Oleksandr Shchur}, \bibinfo{person}{Maximilian Mumme}, \bibinfo{person}{Aleksandar Bojchevski}, {and} \bibinfo{person}{Stephan G{\"u}nnemann}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Pitfalls of graph neural network evaluation}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:1811.05868}} (\bibinfo{year}{2018}).
+\newblock
+
+
+\bibitem[Sinha et~al\mbox{.}(2024)]%
+        {2024D2DGN}
+\bibfield{author}{\bibinfo{person}{Yash Sinha}, \bibinfo{person}{Murari Mandal}, {and} \bibinfo{person}{Mohan Kankanhalli}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Distill to Delete: Unlearning in Graph Networks with Knowledge Distillation}.
+\newblock
+\newblock
+\showeprint[arxiv]{2309.16173}~[cs.LG]
+
+
+\bibitem[Su et~al\mbox{.}(2024)]%
+        {su2024dcl}
+\bibfield{author}{\bibinfo{person}{Daohan Su}, \bibinfo{person}{Bowen Fan}, \bibinfo{person}{Zhi Zhang}, \bibinfo{person}{Haoyan Fu}, {and} \bibinfo{person}{Zhida Qin}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{DCL: Diversified Graph Recommendation With Contrastive Learning}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Computational Social Systems}} (\bibinfo{year}{2024}).
+\newblock
+
+
+\bibitem[Sun et~al\mbox{.}(2023)]%
+        {sun2023adpa}
+\bibfield{author}{\bibinfo{person}{Henan Sun}, \bibinfo{person}{Xunkai Li}, \bibinfo{person}{Zhengyu Wu}, \bibinfo{person}{Daohan Su}, \bibinfo{person}{Rong-Hua Li}, {and} \bibinfo{person}{Guoren Wang}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Breaking the Entanglement of Homophily and Heterophily in Semi-supervised Node Classification}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2312.04111}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Sutherland et~al\mbox{.}(2003)]%
+        {BZR_COX_DHFR}
+\bibfield{author}{\bibinfo{person}{Jeffrey~J. Sutherland}, \bibinfo{person}{Lee~A. O'Brien}, {and} \bibinfo{person}{Donald~F. Weaver}.} \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Spline-Fitting with a Genetic Algorithm: A Method for Developing Classification Structure Activity Relationships}.
+\newblock \bibinfo{journal}{\emph{Journal of Chemical Information and Computer Sciences}} \bibinfo{volume}{43}, \bibinfo{number}{6} (\bibinfo{year}{2003}), \bibinfo{pages}{1906--1915}.
+\newblock
+
+
+\bibitem[Tan et~al\mbox{.}(2024)]%
+        {Tan2024UtU}
+\bibfield{author}{\bibinfo{person}{Jiajun Tan}, \bibinfo{person}{Fei Sun}, \bibinfo{person}{Ruichen Qiu}, \bibinfo{person}{Du Su}, {and} \bibinfo{person}{Huawei Shen}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Unlink to Unlearn: Simplifying Edge Unlearning in GNNs}. In \bibinfo{booktitle}{\emph{Companion Proceedings of the ACM Web Conference 2024}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{489–492}.
+\newblock
+\showISBNx{9798400701726}
+
+
+\bibitem[Tanuwidjaja et~al\mbox{.}(2020)]%
+        {tanuwidjaja2020privacy}
+\bibfield{author}{\bibinfo{person}{Harry~Chandra Tanuwidjaja}, \bibinfo{person}{Rakyong Choi}, \bibinfo{person}{Seunggeun Baek}, {and} \bibinfo{person}{Kwangjo Kim}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Privacy-preserving deep learning on machine learning as a service—a comprehensive survey}.
+\newblock \bibinfo{journal}{\emph{IEEE Access}}  \bibinfo{volume}{8} (\bibinfo{year}{2020}), \bibinfo{pages}{167425--167447}.
+\newblock
+
+
+\bibitem[Tarun et~al\mbox{.}(2023)]%
+        {Efficient3}
+\bibfield{author}{\bibinfo{person}{Ayush~K Tarun}, \bibinfo{person}{Vikram~S Chundawat}, \bibinfo{person}{Murari Mandal}, {and} \bibinfo{person}{Mohan Kankanhalli}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Fast yet effective machine unlearning}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Neural Networks and Learning Systems}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Veli{\v{c}}kovi{\'c} et~al\mbox{.}(2018)]%
+        {velivckovic2017gat}
+\bibfield{author}{\bibinfo{person}{Petar Veli{\v{c}}kovi{\'c}}, \bibinfo{person}{Guillem Cucurull}, \bibinfo{person}{Arantxa Casanova}, \bibinfo{person}{Adriana Romero}, \bibinfo{person}{Pietro Lio}, {and} \bibinfo{person}{Yoshua Bengio}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Graph attention networks}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Wale and Karypis(2006)]%
+        {NCI1}
+\bibfield{author}{\bibinfo{person}{Nikil Wale} {and} \bibinfo{person}{George Karypis}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Comparison of Descriptor Spaces for Chemical Compound Retrieval and Classification}. In \bibinfo{booktitle}{\emph{Proceedings of the Sixth International Conference on Data Mining}} \emph{(\bibinfo{series}{ICDM '06})}. \bibinfo{publisher}{IEEE Computer Society}, \bibinfo{address}{USA}, \bibinfo{pages}{678–689}.
+\newblock
+\showISBNx{0769527019}
+
+
+\bibitem[Wang et~al\mbox{.}(2023)]%
+        {wang2023guide}
+\bibfield{author}{\bibinfo{person}{Cheng-Long Wang}, \bibinfo{person}{Mengdi Huai}, {and} \bibinfo{person}{Di Wang}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Inductive Graph Unlearning}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2304.03093}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Wang et~al\mbox{.}(2020)]%
+        {wang2020microsoft_MAG}
+\bibfield{author}{\bibinfo{person}{Kuansan Wang}, \bibinfo{person}{Zhihong Shen}, \bibinfo{person}{Chiyuan Huang}, \bibinfo{person}{Chieh-Han Wu}, \bibinfo{person}{Yuxiao Dong}, {and} \bibinfo{person}{Anshul Kanakia}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Microsoft academic graph: When experts are not enough}.
+\newblock \bibinfo{journal}{\emph{Quantitative Science Studies}} \bibinfo{volume}{1}, \bibinfo{number}{1} (\bibinfo{year}{2020}), \bibinfo{pages}{396--413}.
+\newblock
+
+
+\bibitem[Wang et~al\mbox{.}(2018)]%
+        {ijcai2018p142}
+\bibfield{author}{\bibinfo{person}{Zhouxia Wang}, \bibinfo{person}{Tianshui Chen}, \bibinfo{person}{Jimmy Ren}, \bibinfo{person}{Weihao Yu}, \bibinfo{person}{Hui Cheng}, {and} \bibinfo{person}{Liang Lin}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Deep Reasoning with Knowledge Graph for Social Relationship Understanding}. In \bibinfo{booktitle}{\emph{Proceedings of the Twenty-Seventh International Joint Conference on Artificial Intelligence, {IJCAI-18}}}. \bibinfo{publisher}{International Joint Conferences on Artificial Intelligence Organization}, \bibinfo{pages}{1021--1028}.
+\newblock
+
+
+\bibitem[Wu et~al\mbox{.}(2022)]%
+        {wu2022survey}
+\bibfield{author}{\bibinfo{person}{Bingzhe Wu}, \bibinfo{person}{Jintang Li}, \bibinfo{person}{Junchi Yu}, \bibinfo{person}{Yatao Bian}, \bibinfo{person}{Hengtong Zhang}, \bibinfo{person}{CHaochao Chen}, \bibinfo{person}{Chengbin Hou}, \bibinfo{person}{Guoji Fu}, \bibinfo{person}{Liang Chen}, \bibinfo{person}{Tingyang Xu}, {et~al\mbox{.}}} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{A survey of trustworthy graph learning: Reliability, explainability, and privacy protection}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2205.10014}} (\bibinfo{year}{2022}).
+\newblock
+
+
+\bibitem[Wu et~al\mbox{.}(2019)]%
+        {wu2019sgc}
+\bibfield{author}{\bibinfo{person}{Felix Wu}, \bibinfo{person}{Amauri Souza}, \bibinfo{person}{Tianyi Zhang}, \bibinfo{person}{Christopher Fifty}, \bibinfo{person}{Tao Yu}, {and} \bibinfo{person}{Kilian Weinberger}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Simplifying graph convolutional networks}. In \bibinfo{booktitle}{\emph{International Conference on Machine Learning, ICML}}.
+\newblock
+
+
+\bibitem[Wu et~al\mbox{.}(2023b)]%
+        {wu2023gif}
+\bibfield{author}{\bibinfo{person}{Jiancan Wu}, \bibinfo{person}{Yi Yang}, \bibinfo{person}{Yuchun Qian}, \bibinfo{person}{Yongduo Sui}, \bibinfo{person}{Xiang Wang}, {and} \bibinfo{person}{Xiangnan He}.} \bibinfo{year}{2023}\natexlab{b}.
+\newblock \showarticletitle{GIF: A General Graph Unlearning Strategy via Influence Function}. In \bibinfo{booktitle}{\emph{Proceedings of the ACM Web Conference, WWW}}.
+\newblock
+
+
+\bibitem[Wu et~al\mbox{.}(2023a)]%
+        {2023WuCEU}
+\bibfield{author}{\bibinfo{person}{Kun Wu}, \bibinfo{person}{Jie Shen}, \bibinfo{person}{Yue Ning}, \bibinfo{person}{Ting Wang}, {and} \bibinfo{person}{Wendy~Hui Wang}.} \bibinfo{year}{2023}\natexlab{a}.
+\newblock \showarticletitle{Certified Edge Unlearning for Graph Neural Networks}. In \bibinfo{booktitle}{\emph{Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{2606–2617}.
+\newblock
+\showISBNx{9798400701030}
+
+
+\bibitem[Wu et~al\mbox{.}(2024)]%
+        {robustness1}
+\bibfield{author}{\bibinfo{person}{Tao Wu}, \bibinfo{person}{Xinwen Cao}, \bibinfo{person}{Chao Wang}, \bibinfo{person}{Shaojie Qiao}, \bibinfo{person}{Xingping Xian}, \bibinfo{person}{Lin Yuan}, \bibinfo{person}{Canyixing Cui}, {and} \bibinfo{person}{Yanbing Liu}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{GraphMU: Repairing Robustness of Graph Neural Networks via Machine Unlearning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2406.13499}~[cs.SI]
+
+
+\bibitem[Wu et~al\mbox{.}(2020)]%
+        {wu2020gnn_survey1}
+\bibfield{author}{\bibinfo{person}{Zonghan Wu}, \bibinfo{person}{Shirui Pan}, \bibinfo{person}{Fengwen Chen}, \bibinfo{person}{Guodong Long}, \bibinfo{person}{Chengqi Zhang}, {and} \bibinfo{person}{S~Yu Philip}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{A comprehensive survey on graph neural networks}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Neural Networks and Learning Systems}} \bibinfo{volume}{32}, \bibinfo{number}{1} (\bibinfo{year}{2020}), \bibinfo{pages}{4--24}.
+\newblock
+
+
+\bibitem[Xu et~al\mbox{.}(2023)]%
+        {Xu2023ACMMU}
+\bibfield{author}{\bibinfo{person}{Heng Xu}, \bibinfo{person}{Tianqing Zhu}, \bibinfo{person}{Lefeng Zhang}, \bibinfo{person}{Wanlei Zhou}, {and} \bibinfo{person}{Philip~S. Yu}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Machine Unlearning: A Survey}.
+\newblock \bibinfo{journal}{\emph{ACM Comput. Surv.}} \bibinfo{volume}{56}, \bibinfo{number}{1}, Article \bibinfo{articleno}{9} (\bibinfo{date}{Aug.} \bibinfo{year}{2023}).
+\newblock
+\showISSN{0360-0300}
+
+
+\bibitem[Xu et~al\mbox{.}(2019)]%
+        {xu2018gin}
+\bibfield{author}{\bibinfo{person}{Keyulu Xu}, \bibinfo{person}{Weihua Hu}, \bibinfo{person}{Jure Leskovec}, {and} \bibinfo{person}{Stefanie Jegelka}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{How powerful are graph neural networks?} \bibinfo{publisher}{International Conference on Learning Representations, ICLR}.
+\newblock
+
+
+\bibitem[Yan et~al\mbox{.}(2022)]%
+        {Efficient1}
+\bibfield{author}{\bibinfo{person}{Haonan Yan}, \bibinfo{person}{Xiaoguang Li}, \bibinfo{person}{Ziyao Guo}, \bibinfo{person}{Hui Li}, \bibinfo{person}{Fenghua Li}, {and} \bibinfo{person}{Xiaodong Lin}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{ARCANE: An Efficient Architecture for Exact Machine Unlearning.}. In \bibinfo{booktitle}{\emph{IJCAI}}, Vol.~\bibinfo{volume}{6}. \bibinfo{pages}{19}.
+\newblock
+
+
+\bibitem[Yanardag and Vishwanathan(2015)]%
+        {IMDB}
+\bibfield{author}{\bibinfo{person}{Pinar Yanardag} {and} \bibinfo{person}{S.V.N. Vishwanathan}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Deep Graph Kernels}. In \bibinfo{booktitle}{\emph{Proceedings of the 21th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{1365–1374}.
+\newblock
+\showISBNx{9781450336642}
+
+
+\bibitem[Yang and Li(2023)]%
+        {2023GCU}
+\bibfield{author}{\bibinfo{person}{Tzu-Hsuan Yang} {and} \bibinfo{person}{Cheng-Te Li}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{When Contrastive Learning Meets Graph Unlearning: Graph Contrastive Unlearning for Link Prediction}. In \bibinfo{booktitle}{\emph{2023 IEEE International Conference on Big Data (BigData)}}. \bibinfo{pages}{6025--6032}.
+\newblock
+
+
+\bibitem[Yang et~al\mbox{.}(2016)]%
+        {Yang16cora}
+\bibfield{author}{\bibinfo{person}{Zhilin Yang}, \bibinfo{person}{William~W. Cohen}, {and} \bibinfo{person}{Ruslan Salakhutdinov}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Revisiting Semi-Supervised Learning with Graph Embeddings}. In \bibinfo{booktitle}{\emph{International Conference on Machine Learning, ICML}}.
+\newblock
+
+
+\bibitem[Yi et~al\mbox{.}(2016)]%
+        {ShapeNet}
+\bibfield{author}{\bibinfo{person}{Li Yi}, \bibinfo{person}{Vladimir~G. Kim}, \bibinfo{person}{Duygu Ceylan}, \bibinfo{person}{I-Chao Shen}, \bibinfo{person}{Mengyan Yan}, \bibinfo{person}{Hao Su}, \bibinfo{person}{Cewu Lu}, \bibinfo{person}{Qixing Huang}, \bibinfo{person}{Alla Sheffer}, {and} \bibinfo{person}{Leonidas Guibas}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{A scalable active framework for region annotation in 3D shape collections}.
+\newblock \bibinfo{journal}{\emph{ACM Trans. Graph.}} \bibinfo{volume}{35}, \bibinfo{number}{6}, Article \bibinfo{articleno}{210} (\bibinfo{year}{2016}).
+\newblock
+\showISSN{0730-0301}
+
+
+\bibitem[Yi and Wei(2024)]%
+        {scaluGUN}
+\bibfield{author}{\bibinfo{person}{Lu Yi} {and} \bibinfo{person}{Zhewei Wei}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Scalable and Certifiable Graph Unlearning: Overcoming the Approximation Error Barrier}.
+\newblock
+\newblock
+\showeprint[arxiv]{2408.09212}~[cs.LG]
+
+
+\bibitem[Yun et~al\mbox{.}(2019)]%
+        {2019DBLP}
+\bibfield{author}{\bibinfo{person}{Seongjun Yun}, \bibinfo{person}{Minbyul Jeong}, \bibinfo{person}{Raehyun Kim}, \bibinfo{person}{Jaewoo Kang}, {and} \bibinfo{person}{Hyunwoo~J. Kim}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Graph transformer networks}}.
+\newblock \bibinfo{publisher}{Curran Associates Inc.}
+\newblock
+
+
+\bibitem[Zeng et~al\mbox{.}(2020)]%
+        {zeng2019graphsaint}
+\bibfield{author}{\bibinfo{person}{Hanqing Zeng}, \bibinfo{person}{Hongkuan Zhou}, \bibinfo{person}{Ajitesh Srivastava}, \bibinfo{person}{Rajgopal Kannan}, {and} \bibinfo{person}{Viktor Prasanna}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Graphsaint: Graph sampling based inductive learning method}. In \bibinfo{booktitle}{\emph{International conference on learning representations, ICLR}}.
+\newblock
+
+
+\bibitem[Zhang(2024)]%
+        {2024ZhangGraphRevoker}
+\bibfield{author}{\bibinfo{person}{Jiahao Zhang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Graph Unlearning with Efficient Partial Retraining}. In \bibinfo{booktitle}{\emph{Companion Proceedings of the ACM Web Conference 2024}}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{pages}{1218–1221}.
+\newblock
+\showISBNx{9798400701726}
+
+
+\bibitem[Zhang et~al\mbox{.}(2024)]%
+        {generalization2}
+\bibfield{author}{\bibinfo{person}{Zhexin Zhang}, \bibinfo{person}{Junxiao Yang}, \bibinfo{person}{Pei Ke}, \bibinfo{person}{Shiyao Cui}, \bibinfo{person}{Chujie Zheng}, \bibinfo{person}{Hongning Wang}, {and} \bibinfo{person}{Minlie Huang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Safe Unlearning: A Surprisingly Effective and Generalizable Solution to Defend Against Jailbreak Attacks}.
+\newblock
+\newblock
+\showeprint[arxiv]{2407.02855}~[cs.CR]
+
+
+\bibitem[Zheng et~al\mbox{.}(2023)]%
+        {2023GUKD}
+\bibfield{author}{\bibinfo{person}{Wenyue Zheng}, \bibinfo{person}{Ximeng Liu}, \bibinfo{person}{Yuyang Wang}, {and} \bibinfo{person}{Xuanwei Lin}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Graph Unlearning Using Knowledge Distillation}. In \bibinfo{booktitle}{\emph{Information and Communications Security: 25th International Conference, ICICS 2023, Tianjin, China, November 18–20, 2023, Proceedings}}. \bibinfo{publisher}{Springer-Verlag}, \bibinfo{pages}{485–501}.
+\newblock
+\showISBNx{978-981-99-7355-2}
+
+
+\bibitem[Zhou et~al\mbox{.}(2022)]%
+        {zhou2022gnn_survey2}
+\bibfield{author}{\bibinfo{person}{Yu Zhou}, \bibinfo{person}{Haixia Zheng}, \bibinfo{person}{Xin Huang}, \bibinfo{person}{Shufeng Hao}, \bibinfo{person}{Dengao Li}, {and} \bibinfo{person}{Jumin Zhao}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Graph Neural Networks: Taxonomy, Advances, and Trends}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Intelligent Systems and TechnoLoGy}} \bibinfo{volume}{13}, \bibinfo{number}{1} (\bibinfo{year}{2022}), \bibinfo{pages}{1--54}.
+\newblock
+
+
+\bibitem[Zhu and Koniusz(2021)]%
+        {zhu2021ssgc}
+\bibfield{author}{\bibinfo{person}{Hao Zhu} {and} \bibinfo{person}{Piotr Koniusz}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Simple spectral graph convolution}. In \bibinfo{booktitle}{\emph{International Conference on Learning Representations, ICLR}}.
+\newblock
+
+
+\bibitem[Zitnik et~al\mbox{.}(2018)]%
+        {10.1093/bioinformatics/bty294}
+\bibfield{author}{\bibinfo{person}{Marinka Zitnik}, \bibinfo{person}{Monica Agrawal}, {and} \bibinfo{person}{Jure Leskovec}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{{Modeling polypharmacy side effects with graph convolutional networks}}.
+\newblock \bibinfo{journal}{\emph{Bioinformatics}} \bibinfo{volume}{34}, \bibinfo{number}{13} (\bibinfo{date}{06} \bibinfo{year}{2018}), \bibinfo{pages}{i457--i466}.
+\newblock
+\showISSN{1367-4803}
+
+
+\end{thebibliography}
