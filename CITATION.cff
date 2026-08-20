@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use MIA-Bench in your research, please cite it as below."
+authors:
+  - family-names: Liu
+    given-names: Shang
+  - family-names: Hu
+    given-names: Jingchao
+  - family-names: Yang
+    given-names: Zhan
+  - family-names: Li
+    given-names: Yonggang
+  - family-names: Yuan
+    given-names: Guan
+  - family-names: Liu
+    given-names: Jinfei
+  - family-names: Cao
+    given-names: Yang
+title: "MIA-Bench: Benchmarking Membership Inference Attacks on Machine Unlearning"
+journal: "IEEE Transactions on Knowledge and Data Engineering"
+year: 2026
+keywords:
+  - machine unlearning
+  - membership inference attack
+  - privacy
+  - benchmark
+license: MIT
+repository-code: "https://github.com/keke2510/MIA-benchmark"
