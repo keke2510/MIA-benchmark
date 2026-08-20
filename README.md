@@ -9,6 +9,8 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-ee4c2c.svg)](https://pytorch.org/)
 [![Paper](https://img.shields.io/badge/Paper-TKDE-blue)](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=69)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen.svg)](.github/workflows/ci.yml)
+[![Stars](https://img.shields.io/github/stars/keke2510/MIA-benchmark?style=social)](https://github.com/keke2510/MIA-benchmark/stargazers)
+[![Forks](https://img.shields.io/github/forks/keke2510/MIA-benchmark?style=social)](https://github.com/keke2510/MIA-benchmark/network/members)
 
 *"The right to be forgotten" is only as strong as our ability to verify it.*
 
@@ -25,6 +27,19 @@ Instead of relying on a single metric or a single attack, MIA-Bench evaluates at
 </p>
 
 > 📄 **Paper**: *MIA-Bench: Benchmarking Membership Inference Attacks on Machine Unlearning* — submitted to IEEE TKDE (CCF-A).
+
+---
+
+## 🎯 Why MIA-Bench?
+
+Existing MIA-on-unlearning studies are hard to compare — they use different forgetting ratios, shadow-model counts, attack implementations, and metrics. MIA-Bench fixes this with a unified, multi-dimensional protocol:
+
+| Dimension | Prior Work | **MIA-Bench** |
+|-----------|-----------|---------------|
+| Attacks evaluated | 1–3 per study | **6** (black-box → gray-box → algorithm-specific) |
+| Evaluation dimensions | 1–2 (mostly E, A) | **5** — E / S / A / C / P |
+| Datasets | 2–7, study-specific | **4** standardized (CIFAR-10/100, TinyImageNet, CINIC-10) |
+| Protocol | Heterogeneous | **Fixed** 10% forget ratio, 3 seeds, 8 shadow models |
 
 ---
 
@@ -89,6 +104,16 @@ MIA-Bench evaluates each attack along five complementary dimensions:
 | **A**pplicability | What threat model and knowledge are required? | Knowledge prerequisites, shadow models |
 | **C**ost | What are the computational and query overheads? | Runtime, query budget, storage |
 | **P**racticality | Does it translate to real deployment? | TPR@low-FPR under realistic constraints |
+
+---
+
+## 🏗️ Architecture
+
+MIA-Bench follows a five-stage pipeline — from data partitioning to multi-dimensional analysis:
+
+<p align="center">
+  <img src="assets/pipeline.png" width="95%" alt="MIA-Bench five-stage evaluation pipeline" />
+</p>
 
 ---
 
