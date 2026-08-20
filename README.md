@@ -64,7 +64,6 @@ Existing MIA-on-unlearning studies are hard to compare — they use different fo
 - [Quick Start](#-quick-start)
 - [Usage](#-usage)
 - [Repository Structure](#-repository-structure)
-- [Key Results](#-key-results)
 - [Reproducibility](#-reproducibility)
 - [FAQ](#-faq)
 - [Citation](#-citation)
@@ -269,47 +268,6 @@ mia-benchmark-main/
 ├── config.py                     # Global configuration
 └── utils/                        # Training and evaluation utilities
 ```
-
----
-
-## 📈 Key Results
-
-MIA-Bench reveals substantial and previously under-measured variation in residual privacy leakage:
-
-- **Algorithm choice is a first-order privacy decision** — attack AUC ranges from **0.519** (Retrain, the gold standard) to **0.704** (NegGrad), a **36%** relative difference.
-- **No single attack dominates all dimensions** — RULI attains the highest peak accuracy (**70.41%** on CIFAR-100 NegGrad) but exhibits the widest cross-setting variation (**20.53 pp**); LiRA and UnlearningLeaks provide the most stable measurements.
-- **Global metrics overestimate practical risk** — under a controlled low false-positive rate (FPR = 1%), the strongest attack identifies only **15.1%** of forgotten members, a ~5× drop from global accuracy.
-- **Computational cost spans ~60×** — from <1 minute (Threshold / Loss) to ≈1 hour (LiRA with 8 shadow models).
-
-**Maximum attack AUC** per forgetting algorithm and dataset (worst-case privacy leakage):
-
-| Algorithm | CIFAR-10 | CIFAR-100 | TinyImageNet | CINIC-10 |
-|-----------|:--------:|:---------:|:------------:|:--------:|
-| Retrain | 0.530 | 0.521 | 0.521 | 0.519 |
-| Finetuning | 0.523 | 0.527 | 0.558 | 0.525 |
-| NegGrad | **0.577** | **0.704** | **0.635** | **0.622** |
-| SCRUB | 0.525 | 0.546 | 0.608 | 0.526 |
-
-### Attack Performance Under Low-FPR Constraints
-
-The TPR@FPR analysis shows how attack effectiveness collapses under realistic false-positive constraints — a phenomenon that global AUC hides:
-
-<p align="center">
-  <img src="assets/cifar10.png" width="48%" alt="CIFAR-10 TPR@FPR" />
-  <img src="assets/cifar100.png" width="48%" alt="CIFAR-100 TPR@FPR" />
-  <img src="assets/tinyimagenet.png" width="48%" alt="TinyImageNet TPR@FPR" />
-  <img src="assets/cinic10.png" width="48%" alt="CINIC-10 TPR@FPR" />
-</p>
-
-### Computational Cost
-
-Single-run runtime spans two orders of magnitude across attacks — from sub-second black-box baselines to tens of seconds for shadow-model-based attacks:
-
-<p align="center">
-  <img src="assets/runtime.png" width="62%" alt="Single-run runtime comparison" />
-</p>
-
-The full experimental results, detailed tables, and analysis are available in the paper.
 
 ---
 
