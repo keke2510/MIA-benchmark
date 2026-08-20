@@ -16,7 +16,7 @@ MIA-Bench is a comprehensive benchmarking framework for systematically evaluatin
 - **6 attack methods**: LiRA, REA, RULI, UnlearningLeaks + Threshold, Loss baselines
 - **4 unlearning algorithms**: Retrain, Finetuning, NegGrad, SCRUB
 - **4 benchmark datasets**: CIFAR-10, CIFAR-100, TinyImageNet, CINIC-10
-- **>280 experimental settings** across all dimensions
+- **288 experimental settings** across all dimensions
 - **Unified API** for attacks and unlearning methods — extensible for future work
 - **Automated multi-dimensional reporting**: AUC, Accuracy, TPR@FPR, σ, CV, runtime
 
@@ -48,7 +48,7 @@ MIA-Bench is a comprehensive benchmarking framework for systematically evaluatin
 mia-benchmark-main/
 ├── run_benchmark.py              # Main benchmark entry point
 ├── benchmark/samplewise.py       # Dataset presets, stage orchestration, attack dispatch
-├── attacks/                      # Attack method adapters (lira, rea, ruli, unlearningleaks)
+├── attacks/                      # Attack method adapters (lira, rea, ruli, unlearningleaks, threshold, loss)
 ├── evaluation/                   # Multi-dimensional metrics (effectiveness, stability, cost, realism)
 ├── models/                       # Model architectures (ResNet, ViT)
 ├── datasets/                     # Dataset loaders (CIFAR-10/100, TinyImageNet, CINIC-10)
@@ -125,7 +125,7 @@ python run_benchmark.py \
 ### Effectiveness
 - AUC (Area Under ROC Curve)
 - Accuracy
-- TPR@FPR (0.1%, 0.5%, 1%, 5%)
+- TPR@FPR (0.1%, 1%, 10%)
 
 ### Stability
 - Standard deviation (σ) across 3 random seeds
@@ -156,7 +156,7 @@ log_files/model/forget_random_main/<experiment>/unlearning/<method>/
 ```
 --dataset      Cifar10 | Cifar100 | TinyImageNet | Cinic10
 --methods      retrain | finetune | negative_grad | scrub
---attacks      lira | rea | ruli | unlearningleaks
+--attacks      lira | rea | ruli | unlearningleaks | threshold | loss
 --stages       pretrain shadow unlearn reminiscence attack
 --seed         <int>
 --forget-perc  0.1
@@ -197,4 +197,4 @@ log_files/model/forget_random_main/<experiment>/unlearning/<method>/
 
 ## License
 
-This project is released for research purposes. See the repository for details.
+This project is released under the [MIT License](LICENSE).

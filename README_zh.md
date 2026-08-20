@@ -16,7 +16,7 @@ MIA-Bench 是一个面向机器遗忘场景的成员推断攻击（MIA）综合�
 - **6 种攻击方法**：LiRA、REA、RULI、UnlearningLeaks + Threshold、Loss 基线
 - **4 种遗忘算法**：Retrain、Finetuning、NegGrad、SCRUB
 - **4 个基准数据集**：CIFAR-10、CIFAR-100、TinyImageNet、CINIC-10
-- **280+ 组实验设置**覆盖所有维度
+- **288 组实验设置**覆盖所有维度
 - **统一 API** 接口，支持攻击方法和遗忘算法的灵活扩展
 - **自动化多维报告**：AUC、Accuracy、TPR@FPR、σ、CV、运行时间
 
@@ -91,7 +91,7 @@ python run_benchmark.py \
   --dataset Cifar10 \
   --seed 1 \
   --methods finetune \
-  --attacks lira rea ruli unlearningleaks \
+  --attacks lira rea ruli unlearningleaks threshold loss \
   --stages unlearn attack
 ```
 
@@ -100,7 +100,7 @@ python run_benchmark.py \
 ## 评估指标
 
 ### 有效性
-- AUC、Accuracy、TPR@FPR（0.1%, 0.5%, 1%, 5%）
+- AUC、Accuracy、TPR@FPR（0.1%, 1%, 10%）
 
 ### 稳定性
 - 标准差（σ）跨 3 个随机种子
@@ -122,3 +122,7 @@ python run_benchmark.py \
   note={Under review}
 }
 ```
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。

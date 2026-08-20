@@ -1,28 +1,17 @@
-accelerate==0.30.1
-adapters==1.1.0
-coloredlogs==15.0.1
-datasets==2.19.2
-diffusers==0.28.0
-einops==0.8.1
-evaluate==0.4.3
-fastchat==0.1.0
-fuzzywuzzy==0.18.0
-kagglehub==0.3.11
-matplotlib==3.8.0
-numpy==1.26.4
-pandas==2.2.3
-peft==0.14.0
-Pillow==11.1.0
-PyYAML==6.0.2
-rouge==1.0.1
-scikit-learn==1.3.0
-scipy==1.11.4
-seaborn==0.13.2
-seqeval==1.2.2
-timm==0.9.16
-torch==2.7.1+cu128
-torchaudio==2.7.1+cu128
-torchvision==0.22.1+cu128
-tqdm==4.65.0
-transformers==4.47.1
-wandb==0.19.8
+# MIA-Bench core dependencies (Python 3.8+)
+#
+# The RULI text-unlearning extension (Ruli/text/) has additional
+# dependencies; see Ruli/requirements.txt for that optional module.
+
+torch>=1.10.0
+torchvision>=0.11.0
+numpy>=1.21.0
+pandas>=1.3.0
+scipy>=1.7.0
+matplotlib>=3.4.0
+seaborn>=0.11.0
+scikit-learn>=1.0.0
+timm>=0.5.0
+einops>=0.4.0
+tqdm>=4.60.0
+Pillow>=8.0.0

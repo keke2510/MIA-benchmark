@@ -273,11 +273,13 @@ def run_ruli(model, mem_ldr, non_ldr, n_cls, arch):
     return time.time() - t0
 
 # ── main ─────────────────────────────────────────────
-def main():
+def main(dataset_filter=None):
     attacks = ["Threshold", "Loss", "LiRA", "REA", "UnlearningLeaks", "RULI"]
     results = {}
 
-    for ds_name, cfg in DATASETS.items():
+    datasets_to_run = DATASETS if dataset_filter is None else {dataset_filter: DATASETS[dataset_filter]}
+
+    for ds_name, cfg in datasets_to_run.items():
         n_cls, img_sz, arch = cfg["classes"], cfg["size"], cfg["arch"]
         print(f"\n{'='*60}")
         print(f" {ds_name}: {n_cls} classes, {img_sz}x{img_sz}, {arch}")
@@ -388,4 +390,9 @@ def main():
     print("Copy this file back — I'll integrate the data into the paper.")
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset", type=str, default=None, choices=["CIFAR-10","CIFAR-100","TinyImageNet","CINIC-10"],
+                        help="Run single dataset only")
+    args = parser.parse_args()
+    main(dataset_filter=args.dataset)
