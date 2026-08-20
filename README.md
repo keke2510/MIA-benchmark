@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🔍 MIA-Bench
+<img src="assets/logo.png" width="130" alt="MIA-Bench logo" />
+
+# MIA-Bench
 
 **Benchmarking Membership Inference Attacks on Machine Unlearning**
 
@@ -11,6 +13,7 @@
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen.svg)](.github/workflows/ci.yml)
 [![Stars](https://img.shields.io/github/stars/keke2510/MIA-benchmark?style=social)](https://github.com/keke2510/MIA-benchmark/stargazers)
 [![Forks](https://img.shields.io/github/forks/keke2510/MIA-benchmark?style=social)](https://github.com/keke2510/MIA-benchmark/network/members)
+[![Visitors](https://visitor-badge.laobi.icu/badge?page_id=keke2510.MIA-benchmark&color=blue)](https://github.com/keke2510/MIA-benchmark)
 
 *"The right to be forgotten" is only as strong as our ability to verify it.*
 
@@ -339,6 +342,12 @@ This project is released under the [MIT License](LICENSE).
 - [ ] Release pre-trained checkpoints and pre-computed results for instant reproduction
 - [ ] Integrate experiment tracking (Weights & Biases / TensorBoard)
 - [ ] Provide a Colab quick-start notebook
+
+---
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=keke2510/MIA-benchmark&type=Date)](https://star-history.com/#keke2510/MIA-benchmark&Date)
 
 ---
 

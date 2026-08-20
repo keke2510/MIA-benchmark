@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" width="120" alt="MIA-Bench logo" />
+</p>
+
 # MIA-Bench
 
 **面向机器遗忘的成员推断攻击基准评测框架**
