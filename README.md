@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.png" width="720" alt="MIA-Bench" />
+<img src="assets/banner.png" width="100%" alt="MIA-Bench" />
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
