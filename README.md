@@ -58,6 +58,7 @@ Existing MIA-on-unlearning studies are hard to compare — they use different fo
 
 - [Supported Attacks](#-supported-attacks)
 - [Supported Unlearning Algorithms](#-supported-unlearning-algorithms)
+- [Supported Datasets](#-supported-datasets)
 - [Evaluation Framework](#-evaluation-framework)
 - [Installation](#-installation)
 - [Quick Start](#-quick-start)
@@ -65,8 +66,11 @@ Existing MIA-on-unlearning studies are hard to compare — they use different fo
 - [Repository Structure](#-repository-structure)
 - [Key Results](#-key-results)
 - [Reproducibility](#-reproducibility)
+- [FAQ](#-faq)
 - [Citation](#-citation)
 - [License](#-license)
+- [Star History](#-star-history)
+- [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
 - [Acknowledgements](#-acknowledgements)
 
@@ -91,6 +95,15 @@ Existing MIA-on-unlearning studies are hard to compare — they use different fo
 | **Finetuning** | Approximate | Fine-tune on the retain set for a few epochs |
 | **NegGrad** | Approximate | Gradient ascent on the forget set + descent on the retain set |
 | **SCRUB** | Approximate | Teacher-student distillation with selective obedience |
+
+## 📦 Supported Datasets
+
+| Dataset | Classes | Train | Test | Resolution | Architecture |
+|---------|:-------:|:-----:|:----:|:----------:|--------------|
+| CIFAR-10 | 10 | 50K | 10K | 32×32 | ResNet-18 (11.2M) |
+| CIFAR-100 | 100 | 50K | 10K | 32×32 | ResNet-50 (25.6M) |
+| TinyImageNet | 200 | 100K | 10K | 64×64 | ViT-B/16 (86.6M) |
+| CINIC-10 | 10 | 90K | 90K | 32×32 | ResNet-18 (11.2M) |
 
 ## 📏 Evaluation Framework
 
@@ -276,6 +289,30 @@ MIA-Bench reveals substantial and previously under-measured variation in residua
 | NegGrad | **0.577** | **0.704** | **0.635** | **0.622** |
 | SCRUB | 0.525 | 0.546 | 0.608 | 0.526 |
 
+### Stability
+
+Cross-setting range is the accuracy spread across all 16 dataset×algorithm combinations (smaller = more stable):
+
+| Attack | Cross-setting Range (pp) | Cross-algorithm Range (pp) | Avg Seed σ (%) | Stability |
+|--------|:---:|:---:|:---:|:---:|
+| Threshold | 5.83 | 2.66 | 1.22 | High |
+| Loss | 5.83 | 2.66 | 1.22 | High |
+| UnlearningLeaks | 6.35 | 3.98 | 0.86 | High |
+| LiRA | 8.83 | 3.03 | 0.89 | High |
+| REA | 12.60 | 5.95 | 0.90 | Medium |
+| RULI | 20.53 | 10.58 | 0.57 | Low |
+
+### Applicability
+
+| Attack | Knowledge Prerequisites | Shadow Models | Practicality |
+|--------|------------------------|:---:|:---:|
+| Threshold | Prediction scores | None | 5/5 |
+| Loss | Per-sample loss | None | 5/5 |
+| LiRA | Shadow data, model arch. | 8 | 3/5 |
+| RULI | Population shadow models | 8 | 3/5 |
+| REA | Pre/post params, gradients | 8 | 2/5 |
+| UnlearningLeaks | Pre/post posteriors | 8 | 2/5 |
+
 ### Attack Performance Under Low-FPR Constraints
 
 The TPR@FPR analysis shows how attack effectiveness collapses under realistic false-positive constraints — a phenomenon that global AUC hides:
@@ -305,6 +342,34 @@ The full experimental results, detailed tables, and analysis are available in th
 - All experiments use **fixed random seeds** (42, 123, 999) and are repeated **3 times**; results are reported as mean ± std.
 - **8 shadow models** are used consistently across gray-box attacks (LiRA, RULI) and REA.
 - **Hardware**: NVIDIA RTX 3090 (24 GB), AMD Ryzen 9 5950X, 64 GB RAM; Ubuntu 20.04, Python 3.8, PyTorch 1.10.2, CUDA 11.3.
+
+---
+
+## ❓ FAQ
+
+<details>
+<summary><b>How is MIA-Bench different from existing MIA benchmarks?</b></summary>
+<br>
+Most MIA-on-unlearning studies evaluate 1–3 attacks under study-specific protocols. MIA-Bench provides a unified five-dimensional framework (E / S / A / C / P) across 6 attacks, 4 algorithms, and 4 datasets over 288 standardized settings.
+</details>
+
+<details>
+<summary><b>What hardware do I need to run the full benchmark?</b></summary>
+<br>
+A single NVIDIA RTX 3090 (24 GB) is sufficient. The full 288-setting matrix takes roughly a day; individual black-box attacks (Threshold, Loss) complete in seconds.
+</details>
+
+<details>
+<summary><b>Can I add my own attack or unlearning method?</b></summary>
+<br>
+Yes. Attacks use a lightweight registry pattern — see <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for a step-by-step guide.
+</details>
+
+<details>
+<summary><b>Where can I find the full experimental results?</b></summary>
+<br>
+The complete tables, TPR@FPR analysis, and per-dataset breakdown are in the paper. This repository reproduces every reported number.
+</details>
 
 ---
 
