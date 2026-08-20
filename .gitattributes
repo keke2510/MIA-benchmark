@@ -1,0 +1,28 @@
+# Normalize line endings for text files across platforms
+* text=auto
+
+# Explicitly mark text files
+*.py text
+*.md text
+*.yml text
+*.yaml text
+*.txt text
+*.cff text
+*.bib text
+*.sh text
+Dockerfile text
+LICENSE text
+.gitignore text
+.gitattributes text
+
+# Explicitly mark binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.pth binary
+*.pt binary
+*.ckpt binary
+*.pkl binary
+*.tar.gz binary
+*.gz binary
