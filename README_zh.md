@@ -8,6 +8,12 @@ MIA-Bench 是一个面向机器遗忘场景的成员推断攻击（MIA）综合�
 
 > 📄 **论文**：已投稿 IEEE TKDE（CCF-A）
 
+<p align="center">
+  <img src="assets/radar.png" width="78%" alt="六种攻击方法的五维评估雷达图" />
+  <br>
+  <em>六种攻击方法的五维评估雷达图（min-max 归一化）——没有任何一种攻击能在所有维度上占优。</em>
+</p>
+
 ---
 
 ## 核心特性

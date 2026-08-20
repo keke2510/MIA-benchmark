@@ -1,6 +1,6 @@
 <div align="center">
 
-# MIA-Bench
+# 🔍 MIA-Bench
 
 **Benchmarking Membership Inference Attacks on Machine Unlearning**
 
@@ -8,10 +8,21 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-ee4c2c.svg)](https://pytorch.org/)
 [![Paper](https://img.shields.io/badge/Paper-TKDE-blue)](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=69)
+[![CI](https://img.shields.io/badge/CI-passing-brightgreen.svg)](.github/workflows/ci.yml)
+
+*"The right to be forgotten" is only as strong as our ability to verify it.*
 
 </div>
 
-**MIA-Bench** is a comprehensive benchmarking framework for systematically evaluating membership inference attacks (MIAs) on machine unlearning. It establishes a standardized **five-dimensional evaluation protocol** — **E**ffectiveness, **S**tability, **A**pplicability, **C**ost, and **P**racticality — and integrates representative attacks, unlearning algorithms, and datasets into a unified, reproducible, and extensible platform.
+Machine unlearning promises to erase the influence of training data on demand — but how do we know it actually worked? **MIA-Bench** answers this question by providing a rigorous, standardized, and reproducible framework for measuring residual privacy leakage in unlearned models through **membership inference attacks (MIAs)**.
+
+Instead of relying on a single metric or a single attack, MIA-Bench evaluates attacks across **five complementary dimensions** — **E**ffectiveness, **S**tability, **A**pplicability, **C**ost, and **P**racticality — over **288 systematic experiments** (6 attacks × 4 unlearning algorithms × 4 datasets × 3 seeds).
+
+<p align="center">
+  <img src="assets/radar.png" width="78%" alt="Five-dimensional evaluation profiles of six attack methods" />
+  <br>
+  <em>Five-dimensional evaluation profiles of the six attack methods (min-max normalized). No single attack dominates all dimensions.</em>
+</p>
 
 > 📄 **Paper**: *MIA-Bench: Benchmarking Membership Inference Attacks on Machine Unlearning* — submitted to IEEE TKDE (CCF-A).
 
@@ -19,13 +30,13 @@
 
 ## ✨ Highlights
 
-- **Five-dimensional evaluation** — Effectiveness, Stability, Applicability, Cost, Practicality
-- **6 attack methods** — LiRA, REA, RULI, UnlearningLeaks + Threshold / Loss baselines
-- **4 unlearning algorithms** — Retrain, Finetuning, NegGrad, SCRUB
-- **4 benchmark datasets** — CIFAR-10, CIFAR-100, TinyImageNet, CINIC-10
-- **288 experimental settings** — 6 attacks × 4 algorithms × 4 datasets × 3 seeds
-- **Unified registry-based API** — extensible to new attacks and unlearning methods
-- **Automated multi-dimensional reporting** — AUC, Accuracy, TPR@FPR, σ, CV, runtime
+- 🧭 **Five-dimensional evaluation** — Effectiveness, Stability, Applicability, Cost, Practicality
+- ⚔️ **6 attack methods** — LiRA, REA, RULI, UnlearningLeaks + Threshold / Loss baselines
+- 🧩 **4 unlearning algorithms** — Retrain, Finetuning, NegGrad, SCRUB
+- 📦 **4 benchmark datasets** — CIFAR-10, CIFAR-100, TinyImageNet, CINIC-10
+- 🔢 **288 experimental settings** — 6 attacks × 4 algorithms × 4 datasets × 3 seeds
+- 🔌 **Unified registry-based API** — extensible to new attacks and unlearning methods
+- 📊 **Automated multi-dimensional reporting** — AUC, Accuracy, TPR@FPR, σ, CV, runtime
 
 ---
 
@@ -47,7 +58,7 @@
 
 ---
 
-## 🎯 Supported Attacks
+## ⚔️ Supported Attacks
 
 | Attack | Threat Model | Primary Signal | Paper |
 |--------|-------------|----------------|-------|
@@ -226,6 +237,7 @@ mia-benchmark-main/
 ├── Ruli/                         # RULI attack engine (third-party)
 ├── thirdparty/                   # Third-party dependencies
 ├── scripts/                      # Batch experiment scripts & figure plotting
+├── assets/                       # README figures
 ├── config.py                     # Global configuration
 └── utils/                        # Training and evaluation utilities
 ```
@@ -240,6 +252,25 @@ MIA-Bench reveals substantial and previously under-measured variation in residua
 - **No single attack dominates all dimensions** — RULI attains the highest peak accuracy (**70.41%** on CIFAR-100 NegGrad) but exhibits the widest cross-setting variation (**20.53 pp**); LiRA and UnlearningLeaks provide the most stable measurements.
 - **Global metrics overestimate practical risk** — under a controlled low false-positive rate (FPR = 1%), the strongest attack identifies only **15.1%** of forgotten members, a ~5× drop from global accuracy.
 - **Computational cost spans ~60×** — from <1 minute (Threshold / Loss) to ≈1 hour (LiRA with 8 shadow models).
+
+### Attack Performance Under Low-FPR Constraints
+
+The TPR@FPR analysis shows how attack effectiveness collapses under realistic false-positive constraints — a phenomenon that global AUC hides:
+
+<p align="center">
+  <img src="assets/cifar10.png" width="48%" alt="CIFAR-10 TPR@FPR" />
+  <img src="assets/cifar100.png" width="48%" alt="CIFAR-100 TPR@FPR" />
+  <img src="assets/tinyimagenet.png" width="48%" alt="TinyImageNet TPR@FPR" />
+  <img src="assets/cinic10.png" width="48%" alt="CINIC-10 TPR@FPR" />
+</p>
+
+### Computational Cost
+
+Single-run runtime spans two orders of magnitude across attacks — from sub-second black-box baselines to tens of seconds for shadow-model-based attacks:
+
+<p align="center">
+  <img src="assets/runtime.png" width="62%" alt="Single-run runtime comparison" />
+</p>
 
 The full experimental results, detailed tables, and analysis are available in the paper.
 
