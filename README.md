@@ -107,16 +107,6 @@ MIA-Bench evaluates each attack along five complementary dimensions:
 
 ---
 
-## 🏗️ Architecture
-
-MIA-Bench follows a five-stage pipeline — from data partitioning to multi-dimensional analysis:
-
-<p align="center">
-  <img src="assets/pipeline.png" width="95%" alt="MIA-Bench five-stage evaluation pipeline" />
-</p>
-
----
-
 ## 🛠 Installation
 
 ### Prerequisites
@@ -278,6 +268,15 @@ MIA-Bench reveals substantial and previously under-measured variation in residua
 - **Global metrics overestimate practical risk** — under a controlled low false-positive rate (FPR = 1%), the strongest attack identifies only **15.1%** of forgotten members, a ~5× drop from global accuracy.
 - **Computational cost spans ~60×** — from <1 minute (Threshold / Loss) to ≈1 hour (LiRA with 8 shadow models).
 
+**Maximum attack AUC** per forgetting algorithm and dataset (worst-case privacy leakage):
+
+| Algorithm | CIFAR-10 | CIFAR-100 | TinyImageNet | CINIC-10 |
+|-----------|:--------:|:---------:|:------------:|:--------:|
+| Retrain | 0.530 | 0.521 | 0.521 | 0.519 |
+| Finetuning | 0.523 | 0.527 | 0.558 | 0.525 |
+| NegGrad | **0.577** | **0.704** | **0.635** | **0.622** |
+| SCRUB | 0.525 | 0.546 | 0.608 | 0.526 |
+
 ### Attack Performance Under Low-FPR Constraints
 
 The TPR@FPR analysis shows how attack effectiveness collapses under realistic false-positive constraints — a phenomenon that global AUC hides:
@@ -329,6 +328,17 @@ If you find MIA-Bench useful in your research, please cite:
 ## 📄 License
 
 This project is released under the [MIT License](LICENSE).
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Extend to NLP / LLM unlearning benchmarks (e.g., TOFU-style evaluation)
+- [ ] Add more attacks (label-only, gradient-based)
+- [ ] Add more unlearning algorithms (SISA, certified removal)
+- [ ] Release pre-trained checkpoints and pre-computed results for instant reproduction
+- [ ] Integrate experiment tracking (Weights & Biases / TensorBoard)
+- [ ] Provide a Colab quick-start notebook
 
 ---
 
