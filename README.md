@@ -72,6 +72,7 @@ Existing MIA-on-unlearning studies are hard to compare — they use different fo
 - [Star History](#-star-history)
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
+- [Related Benchmarks & Ecosystem](#-related-benchmarks--ecosystem)
 - [Acknowledgements](#-acknowledgements)
 
 ---
@@ -289,30 +290,6 @@ MIA-Bench reveals substantial and previously under-measured variation in residua
 | NegGrad | **0.577** | **0.704** | **0.635** | **0.622** |
 | SCRUB | 0.525 | 0.546 | 0.608 | 0.526 |
 
-### Stability
-
-Cross-setting range is the accuracy spread across all 16 dataset×algorithm combinations (smaller = more stable):
-
-| Attack | Cross-setting Range (pp) | Cross-algorithm Range (pp) | Avg Seed σ (%) | Stability |
-|--------|:---:|:---:|:---:|:---:|
-| Threshold | 5.83 | 2.66 | 1.22 | High |
-| Loss | 5.83 | 2.66 | 1.22 | High |
-| UnlearningLeaks | 6.35 | 3.98 | 0.86 | High |
-| LiRA | 8.83 | 3.03 | 0.89 | High |
-| REA | 12.60 | 5.95 | 0.90 | Medium |
-| RULI | 20.53 | 10.58 | 0.57 | Low |
-
-### Applicability
-
-| Attack | Knowledge Prerequisites | Shadow Models | Practicality |
-|--------|------------------------|:---:|:---:|
-| Threshold | Prediction scores | None | 5/5 |
-| Loss | Per-sample loss | None | 5/5 |
-| LiRA | Shadow data, model arch. | 8 | 3/5 |
-| RULI | Population shadow models | 8 | 3/5 |
-| REA | Pre/post params, gradients | 8 | 2/5 |
-| UnlearningLeaks | Pre/post posteriors | 8 | 2/5 |
-
 ### Attack Performance Under Low-FPR Constraints
 
 The TPR@FPR analysis shows how attack effectiveness collapses under realistic false-positive constraints — a phenomenon that global AUC hides:
@@ -415,6 +392,21 @@ This project is released under the [MIT License](LICENSE).
 ## 🤝 Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting issues, submitting pull requests, and adding new attacks or unlearning methods.
+
+---
+
+## 🌐 Related Benchmarks & Ecosystem
+
+MIA-Bench focuses on **image-classification** unlearning with MIA-based privacy evaluation. For related efforts across the broader unlearning ecosystem:
+
+| Project | Venue | Focus |
+|---------|-------|-------|
+| [RWKU](https://rwku-bench.github.io/) | NeurIPS 2024 | Real-world knowledge unlearning for LLMs, with MIA probes |
+| [open-unlearning](https://github.com/locuslab/open-unlearning) | NeurIPS D&B 2025 | One-stop LLM unlearning (TOFU / MUSE / WMDP) with 6 MIA metrics |
+| [Minority_Aware_LLM_Unlearning](https://github.com/Graph-COM/Minority_Aware_LLM_Unlearning) | ICML 2025 | Privacy risks for minority populations in LLM unlearning |
+| [SalUn](https://github.com/OPTML-Group/Unlearn-Saliency) | ICLR 2024 | Gradient-based weight saliency unlearning |
+
+More MIA-related repositories can be found under the [GitHub topic: membership-inference-attack](https://github.com/topics/membership-inference-attack).
 
 ---
 
