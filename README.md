@@ -1,10 +1,6 @@
 <div align="center">
 
-<img src="assets/logo.png" width="130" alt="MIA-Bench logo" />
-
-# MIA-Bench
-
-**Benchmarking Membership Inference Attacks on Machine Unlearning**
+<img src="assets/banner.png" width="720" alt="MIA-Bench" />
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)

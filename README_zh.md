@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" width="120" alt="MIA-Bench logo" />
+  <img src="assets/banner.png" width="720" alt="MIA-Bench" />
 </p>
 
 # MIA-Bench
