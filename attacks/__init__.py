@@ -8,3 +8,4 @@ from . import ruli
 from . import unlearningleaks
 from . import threshold
 from . import loss
+from . import entropy

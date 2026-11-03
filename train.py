@@ -27,6 +27,7 @@ from torch.utils.data import ConcatDataset
 import config
 import datasets
 import models
+from benchmark.run_layout import shadow_stem, validate_run_tag
 from lira_utils import progress_bar, set_random_seed
 from randomaug import RandAugment
 from utils.training_utils import WarmUpLR
@@ -56,17 +57,36 @@ parser.add_argument('--num_shadow', default=None, type=int)
 parser.add_argument('--shadow_id', default=None, type=int)
 parser.add_argument('--seed', default=0, type=int)
 parser.add_argument('--pkeep', default=0.5, type=float)
+parser.add_argument(
+    '--shadow-split',
+    default='rank',
+    choices=['rank', 'nested_blocks'],
+    help="How a sample is assigned to shadow models.  'rank' is the original "
+         "code path.  'nested_blocks' partitions the pool into blocks of "
+         "--nested-block-size and keeps exactly pkeep of each block, so every "
+         "prefix 8/16/32 is a balanced nested sub-pool (needed for LiRA's "
+         "in/out calibration and for nested shadow scaling).",
+)
+parser.add_argument('--nested-block-size', default=8, type=int)
+parser.add_argument('--run-tag', default='', help='Enable tagged shadow checkpoint filenames.')
 
 parser.add_argument("-warm", type=int, default=1, help="warm up training phase")
 
 args = parser.parse_args()
+args.run_tag = validate_run_tag(args.run_tag)
 
 log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
 if args.num_shadow is not None:
-    args.job_name = args.save_name + f'_shadow_{args.shadow_id}'
-    log_file = os.path.join(log_dir, f"shadow_model_{args.shadow_id}.log")
+    args.job_name = shadow_stem(
+        args.save_name,
+        args.num_shadow,
+        args.seed,
+        args.shadow_id,
+        tagged=bool(args.run_tag),
+    )
+    log_file = os.path.join(log_dir, f"{args.job_name}.log")
 else:
     args.job_name = args.save_name + '_target'
     log_file = os.path.join(log_dir, f"target_model.log")  # this one, we have another version
@@ -158,12 +178,42 @@ set_random_seed(args.seed)
 
 # get shadow dataset
 if args.num_shadow is not None:
-    # get shadow dataset
-    keep = np.random.uniform(0, 1, size=(args.num_shadow, dataset_size))
-    order = keep.argsort(0)
-    keep = order < int(args.pkeep * args.num_shadow)  # TODO half dataset, right?
-    keep = np.array(keep[args.shadow_id], dtype=bool)
-    keep = keep.nonzero()[0]
+    if args.shadow_split == 'nested_blocks':
+        # Nested shadow scaling needs every prefix (8, 16, 32, ...) to be a
+        # balanced sub-pool: a sample must have both in- and out-shadows in
+        # each prefix or LiRA's in/out calibration degenerates to NaN.  Split
+        # the pool into blocks and keep exactly int(pkeep * block) shadows per
+        # sample per block.  For pkeep=0.83 and block=8 this is 6/8, matching
+        # the published 8-shadow protocol.
+        block = int(args.nested_block_size)
+        if args.num_shadow % block != 0:
+            raise SystemExit(
+                f'--num_shadow={args.num_shadow} is not divisible by '
+                f'--nested-block-size={block}'
+            )
+        num_blocks = args.num_shadow // block
+        n_keep = int(args.pkeep * block)
+        n_out = block - n_keep
+        if not 0 < n_out < block:
+            raise SystemExit(
+                f'pkeep={args.pkeep} leaves {n_out} out-shadows per block; '
+                'need 1 <= n_out < block'
+            )
+        u = np.random.uniform(0, 1, size=(num_blocks, dataset_size, block))
+        out_ids = u.argsort(axis=2)[:, :, :n_out]  # (num_blocks, N, n_out)
+        keep_bool = np.ones((args.num_shadow, dataset_size), dtype=bool)
+        sample_ids = np.arange(dataset_size)
+        for b in range(num_blocks):
+            for j in range(n_out):
+                keep_bool[b * block + out_ids[b, :, j], sample_ids] = False
+        keep = keep_bool[args.shadow_id].nonzero()[0]
+    else:
+        # get shadow dataset
+        keep = np.random.uniform(0, 1, size=(args.num_shadow, dataset_size))
+        order = keep.argsort(0)
+        keep = order < int(args.pkeep * args.num_shadow)  # TODO half dataset, right?
+        keep = np.array(keep[args.shadow_id], dtype=bool)
+        keep = keep.nonzero()[0]
 else:
     # get target dataset
     keep = np.random.choice(dataset_size, size=int(args.pkeep * dataset_size), replace=False)

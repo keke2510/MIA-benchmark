@@ -11,6 +11,12 @@ from typing import Iterable
 
 import config
 from attacks import AttackContext, get_attack, list_attacks
+from benchmark.run_layout import (
+    resolve_shadow_checkpoint,
+    run_summary_path as layout_run_summary_path,
+    shadow_checkpoint_path as layout_shadow_checkpoint_path,
+    validate_run_tag,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -143,15 +149,32 @@ def _run(cmd: list[str], dry_run: bool) -> None:
 def _python_entry(script_name: str) -> list[str]:
     return [sys.executable, str(REPO_ROOT / script_name)]
 
-def _shadow_checkpoint_path(cfg: DatasetConfig, shadow_id: int) -> Path:
-    return (
-        REPO_ROOT
-        / "saved_models"
-        / f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}"
-        / f"{cfg.net}_shadow_{shadow_id}_last.pth"
+def _shadow_checkpoint_path(
+    cfg: DatasetConfig,
+    shadow_id: int,
+    *,
+    num_shadow: int,
+    shadow_seed: int,
+    run_tag: str,
+) -> Path:
+    return layout_shadow_checkpoint_path(
+        REPO_ROOT,
+        f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}",
+        cfg.net,
+        num_shadow,
+        shadow_seed,
+        shadow_id,
+        tagged=bool(run_tag),
     )
 
-def _run_summary_path(cfg: DatasetConfig, seed: int) -> Path:
+def _run_summary_path(
+    cfg: DatasetConfig,
+    seed: int,
+    *,
+    run_tag: str,
+    forget_perc: float,
+    suffix: str = "",
+) -> Path:
     path = (
         REPO_ROOT
         / "benchmark_results"
@@ -159,7 +182,14 @@ def _run_summary_path(cfg: DatasetConfig, seed: int) -> Path:
         / f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}"
     )
     path.mkdir(parents=True, exist_ok=True)
-    return path / f"run_summary_seed_{seed}.json"
+    return layout_run_summary_path(
+        REPO_ROOT,
+        f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}",
+        run_tag=run_tag,
+        forget_perc=forget_perc,
+        seed=seed,
+        suffix=suffix,
+    )
 
 SUMMARY_METRIC_KEYS = [
     "auc",
@@ -198,9 +228,30 @@ def print_attack_summary(attack_name: str, result) -> None:
     if not printed:
         print("  no standardized metrics available")
 
-def train_shadow_models(cfg: DatasetConfig, *, num_shadow: int, seed: int, dry_run: bool) -> None:
-    for shadow_id in range(num_shadow):
-        shadow_ckpt = _shadow_checkpoint_path(cfg, shadow_id)
+def train_shadow_models(
+    cfg: DatasetConfig,
+    *,
+    num_shadow: int,
+    shadow_seed: int,
+    run_tag: str,
+    dry_run: bool,
+    shadow_ids: Iterable[int] | None = None,
+    shadow_split: str = "rank",
+    nested_block_size: int = 8,
+) -> None:
+    # ``shadow_ids`` lets the scheduler split one S-shadow configuration into
+    # independent GPU jobs while keeping the same shadow split (the split only
+    # depends on num_shadow + seed, not on which ids are trained in this job).
+    for shadow_id in (range(num_shadow) if shadow_ids is None else shadow_ids):
+        shadow_ckpt = resolve_shadow_checkpoint(
+            REPO_ROOT,
+            f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}",
+            cfg.net,
+            num_shadow,
+            shadow_seed,
+            shadow_id,
+            tagged=bool(run_tag),
+        )
         if shadow_ckpt.exists():
             print(f"[benchmark] skip shadow_{shadow_id}, found existing checkpoint: {shadow_ckpt}")
             continue
@@ -216,8 +267,12 @@ def train_shadow_models(cfg: DatasetConfig, *, num_shadow: int, seed: int, dry_r
             "--pkeep", cfg.shadow_keep,
             "--num_shadow", str(num_shadow),
             "--shadow_id", str(shadow_id),
-            "--seed", str(seed),
+            "--seed", str(shadow_seed),
+            "--shadow-split", shadow_split,
+            "--nested-block-size", str(nested_block_size),
         ]
+        if run_tag:
+            cmd += ["--run-tag", run_tag]
         _run(cmd, dry_run)
 
 def run_pretrain_target(cfg: DatasetConfig, *, seed: int, dry_run: bool) -> None:
@@ -237,6 +292,7 @@ def run_sample_unlearning(
     *,
     seed: int,
     forget_perc: float,
+    run_tag: str,
     dry_run: bool,
 ) -> None:
     for method in methods:
@@ -251,6 +307,8 @@ def run_sample_unlearning(
             "-forget_perc", str(forget_perc),
             "-seed", str(seed),
         ]
+        if run_tag:
+            cmd += ["--run-tag", run_tag]
         _run(cmd, dry_run)
 
 def run_rea_reminiscence(
@@ -259,6 +317,7 @@ def run_rea_reminiscence(
     *,
     seed: int,
     forget_perc: float,
+    run_tag: str,
     dry_run: bool,
 ) -> None:
     for method in methods:
@@ -273,7 +332,28 @@ def run_rea_reminiscence(
             "-forget_perc", str(forget_perc),
             "-seed", str(seed),
         ]
+        if run_tag:
+            cmd += ["--run-tag", run_tag]
         _run(cmd, dry_run)
+
+def _seed_before_attack(seed: int) -> None:
+    """Make in-process attacks (UnlearningLeaks) reproducible per run.
+
+    LiRA / REA / RULI run in subprocesses that seed themselves; UnlearningLeaks
+    calls ``forget_random_strategies`` in this process, where DataLoader
+    shuffling otherwise depends on OS entropy.
+    """
+    import random
+
+    import numpy as np
+    import torch
+
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
 
 def run_registered_attacks(
     cfg: DatasetConfig,
@@ -283,8 +363,11 @@ def run_registered_attacks(
     seed: int,
     num_shadow: int,
     num_aug: int,
+    run_tag: str,
+    shadow_seed: int,
     attack_options: dict[str, object],
     dry_run: bool,
+    shadow_pool: int | None = None,
 ) -> None:
     for method in methods:
         context = AttackContext(
@@ -297,14 +380,18 @@ def run_registered_attacks(
             seed=seed,
             weight_path=cfg.weight_path,
             num_shadow=num_shadow,
+            shadow_pool=shadow_pool,
             num_aug=num_aug,
             forget_perc=float(attack_options.get("forget_perc", 0.1)),
+            run_tag=run_tag,
+            shadow_seed=shadow_seed,
             name=f"{cfg.net}-{cfg.dataset}-{cfg.n_classes}",
             save_name=cfg.net,
             attack_options=attack_options,
         )
         for attack_name in attacks:
             attack_cls = get_attack(attack_name)
+            _seed_before_attack(seed)
             result = attack_cls.run(context, dry_run=dry_run)
             if result is not None:
                 print_attack_summary(attack_name, result)
@@ -369,10 +456,46 @@ def build_parser() -> argparse.ArgumentParser:
         choices=available_attacks,
         help="要运行的攻击方法。",
     )
-    parser.add_argument("--seed", default=1, type=int)
+    parser.add_argument("--seed", default=42, type=int)
     parser.add_argument("--forget-perc", default=0.1, type=float, help="统一的 sample-wise 遗忘比例。")
     parser.add_argument("--num-shadow", default=8, type=int)
+    parser.add_argument(
+        "--shadow-pool",
+        default=None,
+        type=int,
+        help="已训练 shadow pool 的大小（默认等于 --num-shadow）。"
+        "Nested scaling 时固定为 32，--num-shadow 取 8/16/32 评估前 k 个。",
+    )
+    parser.add_argument(
+        "--shadow-split",
+        default="rank",
+        choices=["rank", "nested_blocks"],
+        help="训练 shadow 时的样本分配方式。Nested scaling 用 nested_blocks，"
+        "保证 8/16/32 前缀都是 6/8 平衡的子池。",
+    )
+    parser.add_argument("--nested-block-size", default=8, type=int)
     parser.add_argument("--num-aug", default=10, type=int)
+    parser.add_argument(
+        "--shadow-seed",
+        default=None,
+        type=int,
+        help="训练/加载 shadow 模型所用的种子；默认与 --seed 相同。"
+        "做遗忘率敏感性实验时可固定为 42，让不同评估种子复用同一套 shadow。",
+    )
+    parser.add_argument(
+        "--run-tag",
+        default="",
+        help="非空时启用隔离的产物目录（含 num_shadow/seed/forget_perc），"
+        "避免新实验覆盖已发表结果。默认空字符串保持旧路径兼容。",
+    )
+    parser.add_argument(
+        "--shadow-ids",
+        default=None,
+        type=int,
+        nargs="+",
+        help="只训练/检查指定的 shadow id（供调度器把 S 个 shadow 拆成多个 GPU job）；"
+        "默认训练全部 0..num_shadow-1。",
+    )
     parser.add_argument(
         "--dhattack-classifier-type",
         default=None,
@@ -503,6 +626,9 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
     total_start = time.time()
 
+    args.run_tag = validate_run_tag(args.run_tag)
+    shadow_seed = args.seed if args.shadow_seed is None else args.shadow_seed
+
     cfg = DATASET_DEFAULTS[args.dataset]
     methods = (
         [parse_method(spec, args.dataset) for spec in args.methods]
@@ -525,7 +651,16 @@ def main(argv: list[str] | None = None) -> None:
     if "shadow" in args.stages:
         timed_stage(
             "shadow",
-            lambda: train_shadow_models(cfg, num_shadow=args.num_shadow, seed=args.seed, dry_run=args.dry_run),
+            lambda: train_shadow_models(
+                cfg,
+                num_shadow=args.num_shadow,
+                shadow_seed=shadow_seed,
+                run_tag=args.run_tag,
+                dry_run=args.dry_run,
+                shadow_ids=args.shadow_ids,
+                shadow_split=args.shadow_split,
+                nested_block_size=args.nested_block_size,
+            ),
         )
     if "unlearn" in args.stages:
         timed_stage(
@@ -535,6 +670,7 @@ def main(argv: list[str] | None = None) -> None:
                 methods,
                 seed=args.seed,
                 forget_perc=args.forget_perc,
+                run_tag=args.run_tag,
                 dry_run=args.dry_run,
             ),
         )
@@ -546,6 +682,7 @@ def main(argv: list[str] | None = None) -> None:
                 methods,
                 seed=args.seed,
                 forget_perc=args.forget_perc,
+                run_tag=args.run_tag,
                 dry_run=args.dry_run,
             ),
         )
@@ -614,8 +751,11 @@ def main(argv: list[str] | None = None) -> None:
                 seed=args.seed,
                 num_shadow=args.num_shadow,
                 num_aug=args.num_aug,
+                run_tag=args.run_tag,
+                shadow_seed=shadow_seed,
                 attack_options=attack_options,
                 dry_run=args.dry_run,
+                shadow_pool=args.shadow_pool,
             ),
         )
 
@@ -625,17 +765,39 @@ def main(argv: list[str] | None = None) -> None:
         "net": cfg.net,
         "classes": cfg.n_classes,
         "seed": args.seed,
+        "shadow_seed": shadow_seed,
+        "run_tag": args.run_tag,
         "forget_perc": args.forget_perc,
         "methods": [f"{m.name}:{m.para1}:{m.para2}" for m in methods],
         "stages": list(args.stages),
         "attacks": list(args.attacks),
         "num_shadow": args.num_shadow,
+        "shadow_pool": args.shadow_pool if args.shadow_pool is not None else args.num_shadow,
+        "shadow_split": args.shadow_split,
+        "nested_block_size": args.nested_block_size,
         "num_aug": args.num_aug,
         "stage_runtime_sec": stage_runtime_sec,
         "total_runtime_sec": total_runtime_sec,
     }
 
-    summary_path = _run_summary_path(cfg, args.seed)
+    summary_suffix = ""
+    if args.run_tag and len(methods) == 1:
+        # The supplementary runner invokes one method per job.  Without this,
+        # the four methods of a (tag, seed, forget) cell would overwrite each
+        # other's run summary.  Legacy (untagged) names stay unchanged.
+        method = methods[0]
+        summary_suffix += f"_{method.name}_{method.para1}_{method.para2}"
+    if args.shadow_ids is not None:
+        # Shadow-only jobs for the same (tag, seed, forget) must not clobber
+        # each other's run summary.
+        summary_suffix += "_shadowids-" + "-".join(str(i) for i in args.shadow_ids)
+    summary_path = _run_summary_path(
+        cfg,
+        args.seed,
+        run_tag=args.run_tag,
+        forget_perc=args.forget_perc,
+        suffix=summary_suffix,
+    )
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(run_summary, f, indent=2, ensure_ascii=False)
 

@@ -13,6 +13,13 @@ import models
 import datasets
 from lira_utils import *
 from models.inferencemodel import *
+from benchmark.run_layout import (
+    forget_index_path,
+    format_perc,
+    method_key as layout_method_key,
+    task_dir as layout_task_dir,
+    validate_run_tag,
+)
 
 def generate_class_dict(args):
     dataset_class_dict = [[] for _ in range(args.classes)]
@@ -56,6 +63,9 @@ def eval_training(target_model, testloader, device):
 def main(args):
     # set random seed
     set_random_seed(args.seed)
+    args.run_tag = validate_run_tag(getattr(args, "run_tag", ""))
+    if getattr(args, "shadow_seed", None) is None:
+        args.shadow_seed = args.seed
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # TODO load shadow and target models
@@ -79,36 +89,41 @@ def main(args):
     train_split_len = len(trainset)
     test_split_len = len(testset)
 
+    experiment_name = f"{args.net}-{args.dataset}-{args.classes}"
     if args.machine_unlearning is not None: #TDOO test the unlearned model
-        print(f"Download forgetting_dataset_index_{args.forget_perc}.npy")
-        checkpoint_path_folder = os.path.join(config.CHECKPOINT_PATH,
-                                              "{unlearning_scenarios}".format(
-                                                  unlearning_scenarios="forget_random_main"),
-                                              "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset,
-                                                                                 classes=args.classes),
-                                              "{task}".format(task=task_path),#'unlearning' "reminisence"
-                                              "{unlearning_method}_{para1}_{para2}".format(
-                                                  unlearning_method=args.machine_unlearning,
-                                                  para1=args.para1,
-                                                  para2=args.para2))  # TODO unlearning
+        print(f"Download forgetting_dataset_index_{format_perc(args.forget_perc)}.npy")
+        checkpoint_path_folder = str(
+            layout_task_dir(
+                config.CHECKPOINT_PATH,
+                experiment_name,
+                task_path,
+                layout_method_key(args.machine_unlearning, args.para1, args.para2),
+                run_tag=args.run_tag,
+                forget_perc=args.forget_perc,
+                seed=args.seed,
+            )
+        )
 
         checkpoint_path = os.path.join(checkpoint_path_folder, "{epoch}-{type}.pth")
         weight_path = checkpoint_path.format(epoch=1, type="last")
-        index_set_path_folder = os.path.join(config.CHECKPOINT_PATH,
-                                             "{unlearning_scenarios}".format(unlearning_scenarios="forget_random_main"),
-                                             "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset,
-                                                                                classes=args.classes),
-                                             "random_index_set")
-        target_in_data = np.load(index_set_path_folder + f'/forgetting_dataset_index_{args.forget_perc}.npy')
+        target_in_data = np.load(
+            forget_index_path(config.CHECKPOINT_PATH, experiment_name, args.forget_perc)
+        )
     else: #TODO test the original model
         weight_path = args.weight_path
-        checkpoint_path_folder = os.path.join(config.CHECKPOINT_PATH,
-                                              "{unlearning_scenarios}".format(
-                                                  unlearning_scenarios="forget_random_main"),
-                                              "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset,
-                                                                                 classes=args.classes),
-                                              "{task}".format(task=task_path))
+        checkpoint_path_folder = str(
+            layout_task_dir(
+                config.CHECKPOINT_PATH,
+                experiment_name,
+                task_path,
+                None,
+                run_tag=args.run_tag,
+                forget_perc=args.forget_perc,
+                seed=args.seed,
+            )
+        )
         target_in_data = list(range(train_split_len))
+    os.makedirs(checkpoint_path_folder, exist_ok=True)
     target_out_data = list(range(train_split_len, train_split_len + test_split_len))
     test_sample_number = min(500, len(target_out_data), len(target_in_data))
 
@@ -201,15 +216,22 @@ def main(args):
     class_labels = np.array(args.class_labels)
     img_id = np.array(args.img_id)
 
-    # save predictions
+    # save predictions (unique per run so parallel workers cannot clobber it)
+    tag_part = args.run_tag or "legacy"
+    pred_stem = (
+        f"{args.save_name}_{args.task}_{tag_part}"
+        f"_forget{format_perc(args.forget_perc)}_seed{args.seed}"
+        f"_{args.machine_unlearning}_{args.para1}_{args.para2}"
+    )
+    pred_path = f'saved_predictions/{args.name}/{pred_stem}.npz'
     os.makedirs(f'saved_predictions/{args.name}/', exist_ok=True)
-    np.savez(f'saved_predictions/{args.name}/{args.save_name}.npz', pred_logits=pred_logits,
+    np.savez(pred_path, pred_logits=pred_logits,
              in_out_labels=in_out_labels,  class_labels=class_labels,
              img_id=img_id) #canary_losses=canary_losses,
 
     ### dummy calculatiton of auc and acc
     ### to be simplified
-    pred = np.load(f'saved_predictions/{args.name}/{args.save_name}.npz')
+    pred = np.load(pred_path)
 
     pred_logits = pred['pred_logits']
     in_out_labels = pred['in_out_labels']
@@ -240,8 +262,12 @@ def main(args):
         "para1": args.para1,
         "para2": args.para2,
         "num_shadow": args.num_shadow,
+        "shadow_pool": getattr(args, "shadow_pool", None) or args.num_shadow,
         "num_aug": args.num_aug,
         "seed": args.seed,
+        "shadow_seed": args.shadow_seed,
+        "run_tag": args.run_tag,
+        "forget_perc": args.forget_perc,
         "some_stats": some_stats,
     }
     with open(checkpoint_path_folder + f'/lira_{args.task}_summary.json', 'w', encoding='utf-8') as f:
@@ -250,7 +276,7 @@ def main(args):
     print(some_stats)
 
     if not args.save_preds:
-        os.remove(f'saved_predictions/{args.name}/{args.save_name}.npz')
+        os.remove(pred_path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Lira')
@@ -262,7 +288,15 @@ if __name__ == '__main__':
     parser.add_argument('--name', default='test')
     parser.add_argument('--save_name', default='test')
     parser.add_argument('--num_shadow', default=None, type=int, required=True)
+    parser.add_argument('--shadow-pool', default=None, type=int,
+                        help="Size of the trained shadow pool whose checkpoints are loaded "
+                             "(defaults to --num_shadow).  Used for nested scaling: evaluate "
+                             "the first k shadows of a larger pool.")
     parser.add_argument('--seed', default=0, type=int)
+    parser.add_argument('--shadow-seed', default=None, type=int,
+                        help="Seed used to train the shadow models (defaults to --seed).")
+    parser.add_argument('--run-tag', default='', type=str,
+                        help="Tagged run layout; empty keeps the legacy paths.")
     parser.add_argument('--patch', default=4, type=int, help="patch for ViT")
     parser.add_argument('--in_model_loss', default='ce', type=str)
     parser.add_argument('--out_model_loss', default='ce', type=str)
@@ -293,5 +327,6 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
+    args.run_tag = validate_run_tag(args.run_tag)
 
     main(args)

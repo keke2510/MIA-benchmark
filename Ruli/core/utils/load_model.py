@@ -75,16 +75,25 @@ def prepare_torchvision_model(args):
 #     return model
 
 
+_FRESH_SEED_COUNTER = 0
+
+
 def prepare_model(args, fresh_seed=True):
     """
     Prepares the model by initializing it and optionally loading from a checkpoint,
     with a fresh seed for each model preparation.
+
+    "Fresh" used to mean ``time.time()``, which made RULI results impossible to
+    reproduce and silently added wall-clock entropy to every seed-stability
+    run.  Derive a distinct but deterministic seed per call instead.
     """
+    global _FRESH_SEED_COUNTER
     if not fresh_seed:
         fresh_seed = args.seed
 
     else:
-        fresh_seed = int(time.time() * 1000) % (2 ** 32 - 1)
+        _FRESH_SEED_COUNTER += 1
+        fresh_seed = int(args.seed) * 1_000_003 + _FRESH_SEED_COUNTER
 
     seed_everything(fresh_seed)
     model = load_model(args)

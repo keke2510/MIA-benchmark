@@ -18,6 +18,13 @@ import config
 from utils.training_utils import *
 import os.path as osp
 
+from benchmark.run_layout import (
+    forget_index_path,
+    method_key as layout_method_key,
+    task_dir as layout_task_dir,
+    validate_run_tag,
+)
+
 # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -64,6 +71,12 @@ parser.add_argument(
     "-epochs", type=int, default=1, help="number of epochs of unlearning method to use"
 )
 parser.add_argument("-seed", type=int, default=0, help="seed for runs")
+parser.add_argument(
+    "--run-tag",
+    type=str,
+    default="",
+    help="非空时使用隔离的 checkpoint 目录（与 forget_sample_main.py 保持一致）。",
+)
 
 parser.add_argument("--para1", type=str, default=None)
 parser.add_argument("--para2", type=str, default=None)
@@ -72,6 +85,7 @@ parser.add_argument("--blackbox", type=str, default='0')
 
 
 args = parser.parse_args()
+args.run_tag = validate_run_tag(args.run_tag)
 
 
 def resolve_img_size(dataset_name):
@@ -146,30 +160,41 @@ if __name__ == '__main__':
     validset = getattr(datasets, args.dataset)(root=root, download=True, train=False, unlearning=True,
                                                img_size=img_size)  # unlearning is set to True
 
-    index_set_path_folder = os.path.join(config.CHECKPOINT_PATH,
-                                         "{unlearning_scenarios}".format(unlearning_scenarios="forget_random_main"),
-                                         "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset,
-                                                                            classes=args.classes),
-                                         "random_index_set")
-    forget_set_idxs = np.load(index_set_path_folder + f'/forgetting_dataset_index_{args.forget_perc}.npy')
+    experiment_name = f"{args.net}-{args.dataset}-{args.classes}"
+    forget_set_idxs = np.load(
+        forget_index_path(config.CHECKPOINT_PATH, experiment_name, args.forget_perc)
+    )
 
     remaining_set_idxs = list(set(np.arange(len(trainset))) - set(forget_set_idxs))
     forget_train_set = Subset(trainset, forget_set_idxs)
     retain_train_set = Subset(trainset, remaining_set_idxs)
 
-    relearning_path = os.path.join(config.CHECKPOINT_PATH,
-                            "{unlearning_scenarios}".format(unlearning_scenarios="forget_random_main"),
-                            "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset, classes=args.classes),
-                            "{task}".format(task="reminisence"),
-                            "{unlearning_method}_{para1}_{para2}".format(unlearning_method=args.method,
-                                                                         para1=args.para1, para2=args.para2))
+    method_key_value = layout_method_key(args.method, args.para1, args.para2)
+
+    relearning_path = str(
+        layout_task_dir(
+            config.CHECKPOINT_PATH,
+            experiment_name,
+            "reminisence",
+            method_key_value,
+            run_tag=args.run_tag,
+            forget_perc=args.forget_perc,
+            seed=args.seed,
+        )
+    )
 
     #where the unlearned model is
-    checkpoint_path_folder = os.path.join(config.CHECKPOINT_PATH,
-                                   "{unlearning_scenarios}".format(unlearning_scenarios="forget_random_main"),
-                                   "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset, classes=args.classes),
-                                   "{task}".format(task="unlearning"),
-                                   "{unlearning_method}_{para1}_{para2}".format(unlearning_method=args.method, para1=args.para1, para2=args.para2))
+    checkpoint_path_folder = str(
+        layout_task_dir(
+            config.CHECKPOINT_PATH,
+            experiment_name,
+            "unlearning",
+            method_key_value,
+            run_tag=args.run_tag,
+            forget_perc=args.forget_perc,
+            seed=args.seed,
+        )
+    )
 
     print("#####", relearning_path)
     os.makedirs(relearning_path, exist_ok=True)

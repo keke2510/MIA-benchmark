@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 import sys
 import argparse
 import time
@@ -97,6 +98,15 @@ parser.add_argument("-warm", type=int, default=1, help="warm up training phase")
 parser.add_argument("-lr", type=float, default=0.1, help="initial learning rate")
 parser.add_argument("-seed", type=int, default=0, help="seed for runs")
 args = parser.parse_args()
+
+# The original script accepted -seed but never used it, so a "reproducible"
+# target model was not actually reproducible.  Seed all RNGs before creating
+# the model or the DataLoader.
+random.seed(args.seed)
+np.random.seed(args.seed)
+torch.manual_seed(args.seed)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(args.seed)
 
 MILESTONES = (
     getattr(config, f"{args.dataset}_MILESTONES")

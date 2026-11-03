@@ -12,6 +12,7 @@ import config
 
 from attacks.base import AttackContext, AttackResult
 from attacks.registry import register_attack
+from benchmark.run_layout import forget_index_path as layout_forget_index_path
 
 @register_attack("ruli")
 class RULIAttack:
@@ -101,9 +102,15 @@ class RULIAttack:
         seed = int(context.attack_options.get("ruli_seed", context.seed))
         unlearn_method = cls.resolve_unlearn_method(context)
         task = str(context.attack_options.get("ruli_task", "selective"))
+        forget_size = cls.resolve_forget_size(context)
         result_path = cls.ruli_root() / "attack" / "attack_inferences" / dataset
         result_path.mkdir(parents=True, exist_ok=True)
-        return result_path / f"shadows_{shadow_num}_{seed}_{unlearn_method}_unlearn_{task}.pth"
+        # forget_size encodes forget_perc; omitting it made RULI silently
+        # reuse shadow results across different forget rates.
+        return result_path / (
+            f"shadows_{shadow_num}_{seed}_{unlearn_method}"
+            f"_forget{forget_size}_unlearn_{task}.pth"
+        )
 
     @classmethod
     def shadow_results_ready(cls, context: AttackContext) -> bool:
@@ -111,12 +118,10 @@ class RULIAttack:
 
     @classmethod
     def shared_forget_index_path(cls, context: AttackContext) -> Path:
-        return (
-            Path(config.CHECKPOINT_PATH)
-            / "forget_random_main"
-            / f"{context.net}-{context.dataset}-{context.classes}"
-            / "random_index_set"
-            / f"forgetting_dataset_index_{context.forget_perc}.npy"
+        return layout_forget_index_path(
+            config.CHECKPOINT_PATH,
+            context.experiment_name,
+            context.forget_perc,
         ).resolve()
 
     @classmethod

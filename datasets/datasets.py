@@ -3,6 +3,7 @@ Datasets used for the experiments (CIFAR and Celebrity Faces)
 """
 import csv
 import os
+import pickle
 import shutil
 import tarfile
 import urllib.request
@@ -297,6 +298,25 @@ class Cifar20(CIFAR100):
 
 
 class Cifar10(CIFAR10):
+    def _check_integrity(self):
+        # A locally reconstructed ``cifar-10-batches-py`` (e.g. converted from
+        # the HF parquet mirror) preserves sample order but cannot reproduce
+        # the official files byte-for-byte, so skip torchvision's MD5 check and
+        # only require that every batch file exists.
+        for filename, _ in self.train_list + self.test_list:
+            if not os.path.exists(os.path.join(self.root, self.base_folder, filename)):
+                return False
+        return True
+
+    def _load_meta(self):
+        # Same reason as ``_check_integrity``: load the reconstructed metadata
+        # without comparing it against torchvision's published MD5.
+        path = os.path.join(self.root, self.base_folder, self.meta["filename"])
+        with open(path, "rb") as infile:
+            data = pickle.load(infile, encoding="latin1")
+            self.classes = data[self.meta["key"]]
+        self.class_to_idx = {_class: i for i, _class in enumerate(self.classes)}
+
     def __init__(self, root, train, unlearning, download, data_aug=False, data_augmentation=False, img_size=32):
         if train:
             if unlearning:

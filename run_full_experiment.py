@@ -116,16 +116,9 @@ def main():
         for method_name, (para1, para2) in METHODS.items():
             method_str = f"{method_name}:{para1}:{para2}"
             for seed in seeds:
-                # Determine stages
-                if method_name == "retrain":
-                    stages = "unlearn attack"
-                elif method_name == "rea":
-                    # REA needs reminiscence stage
-                    continue  # REA is an attack, not a method — handled below
-
-                # Build the unlearn + attack stages
-                stages_list = ["unlearn"]
-                stages_list.append("attack")
+                # REA consumes models produced by the reminiscence stage, so it
+                # must run whenever REA is part of --attacks.
+                stages_list = ["unlearn", "reminiscence", "attack"]
                 stages = " ".join(stages_list)
 
                 current += 1

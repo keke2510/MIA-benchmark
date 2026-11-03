@@ -93,7 +93,11 @@ class Retrain:
         }
         if not os.path.isdir(self.checkpoint_dir):
             os.mkdir(self.checkpoint_dir)
-        torch.save(state, os.path.join(self.checkpoint_dir, f'retrain_{self.args.dataset}_{self.args.seed}_{self.args.forget_size}_{self.args.task}.pth'))
+        torch.save(state, os.path.join(
+            self.checkpoint_dir,
+            f'retrain_{self.args.dataset}_shadows{self.args.shadow_num}'
+            f'_{self.args.seed}_{self.args.forget_size}_{self.args.task}.pth',
+        ))
 
     # @staticmethod
     # def progress_bar(current, total, msg):

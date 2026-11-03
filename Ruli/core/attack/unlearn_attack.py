@@ -247,6 +247,9 @@ class MUlMIA:
             f"shadows_{self.args.shadow_num}_"
             f"{self.args.seed}_"
             f"{self.args.unlearn_method}_"
+            # Forget size is part of the attack definition; omitting it made
+            # different forget rates silently reuse each other's shadow results.
+            f"forget{self.args.forget_size}_"
             f"unlearn_{self.args.task}.pth"
         )  # Ensure the path is relative to the current directory
 
@@ -422,8 +425,12 @@ class TargetModelEvaluator:
             plt.legend(loc="lower right")
             plt.minorticks_on()
             dataset_name = self.args.dataset
-            plt.savefig(os.path.join(self.args.result_path,
-                                     f'roc_curve_{dataset_name}_{self.args.shadow_num}_{self.args.forget_size}'), dpi=300)
+            plt.savefig(os.path.join(
+                self.args.result_path,
+                f'roc_curve_{dataset_name}_{self.args.shadow_num}'
+                f'_{self.args.forget_size}_{self.args.seed}'
+                f'_{self.args.unlearn_method}_{self.args.task}.png',
+            ), dpi=300)
 
     def run_evaluation(self):
         print("═" * 50)
@@ -642,8 +649,12 @@ class TestEvaluator:
             plt.legend(loc="lower right")
             plt.minorticks_on()
             dataset_name = self.args.dataset
-            plt.savefig(os.path.join(self.args.result_path,
-                                     f'roc_curve_{dataset_name}_{self.args.shadow_num}_{self.args.forget_size}'), dpi=300)
+            plt.savefig(os.path.join(
+                self.args.result_path,
+                f'roc_curve_{dataset_name}_{self.args.shadow_num}'
+                f'_{self.args.forget_size}_{self.args.seed}'
+                f'_{self.args.unlearn_method}_{self.args.task}.png',
+            ), dpi=300)
 
     def perform_inference(self):
         inference = Inference(self.target_model, self.args)

@@ -20,6 +20,9 @@ data/
 benchmark_results/
 log_files/
 runs/
+saved_models/
+saved_predictions/
+runtime_logs/
 full_experiment_log.json
 runtime_results.json
 

@@ -219,8 +219,11 @@ class Retrain:
             'optimizer_state_dict': self.optimizer.state_dict(),
         }
         os.makedirs(self.checkpoint_dir, exist_ok=True)
-        torch.save(state, os.path.join(self.checkpoint_dir,
-                                       f'retrain_{self.args.dataset}_{self.args.seed}_{self.args.forget_size}.pth'))
+        torch.save(state, os.path.join(
+            self.checkpoint_dir,
+            f'retrain_{self.args.dataset}_shadows{self.args.shadow_num}'
+            f'_{self.args.seed}_{self.args.forget_size}.pth',
+        ))
 
     def test(self, epoch, progress):
         self.model.eval()

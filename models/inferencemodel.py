@@ -5,6 +5,7 @@ import os
 import torch
 import torch.nn as nn
 
+from benchmark.run_layout import resolve_shadow_checkpoint
 from models.convmixer import ConvMixer
 from models.model_utils import load_model
 
@@ -20,7 +21,28 @@ class InferenceModel(nn.Module):
             resume_checkpoint = f'saved_models/{self.args.name}/{self.args.save_name}_target_last.pth'
             # resume_checkpoint = weights_path
         else:
-            resume_checkpoint = f'saved_models/{self.args.name}/{self.args.save_name}_shadow_{self.shadow_id}_last.pth'
+            run_tag = getattr(self.args, "run_tag", "") or ""
+            shadow_seed = getattr(self.args, "shadow_seed", None)
+            if shadow_seed is None:
+                shadow_seed = self.args.seed
+            # ``shadow_pool`` decouples the pool that was trained from the
+            # number of shadows used by this evaluation.  Nested scaling trains
+            # one 32-shadow pool and evaluates the first 8/16/32 checkpoints of
+            # it, so the checkpoint stem must stay at the pool size.
+            shadow_pool = getattr(self.args, "shadow_pool", None)
+            if shadow_pool is None:
+                shadow_pool = self.args.num_shadow
+            resume_checkpoint = str(
+                resolve_shadow_checkpoint(
+                    ".",
+                    self.args.name,
+                    self.args.save_name,
+                    int(shadow_pool),
+                    int(shadow_seed),
+                    self.shadow_id,
+                    tagged=bool(run_tag),
+                )
+            )
 
         print("Downlaod from resume checkpoint:", resume_checkpoint)
         assert os.path.isfile(resume_checkpoint), 'Error: no checkpoint found!'

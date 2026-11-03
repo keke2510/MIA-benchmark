@@ -6,7 +6,14 @@ configurations for this project
 import os
 from datetime import datetime
 
-CHECKPOINT_PATH = r"log_files\model"
+# On Windows ``log_files\model`` and ``log_files/model`` are the same place,
+# but on Linux a backslash is an ordinary filename character.  Translate the
+# default on POSIX so the same relative tree is used everywhere.  Set
+# ``MIA_CHECKPOINT_PATH`` to point at an existing tree instead (for example
+# when restoring a backup whose directory literally contains a backslash).
+CHECKPOINT_PATH = os.environ.get("MIA_CHECKPOINT_PATH") or r"log_files\model"
+if os.name != "nt" and "MIA_CHECKPOINT_PATH" not in os.environ:
+    CHECKPOINT_PATH = CHECKPOINT_PATH.replace("\\", "/")
 
 # total training epochs
 

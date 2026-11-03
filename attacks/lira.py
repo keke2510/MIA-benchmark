@@ -44,6 +44,7 @@ class LiRAAttack:
             "--name", context.experiment_name,
             "--save_name", context.model_save_name,
             "--num_shadow", str(context.num_shadow),
+            "--shadow-pool", str(context.effective_shadow_pool),
             "--num_aug", str(context.num_aug),
             "--machine_unlearning", context.machine_unlearning,
             "--para1", context.para1,
@@ -52,6 +53,8 @@ class LiRAAttack:
             "-task", LiRAAttack.task_name,
             "--weight_path", context.weight_path,
             "--seed", str(context.seed),
+            "--shadow-seed", str(context.effective_shadow_seed),
+            "--run-tag", context.run_tag,
         ]
 
     @staticmethod

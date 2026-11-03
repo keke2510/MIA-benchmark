@@ -13,6 +13,8 @@ import torch
 import config
 from attacks.base import AttackContext, AttackResult
 from attacks.registry import register_attack
+from benchmark.run_layout import forget_index_path as layout_forget_index_path
+from benchmark.run_layout import resolve_shadow_checkpoint
 
 @register_attack("unlearningleaks")
 class UnlearningLeaksAttack:
@@ -76,6 +78,13 @@ class UnlearningLeaksAttack:
         return int(context.attack_options.get("unlearningleaks_num_shadow", context.num_shadow))
 
     @classmethod
+    def shadow_pool(cls, context: AttackContext) -> int:
+        """Checkpoint pool size, separate from how many shadows are evaluated."""
+        if context.shadow_pool is not None:
+            return int(context.shadow_pool)
+        return cls.shadow_num(context)
+
+    @classmethod
     def sample_budget(cls, context: AttackContext) -> int:
         return int(context.attack_options.get("unlearningleaks_sample_budget", 500))
 
@@ -85,21 +94,22 @@ class UnlearningLeaksAttack:
 
     @classmethod
     def forget_index_path(cls, context: AttackContext) -> Path:
-        return (
-            Path(config.CHECKPOINT_PATH)
-            / "forget_random_main"
-            / f"{context.net}-{context.dataset}-{context.classes}"
-            / "random_index_set"
-            / f"forgetting_dataset_index_{context.forget_perc}.npy"
+        return layout_forget_index_path(
+            config.CHECKPOINT_PATH,
+            context.experiment_name,
+            context.forget_perc,
         )
 
     @classmethod
     def shadow_original_path(cls, context: AttackContext, shadow_id: int) -> Path:
-        return (
-            cls.repo_root()
-            / "saved_models"
-            / context.experiment_name
-            / f"{context.model_save_name}_shadow_{shadow_id}_last.pth"
+        return resolve_shadow_checkpoint(
+            cls.repo_root(),
+            context.experiment_name,
+            context.model_save_name,
+            cls.shadow_pool(context),
+            context.effective_shadow_seed,
+            shadow_id,
+            tagged=bool(context.run_tag),
         )
 
     @classmethod
@@ -113,7 +123,7 @@ class UnlearningLeaksAttack:
         bs = context.attack_options.get("unlearningleaks_shadow_bs") or defaults["bs"]
         lr = context.attack_options.get("unlearningleaks_shadow_lr") or defaults["lr"]
         pkeep = context.attack_options.get("unlearningleaks_shadow_pkeep") or defaults["pkeep"]
-        return [
+        cmd = [
             sys.executable,
             str(cls.repo_root() / "train.py"),
             "--name",
@@ -135,12 +145,15 @@ class UnlearningLeaksAttack:
             "--pkeep",
             str(pkeep),
             "--num_shadow",
-            str(cls.shadow_num(context)),
+            str(cls.shadow_pool(context)),
             "--shadow_id",
             str(shadow_id),
             "--seed",
-            str(context.seed),
+            str(context.effective_shadow_seed),
         ]
+        if context.run_tag:
+            cmd += ["--run-tag", context.run_tag]
+        return cmd
 
     @classmethod
     def run_command(cls, cmd: list[str], *, log_path: Path, verbose: bool, dry_run: bool) -> None:
